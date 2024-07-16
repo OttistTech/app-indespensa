@@ -1,4 +1,4 @@
-# Microsservice InDespensa Tracking
+# App InDespensa
 O repositório do Aplicativo Mobile InDespensa é responsável por conter o código Android em Kotlin do projeto, o principal produto da Ottis Tech. No aplicativo será possível fazer gestão de despensa, receitas, lista de compras, busca de alimentos, gestão de negócios alimentares e mais!
 
 ## 🚀 Funcionalidades 
