@@ -5,20 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.ottistech.indespensa.R
 
 class SplashScreen : AppCompatActivity() {
 
-    private val timeout: Long = 3000
+    private lateinit var splashScreen: SplashScreen
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            openNextActivity()
-            finish()
-        }, timeout)
+        splashScreen.setKeepOnScreenCondition {true}
+        openNextActivity()
+        finish()
     }
 
     fun openNextActivity() {
