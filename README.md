@@ -45,6 +45,8 @@ Para organização, novas branches devem ser criadas seguindo o seguinte padrão
 | debug  | Correção de bug     |
 | config | Configuração        |
 | doc    | Documentação        |
+| refact | Refatoração         |
+
 #### Número da Tarefa
 Código da tarefa no quadro do [Trello](https://trello.com/b/5BLwrWfB/indespensa)
 #### Nome Descritivo
