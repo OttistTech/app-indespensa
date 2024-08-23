@@ -30,6 +30,31 @@
         android:textAlignment="center"
         android:theme="@style/IndespensaHeading1"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/landing_slogan"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/landing_main_button"
+        android:layout_marginHorizontal="80dp">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/landing_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+            android:id="@+id/landing_dots_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:dotsSize="8dp"
+            app:dotsStrokeColor="@color/gray"/>
+    </LinearLayout>
+
     <Button
         android:id="@+id/landing_main_button"
         android:layout_width="0dp"

@@ -54,6 +54,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.tbuonomo:dotsindicator:4.2")
     // FIREBASE SERVICES
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
