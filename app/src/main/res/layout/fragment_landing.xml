@@ -6,13 +6,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.LandingFragment">
 
-    <!-- TODO: Update fragment layout -->
+    <ImageView
+        android:id="@+id/landing_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="132dp"
+        android:src="@drawable/logo_big"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="80dp"/>
+
+    <TextView
+        android:id="@+id/landing_slogan"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/landing_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="64dp"
+        android:text="@string/app_slogan"
+        android:textAlignment="center"
+        android:theme="@style/IndespensaHeading1"/>
 
     <Button
         android:id="@+id/landing_main_button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
         android:background="@drawable/button_primary_background"
         app:backgroundTint="@null"
         android:text="@string/lading_cta_signup"
@@ -20,16 +41,15 @@
         android:textAllCaps="true"
         android:textStyle="bold"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="@id/landing_second_button"
+        app:layout_constraintStart_toStartOf="@id/landing_second_button"
+        app:layout_constraintBottom_toTopOf="@id/landing_second_button"
+        android:layout_marginBottom="8dp"/>
 
     <Button
         android:id="@+id/landing_second_button"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
         android:background="@drawable/button_secondary_background"
         app:backgroundTint="@null"
         android:text="@string/lading_cta_signup_business"
@@ -37,10 +57,39 @@
         android:textAllCaps="true"
         android:textStyle="bold"
         android:textColor="@color/primary"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/landing_main_button" />
+        app:layout_constraintBottom_toTopOf="@id/landing_login_cta"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="56dp"/>
+
+    <LinearLayout
+        android:id="@+id/landing_login_cta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        tools:ignore="ExtraText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="56dp"
+        android:layout_marginStart="32dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/landing_request_login_cta"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat"/>
+        <TextView
+            android:id="@+id/landing_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/landing_request_login"
+            android:textColor="@color/secondary"
+            android:fontFamily="@font/montserrat_bold"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

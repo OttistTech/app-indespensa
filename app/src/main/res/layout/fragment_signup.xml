@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/signup_form_input_enterprise_type_container"
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/signup_form_input_email_container"
@@ -108,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/signup_form_input_birthdate_container"
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/signup_form_input_password_container"
@@ -168,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/signup_form_input_password_confirmation_container"
@@ -197,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -258,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:visibility="gone"
-                    android:theme="@style/FormErrorMessage"/>
+                    android:theme="@style/IndespensaFormErrorMessage"/>
                 <TextView
                     android:id="@+id/signup_form_input_address_number_error"
                     android:layout_width="0dp"
@@ -266,7 +266,7 @@
                     android:layout_weight="4"
                     android:layout_marginStart="8dp"
                     android:visibility="gone"
-                    android:theme="@style/FormErrorMessage"/>
+                    android:theme="@style/IndespensaFormErrorMessage"/>
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -294,7 +294,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/IndespensaFormErrorMessage"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -358,7 +358,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:visibility="gone"
-                    android:theme="@style/FormErrorMessage"/>
+                    android:theme="@style/IndespensaFormErrorMessage"/>
                 <TextView
                     android:id="@+id/signup_form_input_state_select_error"
                     android:layout_width="0dp"
@@ -366,7 +366,7 @@
                     android:layout_weight="4"
                     android:layout_marginStart="8dp"
                     android:visibility="gone"
-                    android:theme="@style/FormErrorMessage"/>
+                    android:theme="@style/IndespensaFormErrorMessage"/>
             </LinearLayout>
 
             <LinearLayout

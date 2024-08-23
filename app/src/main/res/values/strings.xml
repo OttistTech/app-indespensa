@@ -29,4 +29,7 @@
     <string name="form_error_checkbox">CheckBox Obrigatório</string>
     <string name="form_error_conflict">%1$s já está em uso</string>
     <string name="form_hint_birthdate">Data de nascimento</string>
+    <string name="landing_request_login">Entrar</string>
+    <string name="landing_request_login_cta">Já tem uma conta?</string>
+    <string name="app_slogan">O indispensável na sua cozinha</string>
 </resources>

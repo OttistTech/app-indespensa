@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="4dp"/>
-    <stroke android:color="@color/secondary" android:width="2dp"/>
-    <padding android:right="16dp" android:left="16dp"/>
-</shape>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+
+    <item android:drawable="@drawable/button_secondary_background_default"/>
+</ripple>
