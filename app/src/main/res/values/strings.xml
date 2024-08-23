@@ -1,4 +1,32 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--  App  -->
     <string name="app_name">InDespensa</string>
     <string name="app_name_uppercase">InDESPENSA</string>
+
+    <!--  Landing  -->
+    <string name="lading_cta_signup">cadastre-se</string>
+    <string name="lading_cta_signup_business">conta empresarial</string>
+
+    <!--  Form  -->
+    <string name="form_hint_name">Nome</string>
+    <string name="form_hint_enterprise_type">Tipo de comércio</string>
+    <string name="form_hint_email">E-mail</string>
+    <string name="form_hint_password">Senha</string>
+    <string name="form_hint_street">Rua</string>
+    <string name="form_hint_cep">CEP</string>
+    <string name="form_hint_address_number">Número</string>
+    <string name="form_hint_city">Cidade</string>
+    <string name="form_app_terms_start_text">Concordo com os</string>
+    <string name="form_app_terms_link">Termos de uso</string>
+    <string name="form_hint_confirm_password">Confirmar senha</string>
+    <string name="form_error_not_null">%1$s é obrigatório</string>
+    <string name="form_error_not_email">%1$s deve ser um e-mail</string>
+    <string name="form_error_not_cep">%1$s deve ser um CEP</string>
+    <string name="form_error_repeat_password">A senha deve ser a mesma</string>
+    <string name="form_error_min_length">%1$s ter no mínimo %2$d caracteres</string>
+    <string name="form_error_max_length">%1$s ter no máximo %2$d caracteres</string>
+    <string name="form_error_password">A senha deve %1$s</string>
+    <string name="form_error_checkbox">CheckBox Obrigatório</string>
+    <string name="form_error_conflict">%1$s já está em uso</string>
+    <string name="form_hint_birthdate">Data de nascimento</string>
 </resources>
