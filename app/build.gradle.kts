@@ -4,6 +4,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -43,6 +44,7 @@ android {
 dependencies {
     val room_version = "2.6.1"
     val retrofit_version = "2.9.0"
+    val navigationVersion = "2.7.7"
 
     // ANDROID CORE
     implementation("androidx.core:core-ktx:1.13.1")
@@ -68,6 +70,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+    // NAVIGATION
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
 
     testImplementation("junit:junit:4.13.2")
 
