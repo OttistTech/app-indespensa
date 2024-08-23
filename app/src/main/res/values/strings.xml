@@ -6,6 +6,7 @@
     <!--  Landing  -->
     <string name="lading_cta_signup">cadastre-se</string>
     <string name="lading_cta_signup_business">conta empresarial</string>
+    <string name="lading_cta_login">entrar</string>
 
     <!--  Form  -->
     <string name="form_hint_name">Nome</string>
@@ -29,4 +30,8 @@
     <string name="form_error_checkbox">CheckBox Obrigatório</string>
     <string name="form_error_conflict">%1$s já está em uso</string>
     <string name="form_hint_birthdate">Data de nascimento</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="form_login_no_account">Não tem uma conta?</string>
+    <string name="form_login_signup_link">Cadastre-se</string>
 </resources>
