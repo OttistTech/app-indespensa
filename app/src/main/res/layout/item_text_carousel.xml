@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/item_text_carousel_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:text="organize sua despensa pessoal"
+    android:fontFamily="@font/montserrat"
+    android:textSize="20sp"
+    android:textColor="@color/gray"
+    android:gravity="center"
+/>
