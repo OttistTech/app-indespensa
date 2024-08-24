@@ -93,6 +93,13 @@
                 android:theme="@style/FormErrorMessage"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/login_form_input_unauthorized_notfound_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/FormErrorMessage"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/login_form_button"
                 android:layout_width="match_parent"
