@@ -34,7 +34,8 @@ class LandingFragment : Fragment() {
     }
 
     private fun navigateToSignupScreen(signupType : AppAccountType) {
-        val action = LandingFragmentDirections.actionLandingToSignup(signupType)
+//        val action = LandingFragmentDirections.actionLandingToSignup(signupType)
+        val action = LandingFragmentDirections.actionLandingToLogin()
         findNavController().navigate(action)
     }
 }
