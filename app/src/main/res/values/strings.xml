@@ -6,7 +6,6 @@
     <!--  Landing  -->
     <string name="lading_cta_signup">cadastre-se</string>
     <string name="lading_cta_signup_business">conta empresarial</string>
-    <string name="lading_cta_login">entrar</string>
 
     <!--  Form  -->
     <string name="form_hint_name">Nome</string>
