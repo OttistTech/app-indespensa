@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.ottistech.indespensa.R
-import com.ottistech.indespensa.data.exception.FieldConflictException
+import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentLoginBinding
 import com.ottistech.indespensa.ui.helpers.FieldValidations
@@ -49,10 +50,15 @@ class LoginFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         UserRepository(requireContext()).loginUser(user)
-                    } catch (e: FieldConflictException) {
+                    } catch (e: ResourceNotFoundException) {
                         validator.setFieldError(
-                            binding.loginFormInputEmailContainer, binding.loginFormInputEmailError,
-                            getString(R.string.form_error_conflict, "E-mail")
+                            null, binding.loginFormInputUnauthorizedNotfoundError,
+                            getString(R.string.form_login_unauthorizated_error)
+                        )
+                    } catch (e: ResourceUnauthorizedException) {
+                        validator.setFieldError(
+                            null, binding.loginFormInputUnauthorizedNotfoundError,
+                            getString(R.string.form_login_notfound_error)
                         )
                     }
                 }
@@ -68,14 +74,50 @@ class LoginFragment : Fragment() {
         )
     }
 
-    private fun validForm() : Boolean {
-        // email
-        val isEmailValid = validator.validIsEmail(binding.loginFormInputEmail, binding.loginFormInputEmailContainer, binding.loginFormInputEmailError)
+    private fun validForm(): Boolean {
+        var isFormValid = true
 
-        // password
-        val isPasswordValid = validator.validPassword(binding.loginFormInputPassword, binding.loginFormInputPasswordContainer, binding.loginFormInputPasswordError)
+        val isEmailNotNull = validator.validNotNull(
+            binding.loginFormInputEmail,
+            binding.loginFormInputEmailContainer,
+            binding.loginFormInputEmailError
+        )
+        if (!isEmailNotNull) {
+            isFormValid = false
+        }
 
-        return isEmailValid && isPasswordValid
+        val isPasswordNotNull = validator.validNotNull(
+            binding.loginFormInputPassword,
+            binding.loginFormInputPasswordContainer,
+            binding.loginFormInputPasswordError
+        )
+        if (!isPasswordNotNull) {
+            isFormValid = false
+        }
+
+        if (isEmailNotNull) {
+            val isEmailValid = validator.validIsEmailDetailed(
+                binding.loginFormInputEmail,
+                binding.loginFormInputEmailContainer,
+                binding.loginFormInputEmailError
+            )
+            if (!isEmailValid) {
+                isFormValid = false
+            }
+        }
+
+//        if (isPasswordNotNull) {
+//            val isPasswordValid = validator.validPassword(
+//                binding.loginFormInputPassword,
+//                binding.loginFormInputPasswordContainer,
+//                binding.loginFormInputPasswordError
+//            )
+//            if (!isPasswordValid) {
+//                isFormValid = false
+//            }
+//        }
+
+        return isFormValid
     }
 
 }
