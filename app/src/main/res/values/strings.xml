@@ -34,4 +34,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="form_login_no_account">Não tem uma conta?</string>
     <string name="form_login_signup_link">Cadastre-se</string>
+    <string name="form_error_email_missing_at">E-mail deve conter "@"</string>
+    <string name="form_error_email_missing_domain">E-mail deve conter um domínio válido (ex: ".com")</string>
+    <string name="form_error_email_missing_username">E-mail deve ter um nome de usuário antes do "@"</string>
+    <string name="form_login_unauthorizated_error">Senha incorreta!</string>
+    <string name="form_login_notfound_error">Email não existe</string>
 </resources>
