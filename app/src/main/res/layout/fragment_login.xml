@@ -17,7 +17,6 @@
             android:layout_marginVertical="240dp"
             android:gravity="center|center_vertical"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -57,8 +56,8 @@
                 android:id="@+id/login_form_input_email_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:theme="@style/FormErrorMessage"/>
+                android:theme="@style/FormErrorMessage"
+                android:visibility="gone" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -122,27 +121,28 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
                 android:orientation="horizontal"
-                tools:ignore="ExtraText"
-                android:layout_marginTop="35dp">
+                tools:ignore="ExtraText">
 
                 <TextView
                     android:id="@+id/login_form_app_terms_checkbox_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
                     android:text="@string/form_login_no_account"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/montserrat"/>
+                    android:textColor="@color/black" />
+
                 <TextView
                     android:id="@+id/login_form_app_terms_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@string/form_login_signup_link"
-                    android:textColor="@color/secondary"
-                    android:fontFamily="@font/montserrat_bold"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/form_login_signup_link"
+                    android:textColor="@color/secondary" />
             </LinearLayout>
 
         </LinearLayout>
