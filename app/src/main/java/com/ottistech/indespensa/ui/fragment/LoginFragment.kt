@@ -1,6 +1,7 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +49,7 @@ class LoginFragment : Fragment() {
                 val user = generateLoginUser()
 
                 lifecycleScope.launch {
+                    Log.d(TAG, "Trying to login. Called UserRepository.loginUser with $user")
                     try {
                         UserRepository(requireContext()).loginUser(user)
                     }
