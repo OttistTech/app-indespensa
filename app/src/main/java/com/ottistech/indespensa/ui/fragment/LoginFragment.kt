@@ -50,17 +50,20 @@ class LoginFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         UserRepository(requireContext()).loginUser(user)
-                    } catch (e: ResourceNotFoundException) {
-                        validator.setFieldError(
-                            null, binding.loginFormInputUnauthorizedNotfoundError,
-                            getString(R.string.form_login_unauthorizated_error)
-                        )
-                    } catch (e: ResourceUnauthorizedException) {
+                    }
+                    catch (e: ResourceNotFoundException) {
                         validator.setFieldError(
                             null, binding.loginFormInputUnauthorizedNotfoundError,
                             getString(R.string.form_login_notfound_error)
                         )
                     }
+                    catch (e: ResourceUnauthorizedException) {
+                        validator.setFieldError(
+                            null, binding.loginFormInputUnauthorizedNotfoundError,
+                            getString(R.string.form_login_unauthorizated_error)
+                        )
+                    }
+
                 }
             }
         }
@@ -96,26 +99,17 @@ class LoginFragment : Fragment() {
         }
 
         if (isEmailNotNull) {
-            val isEmailValid = validator.validIsEmailDetailed(
-                binding.loginFormInputEmail,
-                binding.loginFormInputEmailContainer,
-                binding.loginFormInputEmailError
-            )
+            val isEmailValid = validator.validIsEmail(binding.loginFormInputEmail, binding.loginFormInputEmailContainer, binding.loginFormInputEmailError)
             if (!isEmailValid) {
                 isFormValid = false
             }
         }
 
-//        if (isPasswordNotNull) {
-//            val isPasswordValid = validator.validPassword(
-//                binding.loginFormInputPassword,
-//                binding.loginFormInputPasswordContainer,
-//                binding.loginFormInputPasswordError
-//            )
-//            if (!isPasswordValid) {
-//                isFormValid = false
-//            }
-//        }
+        if (isFormValid) {
+            validator.removeFieldError(binding.loginFormInputEmailContainer, binding.loginFormInputEmailError)
+            validator.removeFieldError(binding.loginFormInputPasswordContainer, binding.loginFormInputPasswordError)
+            validator.removeFieldError(null, binding.loginFormInputUnauthorizedNotfoundError)
+        }
 
         return isFormValid
     }
