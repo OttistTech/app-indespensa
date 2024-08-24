@@ -1,6 +1,7 @@
 package com.ottistech.indespensa.ui.helpers
 
 import android.content.Context
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.CheckBox
@@ -103,42 +104,9 @@ class FieldValidations(
         inputContainer?.error = error
     }
 
-    fun removeFieldError(inputContainer: TextInputLayout, errorMessageView: TextView) {
+    fun removeFieldError(inputContainer: TextInputLayout?, errorMessageView: TextView) {
         errorMessageView.visibility = View.GONE
-        inputContainer.error = null
-    }
-
-    fun validIsEmailDetailed(inputView: TextView, inputContainer: TextInputLayout, errorMessageView: TextView): Boolean {
-        val email = inputView.text.toString()
-
-        // Verifica se contém "@"
-        if (!email.contains("@")) {
-            setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_email_missing_at))
-            return false
-        }
-
-        // Verifica se o domínio está presente e válido
-        val parts = email.split("@")
-        if (parts.size < 2 || !parts[1].contains(".")) {
-            setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_email_missing_domain))
-            return false
-        }
-
-        // Verifica se o nome de usuário é válido
-        if (parts[0].isEmpty()) {
-            setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_email_missing_username))
-            return false
-        }
-
-        // Se passar todas as verificações
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_not_email, inputView.hint))
-            return false
-        }
-
-        // Remove o erro se o email for válido
-        removeFieldError(inputContainer, errorMessageView)
-        return true
+        inputContainer?.error = null
     }
 
 }
