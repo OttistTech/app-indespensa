@@ -1,7 +1,6 @@
 package com.ottistech.indespensa.ui.helpers
 
 import android.content.Context
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.CheckBox
