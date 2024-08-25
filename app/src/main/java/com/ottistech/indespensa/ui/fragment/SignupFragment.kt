@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
@@ -75,9 +76,8 @@ class SignupFragment : Fragment() {
         val brazilStatesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.BRAZIL_STATES)
         binding.signupFormInputStateSelect.setAdapter(brazilStatesAdapter)
 
-
         binding.signupFormAppTermsLink.setOnClickListener {
-            // TODO: Add terms screen navigation
+            navigateToTermsAndConditions()
         }
 
         binding.signupFormButton.setOnClickListener {
@@ -152,5 +152,10 @@ class SignupFragment : Fragment() {
         return isNameValid && isEnterpriseTypeValid && isEmailValid && isBirthDateValid &&
                 isPasswordValid && isPasswordConfirmationValid && isCepValid && isAddressNumberValid &&
                 isCityValid && isStreetValid && isStateValid && isTermsValid
+    }
+
+    fun navigateToTermsAndConditions() {
+        val action = SignupFragmentDirections.actionSignupToTerms()
+        findNavController().navigate(action)
     }
 }

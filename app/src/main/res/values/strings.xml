@@ -34,7 +34,7 @@
     <string name="form_login_no_account">Não tem uma conta?</string>
     <string name="form_login_signup_link">Cadastre-se</string>
     <string name="form_login_unauthorizated_error">Senha incorreta!</string>
-    <string name="form_login_notfound_error">Email não existe!</string>
+    <string name="form_login_notfound_error">Usuário não existe!</string>
     <string name="landing_request_login">Entrar</string>
     <string name="landing_request_login_cta">Já tem uma conta?</string>
     <string name="app_slogan">O indispensável na sua cozinha</string>

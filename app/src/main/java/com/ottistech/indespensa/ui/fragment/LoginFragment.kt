@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
@@ -38,10 +39,13 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var passwordVisibility = false
-
         binding.loginFormInputPasswordContainer.setEndIconOnClickListener {
             passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
                 binding.loginFormInputPassword, binding.loginFormInputPasswordContainer)
+        }
+
+        binding.loginSignupButton.setOnClickListener {
+            navigateToSignupScreen()
         }
 
         binding.loginFormButton.setOnClickListener {
@@ -114,6 +118,11 @@ class LoginFragment : Fragment() {
         }
 
         return isFormValid
+    }
+
+    fun navigateToSignupScreen() {
+        val action = LoginFragmentDirections.actionLoginToSignup()
+        findNavController().navigate(action)
     }
 
 }

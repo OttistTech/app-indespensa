@@ -51,10 +51,18 @@ class LandingFragment : Fragment() {
         binding.landingSecondButton.setOnClickListener {
             navigateToSignupScreen(AppAccountType.BUSINESS)
         }
+        binding.landingLoginButton.setOnClickListener {
+            navigateToLoginScreen()
+        }
     }
 
     private fun navigateToSignupScreen(signupType : AppAccountType) {
         val action = LandingFragmentDirections.actionLandingToSignup(signupType)
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToLoginScreen() {
+        val action = LandingFragmentDirections.actionLandingToLogin()
         findNavController().navigate(action)
     }
 
