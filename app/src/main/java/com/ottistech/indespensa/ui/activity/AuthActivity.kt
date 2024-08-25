@@ -18,7 +18,7 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val host : NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.auth_nav_host_fragment) as NavHostFragment? ?: return
+            .findFragmentById(R.id.auth_nav_host_fragment) as NavHostFragment
         val navController : NavController = host.navController
     }
 }

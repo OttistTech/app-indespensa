@@ -26,7 +26,7 @@ class SplashScreen : AppCompatActivity() {
 
     private fun openNextActivity(isUserAuthenticated: Boolean) {
         val intent = if(isUserAuthenticated) {
-            Intent(this, HomeActivity::class.java)
+            Intent(this, MainActivity::class.java)
         } else {
             Intent(this, AuthActivity::class.java)
         }
