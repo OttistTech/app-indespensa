@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentSignupBinding
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.AppConstants
+import com.ottistech.indespensa.ui.activity.HomeActivity
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
@@ -86,7 +88,10 @@ class SignupFragment : Fragment() {
                 lifecycleScope.launch {
                     Log.d(TAG, "Trying to Signup. Called UserRepository.signupUser wit $newUser")
                     try {
-                        UserRepository(requireContext()).signupUser(newUser)
+                        val result = UserRepository(requireContext()).signupUser(newUser)
+                        if(result) {
+                            navigateToHome()
+                        }
                     } catch (e: FieldConflictException) {
                         validator.setFieldError(
                             binding.signupFormInputEmailContainer, binding.signupFormInputEmailError,
@@ -154,8 +159,15 @@ class SignupFragment : Fragment() {
                 isCityValid && isStreetValid && isStateValid && isTermsValid
     }
 
-    fun navigateToTermsAndConditions() {
+    private fun navigateToTermsAndConditions() {
         val action = SignupFragmentDirections.actionSignupToTerms()
         findNavController().navigate(action)
+    }
+    private fun navigateToHome() {
+        val currentActivity = requireActivity()
+        val intent = Intent(currentActivity, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        currentActivity.startActivity(intent)
+        currentActivity.finish()
     }
 }
