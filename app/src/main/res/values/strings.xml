@@ -39,4 +39,8 @@
     <string name="landing_request_login_cta">Já tem uma conta?</string>
     <string name="app_slogan">O indispensável na sua cozinha</string>
     <string name="lading_cta_login">Entrar</string>
+    <string name="page_home_title">Home</string>
+    <string name="page_shoplist_title">Lista de compras\n</string>
+    <string name="page_profile_title">Perfil\n</string>
+    <string name="page_recipe_list_title">Lista de receitas</string>
 </resources>

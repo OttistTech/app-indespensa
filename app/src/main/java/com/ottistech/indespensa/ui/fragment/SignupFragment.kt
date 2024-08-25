@@ -18,7 +18,7 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentSignupBinding
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.AppConstants
-import com.ottistech.indespensa.ui.activity.HomeActivity
+import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
@@ -165,7 +165,7 @@ class SignupFragment : Fragment() {
     }
     private fun navigateToHome() {
         val currentActivity = requireActivity()
-        val intent = Intent(currentActivity, HomeActivity::class.java)
+        val intent = Intent(currentActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         currentActivity.startActivity(intent)
         currentActivity.finish()
