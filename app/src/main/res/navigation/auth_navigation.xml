@@ -37,6 +37,14 @@
             android:name="signupType"
             app:argType="com.ottistech.indespensa.shared.AppAccountType"
             android:defaultValue="PERSONAL" />
+        <action
+            android:id="@+id/action_signup_to_terms"
+            app:destination="@id/terms_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+        </action>
     </fragment>
 
     <fragment
@@ -44,5 +52,20 @@
         android:name="com.ottistech.indespensa.ui.fragment.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_login_to_signup"
+            app:destination="@id/signup_dest"
+            app:enterAnim="@anim/slide_out_left"
+            app:exitAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left">
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/terms_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.TermsAndConditionsFragment"
+        android:label="fragment_terms_and_conditions"
+        tools:layout="@layout/fragment_terms_and_conditions">
     </fragment>
 </navigation>

@@ -33,8 +33,6 @@
                 android:id="@+id/login_form_input_email_container"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="10dp"
                 android:theme="@style/CustomTextInputLayout"
                 app:boxStrokeErrorColor="@color/red"
                 app:boxStrokeWidth="2dp"
@@ -51,12 +49,12 @@
                     android:paddingBottom="12dp"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/login_form_input_email_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/IndespensaFormErrorMessage"
+                android:layout_gravity="start"
                 android:visibility="gone" />
 
 
@@ -64,8 +62,7 @@
                 android:id="@+id/login_form_input_password_container"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="16dp"
                 android:theme="@style/CustomTextInputLayout"
                 app:boxStrokeErrorColor="@color/red"
                 app:boxStrokeWidth="2dp"
@@ -90,12 +87,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/IndespensaFormErrorMessage"
+                android:layout_gravity="start"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/login_form_input_unauthorized_notfound_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:theme="@style/IndespensaFormErrorMessage"
                 android:visibility="gone" />
 
@@ -103,7 +102,7 @@
                 android:id="@+id/login_form_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/button_primary_background"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat"
@@ -126,7 +125,7 @@
                 tools:ignore="ExtraText">
 
                 <TextView
-                    android:id="@+id/login_form_app_terms_checkbox_text"
+                    android:id="@+id/login_signup_cta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
@@ -134,7 +133,7 @@
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/login_form_app_terms_link"
+                    android:id="@+id/login_signup_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"

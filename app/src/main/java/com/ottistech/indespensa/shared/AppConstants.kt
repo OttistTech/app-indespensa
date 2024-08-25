@@ -8,10 +8,12 @@ object AppConstants {
     )
 
     val START_CAROUSEL_MESSAGES : List<String> = listOf(
-        "Organize sua despensa pessoal",
-        "Gerenciamento de estoque para pequenas empresas",
+        "Gerencie sua despensa pessoal",
+        "Organização para pequenas empresas",
         "Indicação de receitas para todos os perfis",
         "Otimize seu tempo e esforço na cozinha",
         "Economize dinheiro sem desperdício"
     )
+
+    val TERMS_AND_CONDITIONS_URL : String = "https://terms-and-conditions-webpage.onrender.com"
 }
