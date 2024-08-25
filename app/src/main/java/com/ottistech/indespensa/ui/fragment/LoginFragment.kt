@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentLoginBinding
+import com.ottistech.indespensa.ui.activity.HomeActivity
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
 import com.ottistech.indespensa.webclient.dto.UserLoginDTO
@@ -55,7 +57,10 @@ class LoginFragment : Fragment() {
                 lifecycleScope.launch {
                     Log.d(TAG, "Trying to login. Called UserRepository.loginUser with $user")
                     try {
-                        UserRepository(requireContext()).loginUser(user)
+                        val result = UserRepository(requireContext()).loginUser(user)
+                        if(result) {
+                            navigateToHome()
+                        }
                     }
                     catch (e: ResourceNotFoundException) {
                         validator.setFieldError(
@@ -73,7 +78,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
     }
 
     private fun generateLoginUser(): UserLoginDTO {
@@ -120,9 +124,17 @@ class LoginFragment : Fragment() {
         return isFormValid
     }
 
-    fun navigateToSignupScreen() {
+    private fun navigateToSignupScreen() {
         val action = LoginFragmentDirections.actionLoginToSignup()
         findNavController().navigate(action)
+    }
+
+    private fun navigateToHome() {
+        val currentActivity = requireActivity()
+        val intent = Intent(currentActivity, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        currentActivity.startActivity(intent)
+        currentActivity.finish()
     }
 
 }
