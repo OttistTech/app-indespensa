@@ -33,4 +33,16 @@ class UserFirebaseDataSource(
             }
     }
 
+    fun loginUser(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(executor) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Log.d(TAG, "[loginUser] User logged: $user")
+                } else {
+                    Log.e(TAG, "[loginUser] Failed while authenticating the user")
+                }
+            }
+    }
+
 }

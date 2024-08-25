@@ -97,14 +97,15 @@ class FieldValidations(
         }
     }
 
-    fun setFieldError(inputContainer: TextInputLayout, errorMessageView: TextView, error: String) {
+    fun setFieldError(inputContainer: TextInputLayout?, errorMessageView: TextView, error: String) {
         errorMessageView.text = error
         errorMessageView.visibility = View.VISIBLE
-        inputContainer.error = error
+        inputContainer?.error = error
     }
 
-    fun removeFieldError(inputContainer: TextInputLayout, errorMessageView: TextView) {
+    fun removeFieldError(inputContainer: TextInputLayout?, errorMessageView: TextView) {
         errorMessageView.visibility = View.GONE
-        inputContainer.error = null
+        inputContainer?.error = null
     }
+
 }
