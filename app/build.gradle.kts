@@ -75,6 +75,12 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    // BARCODE SCANNING
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    // CAMERA
+    implementation("androidx.camera:camera-core:1.2.2")
+    implementation("androidx.camera:camera-camera2:1.2.2")
+    implementation("androidx.camera:camera-lifecycle:1.2.2")
 
     testImplementation("junit:junit:4.13.2")
 
