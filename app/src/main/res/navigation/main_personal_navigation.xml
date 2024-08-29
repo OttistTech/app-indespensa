@@ -22,4 +22,10 @@
         android:name="com.ottistech.indespensa.ui.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/scanner_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.ScannerFragment"
+        android:label="fragment_scanner"
+        tools:layout="@layout/fragment_scanner" />
 </navigation>

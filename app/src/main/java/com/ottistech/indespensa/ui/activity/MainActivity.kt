@@ -2,6 +2,7 @@ package com.ottistech.indespensa.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         userId = 1,
         name = "Davi",
         email = "davi@piassi.com",
-        type = AppAccountType.BUSINESS,
+        type = AppAccountType.PERSONAL,
         isPremium = false
     )
 
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
         val host : NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.main_nav_host_fragment) as NavHostFragment
         val navController : NavController = host.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.scanner_dest -> changeBottomNavigationBarVisibility(View.GONE)
+                else -> changeBottomNavigationBarVisibility(View.VISIBLE)
+            }
+        }
 
         if(currentUser.type == AppAccountType.PERSONAL) {
             binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
@@ -39,5 +46,9 @@ class MainActivity : AppCompatActivity() {
             navController.setGraph(R.navigation.main_enterprise_navigation)
         }
         binding.mainBottomNavigation.setupWithNavController(navController)
+    }
+
+    private fun changeBottomNavigationBarVisibility(visibility: Int) {
+        binding.mainBottomNavigation.visibility = visibility
     }
 }
