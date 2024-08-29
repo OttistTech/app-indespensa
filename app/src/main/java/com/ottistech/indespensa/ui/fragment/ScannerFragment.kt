@@ -67,6 +67,10 @@ class ScannerFragment : Fragment() {
         } else {
             permissionManager.requestPermissions()
         }
+
+        binding.scannerCancel.setOnClickListener {
+            giveFragmentResultBack(null)
+        }
     }
 
     private fun startScan() {

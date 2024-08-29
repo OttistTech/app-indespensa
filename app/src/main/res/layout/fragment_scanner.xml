@@ -14,9 +14,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        android:layout_marginTop="336dp"-->
-<!--        android:layout_marginBottom="432dp">-->
 
     </androidx.camera.view.PreviewView>
 
