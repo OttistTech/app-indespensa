@@ -1,6 +1,9 @@
 package com.ottistech.indespensa.ui.helpers
 
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -12,4 +15,8 @@ fun String.toDate(format: String = "dd/MM/yyyy"): Date? {
     } catch (e: Exception) {
         null
     }
+}
+
+fun Fragment.showToast(message: String) {
+    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 }

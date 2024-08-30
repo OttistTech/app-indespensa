@@ -45,6 +45,7 @@ dependencies {
     val room_version = "2.6.1"
     val retrofit_version = "2.9.0"
     val navigationVersion = "2.7.7"
+    val cameraVersion = "1.2.2"
 
     // ANDROID CORE
     implementation("androidx.core:core-ktx:1.13.1")
@@ -75,6 +76,15 @@ dependencies {
     // NAVIGATION
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    // BARCODE SCANNING
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    // CAMERA
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+    implementation("androidx.camera:camera-video:1.2.2")
+    implementation("androidx.camera:camera-extensions:1.2.2")
 
     testImplementation("junit:junit:4.13.2")
 
