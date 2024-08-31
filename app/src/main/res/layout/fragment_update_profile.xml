@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.fragment.UpdateProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:src="@drawable/logo_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sua conta"
+            android:textSize="28dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/update_profile_form_input_name_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:theme="@style/CustomTextInputLayout"
+            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="2dp"
+            app:errorIconDrawable="@null"
+            app:errorTextColor="@color/pastelOrange"
+            android:layout_marginBottom="20dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/update_profile_form_input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:hint="@string/form_hint_name"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="12dp"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/update_profile_form_input_name_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/IndespensaFormErrorMessage"
+            android:layout_gravity="start"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/update_profile_form_input_email_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:theme="@style/CustomTextInputLayout"
+            app:boxStrokeErrorColor="@color/red"
+            app:boxStrokeWidth="2dp"
+            app:errorIconDrawable="@null"
+            app:errorTextColor="@color/pastelOrange">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/update_profile_form_input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:hint="@string/form_hint_email"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="12dp"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/login_form_input_email_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/IndespensaFormErrorMessage"
+            android:layout_gravity="start"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
