@@ -69,6 +69,7 @@ class SignupFragment : Fragment() {
             passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
                 binding.signupFormInputPassword, binding.signupFormInputPasswordContainer)
         }
+
         var passwordConfirmationVisibility = false
         binding.signupFormInputPasswordConfirmationContainer.setEndIconOnClickListener {
             passwordConfirmationVisibility = visibilitySwitcher.switch(passwordConfirmationVisibility,
@@ -163,6 +164,7 @@ class SignupFragment : Fragment() {
         val action = SignupFragmentDirections.actionSignupToTerms()
         findNavController().navigate(action)
     }
+
     private fun navigateToHome() {
         val currentActivity = requireActivity()
         val intent = Intent(currentActivity, MainActivity::class.java)

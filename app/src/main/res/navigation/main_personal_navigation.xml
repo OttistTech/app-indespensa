@@ -25,6 +25,10 @@
         <action
             android:id="@+id/action_nav_profile_to_updateProfileFragment"
             app:destination="@id/updateProfileFragment" />
+
+        <action
+            android:id="@+id/action_nav_profile_to_landingFragment"
+            app:destination="@id/nav_landing" />
     </fragment>
 
     <fragment
@@ -37,4 +41,11 @@
         android:name="com.ottistech.indespensa.ui.fragment.UpdateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
+
+    <fragment
+        android:id="@+id/nav_landing"
+        android:name="com.ottistech.indespensa.ui.fragment.LandingFragment"
+        android:label="fragment_landing"
+        tools:layout="@layout/fragment_landing" />
+
 </navigation>

@@ -44,4 +44,10 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="CustomButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:background">@drawable/button_border_red</item>
+        <item name="android:backgroundTint">@null</item>
+    </style>
+
 </resources>

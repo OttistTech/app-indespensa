@@ -45,4 +45,12 @@ class UserFirebaseDataSource(
             }
     }
 
+    // TODO: implement updateUser on Firebase
+
+
+    fun logoutUser() {
+        auth.signOut()
+        Log.d(TAG, "[logoutUser] User logged out successfully")
+    }
+
 }
