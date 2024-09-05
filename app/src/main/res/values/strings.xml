@@ -20,6 +20,7 @@
     <string name="form_hint_cep">CEP</string>
     <string name="form_hint_address_number">Número</string>
     <string name="form_hint_city">Cidade</string>
+    <string name="form_hint_state">Estado</string>
     <string name="form_app_terms_start_text">Concordo com os</string>
     <string name="form_app_terms_link">Termos de uso</string>
     <string name="form_hint_confirm_password">Confirmar senha</string>
@@ -37,6 +38,7 @@
     <string name="form_login_signup_link">Cadastre-se</string>
     <string name="form_login_unauthorizated_error">Senha incorreta!</string>
     <string name="form_login_notfound_error">Usuário não existe!</string>
+    <string name="form_login_already_deactivated_error">Usuário desativado!</string>
 
     <!--  Main - Pages  -->
     <string name="page_home_title">Home</string>
@@ -50,4 +52,16 @@
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
+
+    <!--  Update Profile  -->
+    <string name="update_profile_your_account">Sua conta</string>
+    <string name="dialog_update_profile_deactivate_account">Excluir sua conta?</string>
+    <string name="dialog_update_profile_deactivate_account_button">Remover conta</string>
+    <string name="dialog_update_profile_cancel_button">Cancelar</string>
+    <string name="update_profile_remove_account_button">Remover conta</string>
+    <string name="update_profile_logout_button">Sair</string>
+    <string name="update_profile_save_button">Salvar</string>
+    <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
+
+
 </resources>
