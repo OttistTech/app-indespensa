@@ -1,31 +1,31 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.ottistech.indespensa.R
-import com.ottistech.indespensa.data.datasource.UserFirebaseDataSource
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.data.repository.UserRepository
-import com.ottistech.indespensa.databinding.FragmentLoginBinding
+import com.ottistech.indespensa.databinding.DialogDeactivateAccountBinding
 import com.ottistech.indespensa.databinding.FragmentUpdateProfileBinding
 import com.ottistech.indespensa.shared.AppConstants
+import com.ottistech.indespensa.ui.activity.AuthActivity
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.webclient.dto.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.UserFullCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
 import kotlinx.coroutines.launch
 
@@ -35,7 +35,7 @@ class UpdateProfileFragment : Fragment() {
     private lateinit var binding: FragmentUpdateProfileBinding
     private lateinit var validator : FieldValidations
     private lateinit var visibilitySwitcher : FieldVisibilitySwitcher
-    private lateinit var userFirebaseDataSource: UserFirebaseDataSource
+    private lateinit var repository: UserRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +44,7 @@ class UpdateProfileFragment : Fragment() {
         validator = FieldValidations(requireContext())
         binding = FragmentUpdateProfileBinding.inflate(inflater, container, false)
         visibilitySwitcher = FieldVisibilitySwitcher(requireContext())
+        repository = UserRepository(requireContext())
 
         return binding.root
     }
@@ -64,7 +65,6 @@ class UpdateProfileFragment : Fragment() {
 
         fetchUserDetails(userId)
 
-        // TODO: navigation to terms and conditions
         binding.updateProfileFormAppTermsLink.setOnClickListener {
             navigateToTermsAndConditions()
         }
@@ -80,7 +80,8 @@ class UpdateProfileFragment : Fragment() {
                     try {
                         val result = UserRepository(requireContext()).updateUser(userId, user)
 
-                        if(result != null) {
+                        if (result != null) {
+                            Toast.makeText(requireContext(), "Atualizado com sucesso!", Toast.LENGTH_LONG).show()
                             fetchUserDetails(userId)
                         }
                     }
@@ -103,8 +104,16 @@ class UpdateProfileFragment : Fragment() {
         }
 
         binding.updateProfileFormButtonLogout.setOnClickListener {
-            userFirebaseDataSource.logoutUser()
-            navigateToLandingFragment()
+            repository.logoutUser()
+            navigateToAuth()
+        }
+
+        binding.updateProfileFormAppTermsLink.setOnClickListener {
+            navigateToTermsAndConditions()
+        }
+
+        binding.updateProfileFormButtonRemoveAccount.setOnClickListener {
+            showDialog()
         }
     }
 
@@ -150,13 +159,16 @@ class UpdateProfileFragment : Fragment() {
     }
 
     private fun navigateToTermsAndConditions() {
-        TODO("Not yet implemented")
+        val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToTermsAndConditionsFragment()
+        findNavController().navigate(action)
     }
 
-    private fun navigateToLandingFragment() {
-        val action = ProfileFragmentDirections.actionNavProfileToLandingFragment()
-
-        findNavController().navigate(action)
+    private fun navigateToAuth() {
+        val currentActivity = requireActivity()
+        val intent = Intent(currentActivity, AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        currentActivity.startActivity(intent)
+        currentActivity.finish()
     }
 
     private fun validForm() : Boolean {
@@ -181,6 +193,62 @@ class UpdateProfileFragment : Fragment() {
         return isNameValid && isEmailValid &&
                 isPasswordValid && isCepValid && isAddressNumberValid &&
                 isCityValid && isStreetValid && isStateValid
+    }
+
+    private fun showDialog() {
+        // TODO: make view binding of dialog
+        val bindingDialog = DialogDeactivateAccountBinding.inflate(LayoutInflater.from(requireContext()))
+
+        val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialog)
+            .setView(bindingDialog.root)
+            .create()
+
+        val removeButton = bindingDialog.dialogDeactivateButtonRemoveAccount
+        val cancelButton = bindingDialog.dialogDeactivateButtonCancel
+
+        removeButton.setOnClickListener {
+            lifecycleScope.launch {
+                val userId = 7L // TODO: get the userId from authentication or something like this
+
+                Log.d(TAG, "Trying to deactivate user. Called UserRepository.deactivateUser with $userId")
+
+                try {
+                    UserRepository(requireContext()).deactivateUser(userId)
+                    Toast.makeText(requireContext(), "Conta removida com sucesso!", Toast.LENGTH_LONG).show()
+
+                    dialog.dismiss()
+                    navigateToAuth()
+                }
+                catch (e: FieldConflictException) {
+                    validator.setFieldError(
+                        binding.updateProfileFormInputEmailContainer, binding.updateProfileFormInputEmailError,
+                        getString(R.string.form_error_conflict, "E-mail")
+                    )
+                } catch (e: ResourceNotFoundException) {
+                    validator.setFieldError(
+                        null, binding.updateProfileFormInputUnauthorizedNotfoundError,
+                        getString(R.string.form_login_notfound_error)
+                    )
+                } catch (e: ResourceUnauthorizedException) {
+                    validator.setFieldError(
+                        null, binding.updateProfileFormInputUnauthorizedNotfoundError,
+                        getString(R.string.form_login_notfound_error)
+                    )
+                }
+                catch (e: BadRequestException) {
+                    Log.d(TAG, "Bad Request for data: $userId")
+                }
+
+            }
+
+
+        }
+
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 }

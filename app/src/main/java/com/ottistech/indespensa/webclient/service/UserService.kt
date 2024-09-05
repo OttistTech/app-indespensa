@@ -8,6 +8,7 @@ import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -37,5 +38,10 @@ interface UserService {
         @Path("id") userId: Long,
         @Body updateUserDTO: UserUpdateDTO
     ): Response<UserUpdateResponseDTO>
+
+    @DELETE("users/deactivation/{id}")
+    suspend fun deactivateUser(
+        @Path("id") userId: Long
+    ) : Response<Any>
 
 }
