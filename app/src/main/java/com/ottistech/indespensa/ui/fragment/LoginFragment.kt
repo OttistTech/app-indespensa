@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.exception.ResourceGoneException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.data.repository.UserRepository
@@ -72,6 +73,12 @@ class LoginFragment : Fragment() {
                         validator.setFieldError(
                             null, binding.loginFormInputUnauthorizedNotfoundError,
                             getString(R.string.form_login_unauthorizated_error)
+                        )
+                    }
+                    catch (e: ResourceGoneException) {
+                        validator.setFieldError(
+                            null, binding.loginFormInputUnauthorizedNotfoundError,
+                            getString(R.string.form_login_already_deactivated_error)
                         )
                     }
 

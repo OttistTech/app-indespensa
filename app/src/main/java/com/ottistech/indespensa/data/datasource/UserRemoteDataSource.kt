@@ -43,7 +43,7 @@ class UserRemoteDataSource {
                     }
                     else -> {
                         Log.e(TAG, "[create] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
 
@@ -84,7 +84,7 @@ class UserRemoteDataSource {
                     }
                     else -> {
                         Log.e(TAG, "[loginUser] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
@@ -126,7 +126,7 @@ class UserRemoteDataSource {
                     }
                     else -> {
                         Log.e(TAG, "[getUserFullInfo] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
@@ -165,13 +165,52 @@ class UserRemoteDataSource {
                     }
                     else -> {
                         Log.e(TAG, "[updateUser] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
 
         } catch (e: Exception) {
             Log.e(TAG, "Failed to update user", e)
+            ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun deactivateUser(userId: Long) : ResultWrapper<Any> {
+        return try {
+            val response = service.deactivateUser(userId)
+
+            if (response.isSuccessful) {
+                Log.d(TAG, "[deactivateUser] User deactivated successfully")
+                ResultWrapper.Success("User deactivated successfully")
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                Log.d(TAG, response.code().toString())
+
+                when (response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[deactivateUser] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_CONFLICT -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[deactivateUser] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        Log.e(TAG, "[deactivateUser] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[deactivateUser] A not mapped error occurred")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to deactivate user", e)
             ResultWrapper.NetworkError
         }
     }
