@@ -3,6 +3,7 @@ package com.ottistech.indespensa.ui.helpers
 import android.widget.EditText
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -10,9 +11,14 @@ import java.util.Locale
 import java.util.TimeZone
 
 class DatePickerCreator {
-    fun createDatePicker(resultView: EditText, label: String): MaterialDatePicker<Long> {
-        val constraintsBuilder = CalendarConstraints.Builder()
-            .setValidator(DateValidatorPointBackward.now())
+    fun createDatePicker(resultView: EditText, label: String, dateBackWards: Boolean): MaterialDatePicker<Long> {
+        val constraintsBuilder = CalendarConstraints.Builder().apply {
+            if(dateBackWards) {
+                this.setValidator(DateValidatorPointBackward.now())
+            } else {
+                this.setValidator(DateValidatorPointForward.now())
+            }
+        }
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(label)

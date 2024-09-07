@@ -20,15 +20,23 @@
     <string name="form_hint_cep">CEP</string>
     <string name="form_hint_address_number">Número</string>
     <string name="form_hint_city">Cidade</string>
+    <string name="form_hint_food">Alimento</string>
+    <string name="form_hint_state">Estado</string>
+    <string name="form_hint_category">Categoria</string>
+    <string name="form_hint_description">Descrição</string>
+    <string name="form_hint_confirm_password">Confirmar senha</string>
+    <string name="form_hint_brand">Marca</string>
+    <string name="form_hint_amount">Peso / Volume</string>
+    <string name="form_hint_unit">Un.</string>
+    <string name="form_hint_validity_date">Data de validade</string>
     <string name="form_app_terms_start_text">Concordo com os</string>
     <string name="form_app_terms_link">Termos de uso</string>
-    <string name="form_hint_confirm_password">Confirmar senha</string>
     <string name="form_error_not_null">%1$s é obrigatório</string>
     <string name="form_error_not_email">%1$s deve ser um e-mail</string>
     <string name="form_error_not_cep">%1$s deve ser um CEP</string>
     <string name="form_error_repeat_password">A senha deve ser a mesma</string>
-    <string name="form_error_min_length">%1$s ter no mínimo %2$d caracteres</string>
-    <string name="form_error_max_length">%1$s ter no máximo %2$d caracteres</string>
+    <string name="form_error_min_length">%1$s deve ter no mínimo %2$d caracteres</string>
+    <string name="form_error_max_length">%1$s deve ter no máximo %2$d caracteres</string>
     <string name="form_error_password">A senha deve %1$s</string>
     <string name="form_error_checkbox">CheckBox Obrigatório</string>
     <string name="form_error_conflict">%1$s já está em uso</string>
@@ -46,8 +54,12 @@
 
     <!--  Common  -->
     <string name="cta_cancel">Cancelar</string>
+    <string name="cta_save">Salvar</string>
     <string name="result_not_found">%1$s não encontrado</string>
+    <string name="created_successfully">%1$s criado com sucesso</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
+    <string name="cta_scan">Escanear</string>
+
 </resources>

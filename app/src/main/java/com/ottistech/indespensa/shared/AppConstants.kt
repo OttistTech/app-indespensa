@@ -1,6 +1,10 @@
 package com.ottistech.indespensa.shared
 
 object AppConstants {
+    val AMOUNT_UNITIES: List<String> = listOf(
+        "kg", "g", "l", "ml", "u"
+    )
+
     val BRAZIL_STATES : List<String> = listOf(
         "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
         "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",

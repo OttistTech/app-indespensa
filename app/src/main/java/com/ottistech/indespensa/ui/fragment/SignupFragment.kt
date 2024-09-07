@@ -54,7 +54,7 @@ class SignupFragment : Fragment() {
                 binding.signupFormInputEnterpriseTypeContainer.visibility = View.GONE
 
                 val datePickerCreator = DatePickerCreator()
-                datePicker = datePickerCreator.createDatePicker(binding.signupFormInputBirthdate, getString(R.string.form_hint_birthdate))
+                datePicker = datePickerCreator.createDatePicker(binding.signupFormInputBirthdate, getString(R.string.form_hint_birthdate), true)
                 binding.signupFormInputBirthdate.setOnClickListener {
                     datePicker.show(parentFragmentManager, "DATE PICKER")
                 }

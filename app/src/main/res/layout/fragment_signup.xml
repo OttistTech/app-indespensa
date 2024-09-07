@@ -330,22 +330,23 @@
                     android:layout_height="56dp"
                     android:layout_weight="4"
                     android:layout_marginStart="8dp"
-                    android:hint="Estado"
-                    style="@style/CustomTextInputLayoutDropdown"
+                    android:hint="@string/form_hint_state"
+                    android:theme="@style/CustomTextInputLayoutDropdown"
                     app:boxStrokeWidth="2dp"
                     app:boxStrokeErrorColor="@color/red"
                     app:errorTextColor="@color/pastelOrange"
                     app:errorIconDrawable="@null">
+
                     <AutoCompleteTextView
                         android:id="@+id/signup_form_input_state_select"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:paddingBottom="12dp"
                         android:dropDownAnchor="@id/signup_form_input_state_select"
                         android:dropDownHeight="148dp"
-                        android:inputType="none"
                         android:fontFamily="@font/montserrat_medium"
+                        android:inputType="none"
+                        android:paddingBottom="12dp"
                         tools:ignore="LabelFor" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
