@@ -50,12 +50,13 @@
                     android:paddingBottom="12dp"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/login_form_input_email_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/IndespensaFormErrorMessage"
                 android:layout_gravity="start"
+                android:theme="@style/IndespensaFormErrorMessage"
                 android:visibility="gone" />
 
 
@@ -87,15 +88,17 @@
                 android:id="@+id/login_form_input_password_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/IndespensaFormErrorMessage"
                 android:layout_gravity="start"
+                android:theme="@style/IndespensaFormErrorMessage"
                 android:visibility="gone" />
 
             <TextView
                 android:id="@+id/login_form_input_unauthorized_notfound_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="16dp"
+                android:textSize="14sp"
                 android:theme="@style/IndespensaFormErrorMessage"
                 android:visibility="gone" />
 
