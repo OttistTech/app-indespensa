@@ -104,7 +104,6 @@ class UserRemoteDataSource {
                 ResultWrapper.Success(
                     response.body() as UserFullCredentialsDTO
                 )
-
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
 
@@ -130,7 +129,6 @@ class UserRemoteDataSource {
                     }
                 }
             }
-
         } catch (e: Exception) {
             Log.e(TAG, "Failed while fetching user info", e)
             return ResultWrapper.NetworkError
@@ -146,7 +144,6 @@ class UserRemoteDataSource {
                 ResultWrapper.Success(response.body() as UserUpdateResponseDTO)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-
                 when (response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()

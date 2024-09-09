@@ -21,7 +21,7 @@ class UserFirebaseDataSource(
         return currentAuthenticatedUser != null
     }
 
-    fun createUser(email: String, password: String) {
+    fun saveUser(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(executor) { task ->
                 if (task.isSuccessful) {
@@ -45,11 +45,26 @@ class UserFirebaseDataSource(
             }
     }
 
-    // TODO: implement updateUser on Firebase
-
-    fun logoutUser() {
-        auth.signOut()
-        Log.d(TAG, "[logoutUser] User logout successfully")
+    fun updateUser(email: String, password: String) {
+        removeUser()
+        saveUser(email, password)
+        Log.d(TAG, "[updateUser] Updated user successfully")
     }
 
+    fun logoutUser() {
+        Log.d(TAG, "[logoutUser] User logout successfully")
+        auth.signOut()
+    }
+
+    private fun removeUser() {
+        Log.d(TAG, "[removeUser] trying to remove user")
+        auth.currentUser!!.delete()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "[removeUser] User account removed successfully")
+                } else {
+                    Log.e(TAG, "[removeUser] Could not remove user")
+                }
+            }
+    }
 }

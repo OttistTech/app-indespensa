@@ -23,7 +23,7 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_nav_profile_to_updateProfileFragment"
+            android:id="@+id/action_profile_to_updateProfile"
             app:destination="@id/updateProfileFragment" />
 
     </fragment>
@@ -39,7 +39,7 @@
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" >
         <action
-            android:id="@+id/action_updateProfileFragment_to_termsAndConditionsFragment"
+            android:id="@+id/action_updateProfile_to_termsAndConditions"
             app:destination="@id/terms_and_conditions_dest" />
     </fragment>
     <fragment

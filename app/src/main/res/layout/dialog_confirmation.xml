@@ -12,13 +12,12 @@
         android:background="@android:color/transparent">
 
         <TextView
-            android:id="@+id/dialog_deactivate_default_text"
+            android:id="@+id/dialog_confirmation_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:fontFamily="@font/montserrat_medium"
             android:gravity="center|center_horizontal|center_vertical"
-            android:text="@string/dialog_update_profile_deactivate_account"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,16 +30,15 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dialog_deactivate_default_text" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_confirmation_message" />
 
         <Button
-            android:id="@+id/dialog_deactivate_button_remove_account"
+            android:id="@+id/dialog_confirmation_confirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_without_background"
             android:enabled="true"
             android:fontFamily="@font/montserrat"
-            android:text="@string/dialog_update_profile_deactivate_account_button"
             android:maxLines="1"
             android:textAllCaps="true"
             android:textColor="@color/red"
@@ -57,16 +55,16 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dialog_deactivate_button_remove_account" />
+            app:layout_constraintTop_toBottomOf="@id/dialog_confirmation_confirm" />
 
         <Button
-            android:id="@+id/dialog_deactivate_button_cancel"
+            android:id="@+id/dialog_confirmation_cancel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="@drawable/button_without_background"
             android:enabled="true"
             android:fontFamily="@font/montserrat"
-            android:text="@string/dialog_update_profile_cancel_button"
+            android:text="@string/cta_cancel"
             android:textAllCaps="true"
             android:textColor="@color/black"
             android:textStyle="bold"

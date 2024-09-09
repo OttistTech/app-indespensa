@@ -2,6 +2,7 @@ package com.ottistech.indespensa.webclient.dto
 
 data class UserUpdateDTO(
     val name: String,
+    val enterpriseType: String,
     val email: String,
     val password: String,
     val cep: String,

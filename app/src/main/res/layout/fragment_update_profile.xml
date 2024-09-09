@@ -59,9 +59,36 @@
                     android:paddingBottom="12dp"
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/update_profile_form_input_name_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:theme="@style/IndespensaFormErrorMessage"
+                android:visibility="gone" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/update_profile_form_input_enterprise_type_container"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:theme="@style/CustomTextInputLayout"
+                app:boxStrokeErrorColor="@color/red"
+                app:boxStrokeWidth="2dp"
+                app:errorIconDrawable="@null"
+                app:errorTextColor="@color/pastelOrange">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/update_profile_form_input_enterprise_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:hint="@string/form_hint_enterprise_type"
+                    android:inputType="text"
+                    android:paddingBottom="12dp"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/update_profile_form_input_enterprise_type_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
@@ -342,7 +369,7 @@
                 android:background="@drawable/button_primary_background"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat"
-                android:text="@string/update_profile_save_button"
+                android:text="@string/cta_save"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -360,7 +387,7 @@
                 android:background="@drawable/button_border_red"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat"
-                android:text="@string/update_profile_logout_button"
+                android:text="@string/cta_exit"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
                 android:textStyle="bold"
@@ -380,7 +407,7 @@
                 android:background="@drawable/button_without_background"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat"
-                android:text="@string/update_profile_remove_account_button"
+                android:text="@string/cta_remove"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
                 android:textStyle="bold"

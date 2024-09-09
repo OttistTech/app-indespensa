@@ -28,18 +28,19 @@ class UserRepository (
 
     fun isUserAuthenticated() : Boolean {
         val result = firebaseDataSource.isUserAuthenticated()
-        Log.d(TAG, "[isUserAuthenticated] User authenticated? $result")
+        Log.d(TAG, "[isUserAuthenticated] User authenticated ")
 
         return result
     }
 
     suspend fun signupUser(user: UserCreateDTO) : Boolean {
+        Log.d(TAG, "[signupUser] Trying to sign user up with $user")
         val result : ResultWrapper<UserCredentialsDTO> = remoteDataSource.create(user)
 
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[signupUser] Signed up user successfully: ${result.value}")
-                firebaseDataSource.createUser(
+                firebaseDataSource.saveUser(
                     email = user.email,
                     password = user.password
                 )
@@ -62,6 +63,7 @@ class UserRepository (
     }
 
     suspend fun loginUser(user: UserLoginDTO) : Boolean {
+        Log.d(TAG, "[loginUser] Trying to log user in with credentials $user")
         val result : ResultWrapper<UserCredentialsDTO> = remoteDataSource.loginUser(user)
 
         return when(result) {
@@ -75,7 +77,6 @@ class UserRepository (
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[loginUser] Error while logging user: ${result.error}, code: ${result.code}")
-
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)
@@ -86,7 +87,6 @@ class UserRepository (
                     HttpURLConnection.HTTP_GONE -> {
                         throw ResourceGoneException(result.error)
                     }
-
                     else -> false
                 }
             }
@@ -97,16 +97,17 @@ class UserRepository (
         }
     }
 
-    suspend fun infoUserDetails(userId: Long, fullInfo: Boolean) : UserFullCredentialsDTO? {
+    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullCredentialsDTO? {
+        Log.d(TAG, "[getUserInfo] Trying to find user $userId info")
         val result: ResultWrapper<UserFullCredentialsDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
 
         return when (result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[infoUserDetails] Successfully retrieved user info: ${result.value}")
+                Log.d(TAG, "[getUserInfo] Successfully retrieved user info: ${result.value}")
                 result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[infoUserDetails] Error retrieving user info: ${result.error}, code: ${result.code}")
+                Log.e(TAG, "[getUserInfo] Error retrieving user info: ${result.error}, code: ${result.code}")
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)
@@ -118,18 +119,20 @@ class UserRepository (
                 }
             }
             else -> {
-                Log.e(TAG, "[infoUserDetails] Unexpected result: $result")
+                Log.e(TAG, "[getUserInfo] Unexpected result: $result")
                 null
             }
         }
     }
 
     suspend fun updateUser(userId: Long, user: UserUpdateDTO) : UserUpdateResponseDTO? {
+        Log.d(TAG, "[updateUser] Trying to update user $userId with $user")
         val result: ResultWrapper<UserUpdateResponseDTO> = remoteDataSource.updateUser(userId, user)
 
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[updateUser] Successfully retrieved user info: ${result.value}")
+                firebaseDataSource.updateUser(user.email, user.password)
                 result.value
             }
             is ResultWrapper.Error -> {
@@ -155,10 +158,12 @@ class UserRepository (
     }
 
     fun logoutUser() {
+        Log.d(TAG, "[logoutUser] logging user out")
         firebaseDataSource.logoutUser()
     }
 
     suspend fun deactivateUser(userId: Long) : Boolean {
+        Log.d(TAG, "[deactivateUser] Trying to deactivate user $userId")
         val result: ResultWrapper<Any> = remoteDataSource.deactivateUser(userId)
 
         return when (result) {

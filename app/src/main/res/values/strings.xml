@@ -48,6 +48,9 @@
 
     <!--  Common  -->
     <string name="cta_cancel">Cancelar</string>
+    <string name="cta_remove">Remover</string>
+    <string name="cta_exit">Sair</string>
+    <string name="cta_save">Salvar</string>
     <string name="result_not_found">%1$s não encontrado</string>
 
     <!--  Scanner  -->
@@ -55,12 +58,8 @@
 
     <!--  Update Profile  -->
     <string name="update_profile_your_account">Sua conta</string>
-    <string name="dialog_update_profile_deactivate_account">Excluir sua conta?</string>
-    <string name="dialog_update_profile_deactivate_account_button">Remover conta</string>
-    <string name="dialog_update_profile_cancel_button">Cancelar</string>
-    <string name="update_profile_remove_account_button">Remover conta</string>
-    <string name="update_profile_logout_button">Sair</string>
-    <string name="update_profile_save_button">Salvar</string>
+    <string name="update_profile_deactivate_confirmation_message">Excluir sua conta?</string>
+    <string name="update_profile_logout_confirmation_message">Deseja mesmo sair?</string>
     <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
 
 
