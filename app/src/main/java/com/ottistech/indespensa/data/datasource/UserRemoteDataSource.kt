@@ -70,7 +70,7 @@ class UserRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        val detail =  error.get("detail").toString()
+                        val detail = error.get("detail").toString()
                         Log.e(TAG, "[getUser] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }

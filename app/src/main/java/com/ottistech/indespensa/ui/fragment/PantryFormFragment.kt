@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.databinding.FragmentPantryFormBinding
 import com.ottistech.indespensa.shared.AppConstants
@@ -72,6 +73,12 @@ class PantryFormFragment : Fragment() {
         binding.pantryFormScanButton.setOnClickListener {
             val action = PantryFormFragmentDirections.pantryFormToScanner()
             findNavController().navigate(action)
+        }
+
+        lifecycleScope.launch {
+            val categories = CategoryRepository().listCategories()
+            val categoriesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, categories)
+            binding.pantryFormInputCategorySelect.setAdapter(categoriesAdapter)
         }
 
         val unitiesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.AMOUNT_UNITIES)
