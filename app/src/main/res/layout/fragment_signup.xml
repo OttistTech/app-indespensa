@@ -349,12 +349,12 @@
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="8dp"
-                    android:layout_weight="4"
                     android:hint="@string/form_hint_state"
-                    app:boxStrokeErrorColor="@color/red"
+                    android:theme="@style/CustomTextInputLayoutDropdown"
                     app:boxStrokeWidth="2dp"
-                    app:errorIconDrawable="@null"
-                    app:errorTextColor="@color/pastelOrange">
+                    app:boxStrokeErrorColor="@color/red"
+                    app:errorTextColor="@color/pastelOrange"
+                    app:errorIconDrawable="@null">
 
                     <AutoCompleteTextView
                         android:id="@+id/signup_form_input_state_select"

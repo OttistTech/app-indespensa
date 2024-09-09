@@ -130,7 +130,7 @@ class ScannerFragment : Fragment() {
             putSerializable(UiConstants.SCANNER_RESULT_KEY, product)
         }
         setFragmentResult(UiConstants.SCANNER_REQUEST_CODE, resultData)
-        findNavController().popBackStack(R.id.nav_home, true)
+        findNavController().popBackStack(R.id.pantry_form_dest, true)
     }
 
     private suspend fun searchProduct(barcode: String) : ProductResponseDTO? {
