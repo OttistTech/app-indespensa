@@ -1,12 +1,15 @@
 package com.ottistech.indespensa.ui.helpers
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import coil.load
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.repository.UserRepository
+import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -32,3 +35,8 @@ fun ImageView.loadImage(url: String?) {
         error(alternativeImage)
     }
 }
+
+fun Context.getCurrentUser() : UserCredentialsDTO {
+    return UserRepository(this).getUserCredentials()
+}
+

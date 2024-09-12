@@ -16,6 +16,7 @@ class ProductRemoteDataSource {
 
     suspend fun findByBarcode(barcode: String) : ResultWrapper<ProductResponseDTO> {
         try {
+            Log.d(TAG, "[findByBarcode] Trying to find product by barcode")
             val response = service.findByBarcode(barcode)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[findByBarcode] Product found successfully")

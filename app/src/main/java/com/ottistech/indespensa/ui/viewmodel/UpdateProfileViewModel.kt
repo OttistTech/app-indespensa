@@ -5,14 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.model.FieldError
-import com.ottistech.indespensa.webclient.dto.UserFullCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
 import kotlinx.coroutines.launch
 
@@ -22,8 +21,8 @@ class UpdateProfileViewModel(
 
     private val TAG = "UPDATE USER VIEWMODEL"
 
-    private val _userInfo = MutableLiveData<UserFullCredentialsDTO?>()
-    val userInfo: LiveData<UserFullCredentialsDTO?> = _userInfo
+    private val _userInfo = MutableLiveData<UserFullInfoDTO?>()
+    val userInfo: LiveData<UserFullInfoDTO?> = _userInfo
 
     private val _updateResult = MutableLiveData<Boolean>()
     val updateResult: LiveData<Boolean> = _updateResult
@@ -34,13 +33,12 @@ class UpdateProfileViewModel(
     private val _fieldError = MutableLiveData<FieldError>()
     val fieldError: LiveData<FieldError> = _fieldError
 
-    private val userId = 7L // TODO: Substituir pelo ID correto via autenticação
-    private val userType = AppAccountType.PERSONAL // TODO: Substituir via autenticação
+    private val currentUser = repository.getUserCredentials()
 
     fun fetchUserInfo() {
         viewModelScope.launch {
             try {
-                val userInfo = repository.getUserInfo(userId, true)
+                val userInfo = repository.getUserInfo(currentUser.userId, true)
                 Log.d(TAG, "[fetchUserInfo] Fetched user information successfully")
                 _userInfo.value = userInfo
             } catch (e: Exception) {
@@ -53,7 +51,7 @@ class UpdateProfileViewModel(
     fun updateUser(user: UserUpdateDTO) {
         viewModelScope.launch {
             try {
-                val result = repository.updateUser(userId, user)
+                val result = repository.updateUser(currentUser.userId, user)
                 if (result != null) {
                     Log.d(TAG, "[updateUser] User updated successfully")
                     _updateResult.value = true
@@ -71,7 +69,7 @@ class UpdateProfileViewModel(
     fun deactivateUser() {
         viewModelScope.launch {
             try {
-                repository.deactivateUser(userId)
+                repository.deactivateUser(currentUser.userId)
                 Log.d(TAG, "[removeUser] Deactivated user successfully")
                 _userMessage.value = "Conta removida com sucesso"
             } catch (e: Exception) {
@@ -87,7 +85,7 @@ class UpdateProfileViewModel(
     }
 
     fun getUserType(): AppAccountType {
-        Log.d(TAG, "[getUserType] User type: $userType")
-        return userType
+        Log.d(TAG, "[getUserType] User type: ${currentUser.type}")
+        return currentUser.type
     }
 }

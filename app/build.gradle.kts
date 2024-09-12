@@ -85,6 +85,9 @@ dependencies {
     implementation("androidx.camera:camera-view:$cameraVersion")
     implementation("androidx.camera:camera-video:1.2.2")
     implementation("androidx.camera:camera-extensions:1.2.2")
+    // ENCRYPTED PREFERENCES
+    implementation("androidx.security:security-crypto:1.1.0-alpha03")
+
 
     testImplementation("junit:junit:4.13.2")
 

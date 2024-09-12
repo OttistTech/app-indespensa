@@ -13,6 +13,7 @@ class ProductRepository {
     private val remoteDataSource = ProductRemoteDataSource()
 
     suspend fun findByBarcode(barcode: String) : ProductResponseDTO? {
+        Log.d(TAG, "[findByBarcode] trying to find product by barcode")
         val result : ResultWrapper<ProductResponseDTO> = remoteDataSource.findByBarcode(barcode)
         return when(result) {
             is ResultWrapper.Success -> {

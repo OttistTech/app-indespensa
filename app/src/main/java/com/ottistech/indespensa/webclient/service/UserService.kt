@@ -2,7 +2,7 @@ package com.ottistech.indespensa.webclient.service
 
 import com.ottistech.indespensa.webclient.dto.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
 import com.ottistech.indespensa.webclient.dto.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
@@ -31,13 +31,13 @@ interface UserService {
     suspend fun getUserFullInfo(
         @Path("id") userId: Long,
         @Query("full-info") fullInfo: Boolean = true
-    ) : Response<UserFullCredentialsDTO>
+    ) : Response<UserFullInfoDTO>
 
     @PUT("users/update/{id}")
     suspend fun updateUser(
         @Path("id") userId: Long,
         @Body updateUserDTO: UserUpdateDTO
-    ): Response<UserUpdateResponseDTO>
+    ): Response<UserCredentialsDTO>
 
     @DELETE("users/deactivation/{id}")
     suspend fun deactivateUser(

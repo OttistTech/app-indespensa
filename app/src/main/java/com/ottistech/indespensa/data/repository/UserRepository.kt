@@ -3,7 +3,9 @@ package com.ottistech.indespensa.data.repository
 import android.content.Context
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.UserFirebaseDataSource
+import com.ottistech.indespensa.data.datasource.UserLocalDataSource
 import com.ottistech.indespensa.data.datasource.UserRemoteDataSource
+import com.ottistech.indespensa.data.exception.AuthenticationException
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.exception.ResourceGoneException
@@ -11,7 +13,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.webclient.dto.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
 import com.ottistech.indespensa.webclient.dto.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
@@ -25,11 +27,11 @@ class UserRepository (
     private val TAG = "USER REPOSITORY"
     private val firebaseDataSource = UserFirebaseDataSource(context)
     private val remoteDataSource = UserRemoteDataSource()
+    private val localDataSource = UserLocalDataSource(context)
 
     fun isUserAuthenticated() : Boolean {
         val result = firebaseDataSource.isUserAuthenticated()
-        Log.d(TAG, "[isUserAuthenticated] User authenticated ")
-
+        Log.d(TAG, "[isUserAuthenticated] User authenticated: $result")
         return result
     }
 
@@ -44,6 +46,7 @@ class UserRepository (
                     email = user.email,
                     password = user.password
                 )
+                localDataSource.saveUser(result.value)
                 true
             }
             is ResultWrapper.Error -> {
@@ -73,6 +76,7 @@ class UserRepository (
                     email = user.email,
                     password = user.password
                 )
+                localDataSource.saveUser(result.value)
                 true
             }
             is ResultWrapper.Error -> {
@@ -97,9 +101,9 @@ class UserRepository (
         }
     }
 
-    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullCredentialsDTO? {
+    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullInfoDTO? {
         Log.d(TAG, "[getUserInfo] Trying to find user $userId info")
-        val result: ResultWrapper<UserFullCredentialsDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
+        val result: ResultWrapper<UserFullInfoDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
 
         return when (result) {
             is ResultWrapper.Success -> {
@@ -125,14 +129,23 @@ class UserRepository (
         }
     }
 
-    suspend fun updateUser(userId: Long, user: UserUpdateDTO) : UserUpdateResponseDTO? {
+    suspend fun updateUser(
+        userId: Long,
+        user: UserUpdateDTO
+    ) : UserCredentialsDTO? {
         Log.d(TAG, "[updateUser] Trying to update user $userId with $user")
-        val result: ResultWrapper<UserUpdateResponseDTO> = remoteDataSource.updateUser(userId, user)
+        val result: ResultWrapper<UserCredentialsDTO> = remoteDataSource.updateUser(userId, user)
 
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[updateUser] Successfully retrieved user info: ${result.value}")
-                firebaseDataSource.updateUser(user.email, user.password)
+                firebaseDataSource.updateUser(
+                    getUserCredentials().email,
+                    getUserCredentials().password,
+                    user.email,
+                    user.password
+                )
+                localDataSource.saveUser(result.value)
                 result.value
             }
             is ResultWrapper.Error -> {
@@ -160,6 +173,7 @@ class UserRepository (
     fun logoutUser() {
         Log.d(TAG, "[logoutUser] logging user out")
         firebaseDataSource.logoutUser()
+        localDataSource.removeUser()
     }
 
     suspend fun deactivateUser(userId: Long) : Boolean {
@@ -169,6 +183,7 @@ class UserRepository (
         return when (result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[deactivateUser] User deactivated successfully")
+                localDataSource.removeUser()
                 true
             }
             is ResultWrapper.Error -> {
@@ -191,6 +206,17 @@ class UserRepository (
                 false
             }
         }
+    }
+
+    fun getUserCredentials() : UserCredentialsDTO {
+        Log.d(TAG, "[getUserCredentials] Trying to get current user credentials")
+        val user = localDataSource.getUser()
+        if(user != null) {
+            Log.d(TAG, "[getUserCredentials] User credentials: $user")
+            return user
+        }
+        Log.e(TAG, "[getUserCredentials] Failed while getting current user credentials")
+        throw AuthenticationException()
     }
 
 }
