@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.ottistech.indespensa.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -22,18 +23,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: Transfer this code to the pantry item form screen
-//        parentFragmentManager.setFragmentResultListener(UiConstants.SCANNER_REQUEST_CODE, this) { _, bundle ->
-//            val result : ProductResponseDTO? =
-//                bundle.getSerializable(UiConstants.SCANNER_RESULT_KEY) as ProductResponseDTO?
-//
-//            // Do what you have to do with response
-//            binding.resultText.text = result.toString()
-//        }
-//
-//        binding.butao.setOnClickListener {
-//            val action = HomeFragmentDirections.actionHomeToScanner()
-//            findNavController().navigate(action)
-//        }
+        findNavController().navigate(HomeFragmentDirections.homeToPantryForm())
     }
 }

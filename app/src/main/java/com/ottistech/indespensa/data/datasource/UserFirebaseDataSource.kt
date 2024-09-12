@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.firebase.Firebase
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.auth
 import java.util.concurrent.Executor
 
@@ -17,7 +18,7 @@ class UserFirebaseDataSource(
 
     fun isUserAuthenticated() : Boolean {
         val currentAuthenticatedUser = auth.currentUser
-        Log.d(TAG, "[isUserAuthenticated] User authenticated: $currentAuthenticatedUser")
+        Log.d(TAG, "[isUserAuthenticated] Current user: $currentAuthenticatedUser")
         return currentAuthenticatedUser != null
     }
 
@@ -26,9 +27,9 @@ class UserFirebaseDataSource(
             .addOnCompleteListener(executor) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Log.d(TAG, "[createUser] User authenticated: $user")
+                    Log.d(TAG, "[saveUser] Saved and authenticated user: $user")
                 } else {
-                    Log.e(TAG, "[createUser] Failed while authenticating the user")
+                    Log.e(TAG, "[saveUser] Failed while saving the user")
                 }
             }
     }
@@ -38,33 +39,48 @@ class UserFirebaseDataSource(
             .addOnCompleteListener(executor) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Log.d(TAG, "[loginUser] User logged: $user")
+                    Log.d(TAG, "[loginUser] User logged in: $user")
                 } else {
                     Log.e(TAG, "[loginUser] Failed while authenticating the user")
                 }
             }
     }
 
-    fun updateUser(email: String, password: String) {
-        removeUser()
-        saveUser(email, password)
+    fun updateUser(
+        currentEmail: String,
+        currentPassword: String,
+        newEmail: String,
+        newPassword: String
+    ) {
+        removeUser(currentEmail, currentPassword)
+        saveUser(newEmail, newPassword)
         Log.d(TAG, "[updateUser] Updated user successfully")
     }
 
     fun logoutUser() {
-        Log.d(TAG, "[logoutUser] User logout successfully")
+        Log.d(TAG, "[logoutUser] User logged out successfully")
         auth.signOut()
     }
 
-    private fun removeUser() {
-        Log.d(TAG, "[removeUser] trying to remove user")
-        auth.currentUser!!.delete()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "[removeUser] User account removed successfully")
-                } else {
-                    Log.e(TAG, "[removeUser] Could not remove user")
+    private fun removeUser(email: String, password: String) {
+        Log.d(TAG, "[removeUser] trying to remove user with email $email")
+        val credential = EmailAuthProvider.getCredential(email, password)
+        auth.currentUser?.let { user ->
+            user.reauthenticate(credential)
+                .addOnCompleteListener { reauthTask ->
+                    if (reauthTask.isSuccessful) {
+                        user.delete()
+                            .addOnCompleteListener { deleteTask ->
+                                if (deleteTask.isSuccessful) {
+                                    Log.d(TAG, "[removeUser] User account removed successfully")
+                                } else {
+                                    Log.e(TAG, "[removeUser] Could not remove user", deleteTask.exception)
+                                }
+                            }
+                    } else {
+                        Log.e(TAG, "[removeUser] Reauthentication failed", reauthTask.exception)
+                    }
                 }
-            }
+        }
     }
 }

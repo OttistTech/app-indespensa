@@ -2,7 +2,7 @@ package com.ottistech.indespensa.webclient.dto
 
 import java.util.Date
 
-data class UserFullCredentialsDTO(
+data class UserFullInfoDTO(
     val userId: Long,
     val type: String,
     val name: String,

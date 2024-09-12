@@ -23,8 +23,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val action = ProfileFragmentDirections.actionNavProfileToUpdateProfileFragment()
-        findNavController().navigate(action)
+        findNavController().navigate(ProfileFragmentDirections.actionProfileToUpdateProfile())
     }
 
 }

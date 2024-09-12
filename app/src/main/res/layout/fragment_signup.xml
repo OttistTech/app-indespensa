@@ -345,10 +345,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/signup_form_input_state_select_container"
-                    style="@style/CustomTextInputLayoutDropdown"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_marginStart="8dp"
+                    android:layout_weight="4"
                     android:hint="@string/form_hint_state"
                     android:theme="@style/CustomTextInputLayoutDropdown"
                     app:boxStrokeWidth="2dp"

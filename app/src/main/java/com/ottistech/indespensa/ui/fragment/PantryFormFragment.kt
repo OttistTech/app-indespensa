@@ -18,6 +18,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
+import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentPantryFormBinding
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
@@ -25,7 +26,9 @@ import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.ui.shared.UiConstants
+import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.ui.activity.MainActivity
+import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.ProductResponseDTO
 import kotlinx.coroutines.launch
@@ -36,6 +39,9 @@ class PantryFormFragment : Fragment() {
     private lateinit var binding : FragmentPantryFormBinding
     private lateinit var validator : FieldValidations
     private lateinit var datePicker : MaterialDatePicker<Long>
+    private lateinit var pantryRepository : PantryRepository
+    private lateinit var categoryRepository : CategoryRepository
+
 
     private var productEanCode : String? = null
     private var productImageUrl : String? = null
@@ -46,6 +52,8 @@ class PantryFormFragment : Fragment() {
     ): View {
         validator = FieldValidations(requireContext())
         binding = FragmentPantryFormBinding.inflate(inflater, container, false)
+        pantryRepository = PantryRepository()
+        categoryRepository = CategoryRepository()
         return binding.root
     }
 
@@ -76,7 +84,7 @@ class PantryFormFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            val categories = CategoryRepository().listCategories()
+            val categories = categoryRepository.listCategories()
             val categoriesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, categories)
             binding.pantryFormInputCategorySelect.setAdapter(categoriesAdapter)
         }
@@ -98,7 +106,7 @@ class PantryFormFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         Log.d(TAG, "Trying to create pantry item")
-                        val result = PantryRepository().createItem(9L, newPantryItem, binding.pantryFormImage.drawable.toBitmap())
+                        val result = pantryRepository.createItem(requireContext().getCurrentUser().userId, newPantryItem, binding.pantryFormImage.drawable.toBitmap())
                         if(result) {
                             showToast(requireContext().getString(R.string.created_successfully, "Item"))
                             findNavController().popBackStack(R.id.pantry_form_dest, true)

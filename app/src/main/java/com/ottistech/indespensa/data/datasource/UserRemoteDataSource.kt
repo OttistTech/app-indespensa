@@ -4,10 +4,9 @@ import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
 import com.ottistech.indespensa.webclient.dto.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.UserService
 import org.json.JSONObject
@@ -95,14 +94,14 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean) : ResultWrapper<UserFullCredentialsDTO> {
+    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean) : ResultWrapper<UserFullInfoDTO> {
         try {
+            Log.d(TAG, "[getUserFullInfo] Trying to fetch user info")
             val response = service.getUserFullInfo(userId, fullInfo)
-
             return if (response.isSuccessful) {
-                Log.d(TAG, "[getUserFullInfo] User logged successfully")
+                Log.d(TAG, "[getUserFullInfo] User info fetched successfully")
                 ResultWrapper.Success(
-                    response.body() as UserFullCredentialsDTO
+                    response.body() as UserFullInfoDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
@@ -135,13 +134,13 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun updateUser(userId: Long, updateUserDTO: UserUpdateDTO): ResultWrapper<UserUpdateResponseDTO> {
+    suspend fun updateUser(userId: Long, updateUserDTO: UserUpdateDTO): ResultWrapper<UserCredentialsDTO> {
         return try {
+            Log.d(TAG, "[updateUser] Trying to update user")
             val response = service.updateUser(userId, updateUserDTO)
-
             if (response.isSuccessful) {
                 Log.d(TAG, "[updateUser] User updated successfully")
-                ResultWrapper.Success(response.body() as UserUpdateResponseDTO)
+                ResultWrapper.Success(response.body() as UserCredentialsDTO)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
                 when (response.code()) {
@@ -168,15 +167,15 @@ class UserRemoteDataSource {
             }
 
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to update user", e)
+            Log.e(TAG, "[updateUser] Failed while updating user", e)
             ResultWrapper.NetworkError
         }
     }
 
     suspend fun deactivateUser(userId: Long) : ResultWrapper<Any> {
         return try {
+            Log.d(TAG, "[deactivateUser] Trying to deactivate user")
             val response = service.deactivateUser(userId)
-
             if (response.isSuccessful) {
                 Log.d(TAG, "[deactivateUser] User deactivated successfully")
                 ResultWrapper.Success("User deactivated successfully")

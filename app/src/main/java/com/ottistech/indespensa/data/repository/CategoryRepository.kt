@@ -15,6 +15,7 @@ class CategoryRepository {
     private val remoteDataSource = CategoryRemoteDataSource()
 
     suspend fun listCategories(pattern: String = "") : List<String> {
+        Log.d(TAG, "[listCategories] Trying to fetch product categories")
         val result : ResultWrapper<List<String>> = remoteDataSource.listCategories(pattern)
         when(result) {
             is ResultWrapper.Success -> {
