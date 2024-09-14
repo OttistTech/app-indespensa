@@ -5,7 +5,6 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import coil.load
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.UserRepository
@@ -38,5 +37,14 @@ fun ImageView.loadImage(url: String?) {
 
 fun Context.getCurrentUser() : UserCredentialsDTO {
     return UserRepository(this).getUserCredentials()
+}
+
+fun ImageView.tryLoadImage(url: String? = null) {
+    val defaultImage = R.drawable.imagem_padrao
+    load(url) {
+        placeholder(defaultImage)
+        fallback(defaultImage)
+        error(defaultImage)
+    }
 }
 
