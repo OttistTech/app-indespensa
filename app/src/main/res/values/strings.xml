@@ -76,4 +76,7 @@
     <string name="shoplist_in_your_shopping_list">na sua lista de compras</string>
     <string name="shoplist_add_all_to_pantry">Adicionar todos à despensa</string>
     <string name="shoplist_purchase_history">Histórico de compras</string>
+
+    <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
+    <string name="ingredient_product_amount">%.2f</string> <!-- Placeholder para decimais com duas casas -->
 </resources>
