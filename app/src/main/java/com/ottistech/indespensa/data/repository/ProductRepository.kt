@@ -3,7 +3,7 @@ package com.ottistech.indespensa.data.repository
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.webclient.dto.ProductResponseDTO
+import com.ottistech.indespensa.webclient.dto.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
@@ -12,9 +12,9 @@ class ProductRepository {
     private val TAG = "PRODUCT REPOSITORY"
     private val remoteDataSource = ProductRemoteDataSource()
 
-    suspend fun findByBarcode(barcode: String) : ProductResponseDTO? {
+    suspend fun findByBarcode(barcode: String) : ProductDTO? {
         Log.d(TAG, "[findByBarcode] trying to find product by barcode")
-        val result : ResultWrapper<ProductResponseDTO> = remoteDataSource.findByBarcode(barcode)
+        val result : ResultWrapper<ProductDTO> = remoteDataSource.findByBarcode(barcode)
         return when(result) {
             is ResultWrapper.Success -> {
                 val productFound = result.value

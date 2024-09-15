@@ -2,10 +2,8 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.PantryItemResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.CategoryService
-import com.ottistech.indespensa.webclient.service.PantryService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 

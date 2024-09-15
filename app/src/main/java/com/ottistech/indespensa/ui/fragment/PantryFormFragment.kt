@@ -18,19 +18,16 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
-import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentPantryFormBinding
 import com.ottistech.indespensa.shared.AppConstants
+import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.activity.MainActivity
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.ProductResponseDTO
+import com.ottistech.indespensa.webclient.dto.ProductDTO
 import kotlinx.coroutines.launch
 
 class PantryFormFragment : Fragment() {
@@ -52,7 +49,7 @@ class PantryFormFragment : Fragment() {
     ): View {
         validator = FieldValidations(requireContext())
         binding = FragmentPantryFormBinding.inflate(inflater, container, false)
-        pantryRepository = PantryRepository()
+        pantryRepository = PantryRepository(requireContext())
         categoryRepository = CategoryRepository()
         return binding.root
     }
@@ -63,8 +60,8 @@ class PantryFormFragment : Fragment() {
         parentFragmentManager.setFragmentResultListener(
             UiConstants.SCANNER_REQUEST_CODE, this
         ) { _, bundle ->
-            val result : ProductResponseDTO? =
-                bundle.getSerializable(UiConstants.SCANNER_RESULT_KEY) as ProductResponseDTO?
+            val result : ProductDTO? =
+                bundle.getSerializable(UiConstants.SCANNER_RESULT_KEY) as ProductDTO?
 
             result?.let {
                 fillForm(it)
@@ -106,7 +103,7 @@ class PantryFormFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         Log.d(TAG, "Trying to create pantry item")
-                        val result = pantryRepository.createItem(requireContext().getCurrentUser().userId, newPantryItem, binding.pantryFormImage.drawable.toBitmap())
+                        val result = pantryRepository.createItem(newPantryItem, binding.pantryFormImage.drawable.toBitmap())
                         if(result) {
                             showToast(requireContext().getString(R.string.created_successfully, "Item"))
                             findNavController().popBackStack(R.id.pantry_form_dest, true)
@@ -145,7 +142,7 @@ class PantryFormFragment : Fragment() {
         )
     }
 
-    private fun fillForm(product: ProductResponseDTO) {
+    private fun fillForm(product: ProductDTO) {
         product.imageUrl?.let {
             binding.pantryFormImage.loadImage(it)
             binding.pantryFormImage.tag = it

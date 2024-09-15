@@ -28,7 +28,7 @@ import com.ottistech.indespensa.databinding.FragmentScannerBinding
 import com.ottistech.indespensa.ui.helpers.PermissionManager
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.webclient.dto.ProductResponseDTO
+import com.ottistech.indespensa.webclient.dto.ProductDTO
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
@@ -125,15 +125,15 @@ class ScannerFragment : Fragment() {
         }
     }
 
-    private fun giveFragmentResultBack(product: ProductResponseDTO?) {
+    private fun giveFragmentResultBack(product: ProductDTO?) {
         val resultData = Bundle().apply {
             putSerializable(UiConstants.SCANNER_RESULT_KEY, product)
         }
         setFragmentResult(UiConstants.SCANNER_REQUEST_CODE, resultData)
-        findNavController().popBackStack(R.id.pantry_form_dest, true)
+        findNavController().popBackStack(R.id.pantry_form_dest, false)
     }
 
-    private suspend fun searchProduct(barcode: String) : ProductResponseDTO? {
+    private suspend fun searchProduct(barcode: String) : ProductDTO? {
         return try {
             val product = repository.findByBarcode(barcode)
             Log.d(TAG, "[analyseImage] Product found: $product")
