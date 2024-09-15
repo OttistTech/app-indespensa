@@ -3,6 +3,7 @@ package com.ottistech.indespensa.ui.recyclerview.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.IngredientShoplistItemBinding
 import com.ottistech.indespensa.ui.helpers.tryLoadImage
 import com.ottistech.indespensa.webclient.dto.ShopListIngredientResponseDTO
@@ -28,15 +29,14 @@ class ShopListAdapter(
 
     override fun getItemCount(): Int = ingredients.size
 
-
     inner class ShopListViewHolder(private val binding: IngredientShoplistItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: ShopListIngredientResponseDTO) {
             binding.ingredientImage.tryLoadImage(ingredient.imageUrl)
 
             binding.ingredientName.text = ingredient.productName
-            binding.ingredientAmount.text = "${ingredient.amount}x"
-            binding.ingredientUnit.text = String.format("%.2f", ingredient.productAmount)
+            binding.ingredientAmount.text = itemView.context.getString(R.string.ingredient_amount, ingredient.amount)
+            binding.ingredientUnit.text = itemView.context.getString(R.string.ingredient_product_amount, ingredient.productAmount)
             binding.ingredientUnitType.text = ingredient.productUnit
         }
     }
