@@ -5,4 +5,5 @@ object UiConstants {
     const val SCANNER_RESULT_KEY = "RESPONSE BARCODE"
 
     const val ERROR_CONFLICT = 409
+    const val ERROR_NOT_FOUND = 404
 }

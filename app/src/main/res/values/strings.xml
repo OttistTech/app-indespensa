@@ -60,6 +60,11 @@
     <string name="cta_save">Salvar</string>
     <string name="result_not_found">%1$s não encontrado</string>
     <string name="created_successfully">%1$s criado com sucesso</string>
+    <string name="amount_template">%1$dx</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="cta_add_one">Adicionar um</string>
+    <string name="cta_remove_one">Remover um</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -70,5 +75,11 @@
     <string name="update_profile_deactivate_confirmation_message">Excluir sua conta?</string>
     <string name="update_profile_logout_confirmation_message">Deseja mesmo sair?</string>
     <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
+
+    <!--  Pantry  -->
+    <string name="home_access_pantry">Acessar despensa</string>
+    <string name="pantry_text">Olá, %1$s! Este é o estado atual da sua despensa</string>
+    <string name="pantry_message_empty">Sua despensa está vazia no momento</string>
+
 
 </resources>

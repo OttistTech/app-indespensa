@@ -1,9 +1,8 @@
 package com.ottistech.indespensa.webclient.dto
 
-import com.ottistech.indespensa.shared.AppAccountType
 import java.util.Date
 
-data class PantryItemResponseDTO (
+data class PantryItemDTO (
     val productEanCode: String?,
     val productName: String,
     val productImageUrl: String?,

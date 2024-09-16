@@ -2,7 +2,7 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.ProductResponseDTO
+import com.ottistech.indespensa.webclient.dto.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.ProductService
 import org.json.JSONObject
@@ -14,14 +14,14 @@ class ProductRemoteDataSource {
     private val service : ProductService =
         RetrofitInitializer().getService(ProductService::class.java)
 
-    suspend fun findByBarcode(barcode: String) : ResultWrapper<ProductResponseDTO> {
+    suspend fun findByBarcode(barcode: String) : ResultWrapper<ProductDTO> {
         try {
             Log.d(TAG, "[findByBarcode] Trying to find product by barcode")
             val response = service.findByBarcode(barcode)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[findByBarcode] Product found successfully")
                 ResultWrapper.Success(
-                    response.body() as ProductResponseDTO
+                    response.body() as ProductDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
