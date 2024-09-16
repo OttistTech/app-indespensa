@@ -9,8 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.ShopListRepository
-import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentShoplistBinding
+import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.recyclerview.adapter.ShopListAdapter
 import kotlinx.coroutines.launch
 
@@ -19,7 +19,6 @@ class ShopListFragment : Fragment() {
     private lateinit var binding: FragmentShoplistBinding
     private lateinit var shopListAdapter: ShopListAdapter
     private lateinit var shopListRepository: ShopListRepository
-    private lateinit var userRepository: UserRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,7 +26,6 @@ class ShopListFragment : Fragment() {
     ): View {
         binding = FragmentShoplistBinding.inflate(inflater, container, false)
         shopListRepository = ShopListRepository()
-        userRepository = UserRepository(requireContext())
         setupRecyclerView()
 
         return binding.root
@@ -50,7 +48,7 @@ class ShopListFragment : Fragment() {
 
     private fun loadData() {
         lifecycleScope.launch {
-            val currentUser = userRepository.getUserCredentials()
+            val currentUser = requireContext().getCurrentUser()
             val shopItems = shopListRepository.listShopItems(currentUser.userId)
 
             binding.shoplistQuantityIngredients.text = getString(R.string.shoplist_ingredients_count, shopItems.size)

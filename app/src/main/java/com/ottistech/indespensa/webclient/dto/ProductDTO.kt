@@ -2,7 +2,7 @@ package com.ottistech.indespensa.webclient.dto
 
 import java.io.Serializable
 
-data class ProductResponseDTO (
+data class ProductDTO (
     val eanCode: String,
     val name: String?,
     val imageUrl: String?,

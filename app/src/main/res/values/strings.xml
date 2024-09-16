@@ -78,5 +78,6 @@
     <string name="shoplist_purchase_history">Histórico de compras</string>
 
     <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
-    <string name="ingredient_product_amount">%.2f</string> <!-- Placeholder para decimais com duas casas -->
+    <string name="ingredient_product_amount">%.2f</string>
+    <string name="home_access_pantry">Acessar despensa</string> <!-- Placeholder para decimais com duas casas -->
 </resources>

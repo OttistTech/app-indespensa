@@ -11,8 +11,8 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/home_to_pantry_form"
-            app:destination="@id/pantry_form_dest" />
+            android:id="@+id/home_to_pantry"
+            app:destination="@id/pantry_dest" />
     </fragment>
 
     <fragment
@@ -67,5 +67,15 @@
         android:name="com.ottistech.indespensa.ui.fragment.TermsAndConditionsFragment"
         android:label="fragment_terms_and_conditions"
         tools:layout="@layout/fragment_terms_and_conditions" />
+
+    <fragment
+        android:id="@+id/pantry_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.PantryFragment"
+        android:label="fragment_pantry"
+        tools:layout="@layout/fragment_pantry" >
+        <action
+            android:id="@+id/pantry_to_pantry_form"
+            app:destination="@id/pantry_form_dest" />
+    </fragment>
 
 </navigation>
