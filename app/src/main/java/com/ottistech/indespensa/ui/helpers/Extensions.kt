@@ -11,6 +11,7 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @SuppressLint("SimpleDateFormat")
 fun String.toDate(format: String = "dd/MM/yyyy"): Date? {
@@ -20,6 +21,11 @@ fun String.toDate(format: String = "dd/MM/yyyy"): Date? {
     } catch (e: Exception) {
         null
     }
+}
+
+fun Date.formatAsString(format: String = "dd/MM/yyyy") : String {
+    val simpleDateFormat = SimpleDateFormat(format, Locale.getDefault())
+    return simpleDateFormat.format(this)
 }
 
 fun Fragment.showToast(message: String) {
