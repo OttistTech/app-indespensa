@@ -11,12 +11,11 @@ import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.exception.ResourceGoneException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
-import com.ottistech.indespensa.webclient.dto.UserCreateDTO
-import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
+import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
@@ -101,9 +100,9 @@ class UserRepository (
         }
     }
 
-    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullInfoDTO? {
+    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullIDTO? {
         Log.d(TAG, "[getUserInfo] Trying to find user $userId info")
-        val result: ResultWrapper<UserFullInfoDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
+        val result: ResultWrapper<UserFullIDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
 
         return when (result) {
             is ResultWrapper.Success -> {

@@ -20,8 +20,8 @@ import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.model.FieldError
 import com.ottistech.indespensa.ui.viewmodel.UpdateProfileViewModel
-import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 
 class UpdateProfileFragment : Fragment() {
 
@@ -142,7 +142,7 @@ class UpdateProfileFragment : Fragment() {
         )
     }
 
-    private fun fillForm(userInfo: UserFullInfoDTO) {
+    private fun fillForm(userInfo: UserFullIDTO) {
         binding.updateProfileFormInputName.setText(userInfo.name)
         binding.updateProfileFormInputEnterpriseType.setText(userInfo.enterpriseType)
         binding.updateProfileFormInputEmail.setText(userInfo.email)

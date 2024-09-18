@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.webclient.dto
+package com.ottistech.indespensa.webclient.dto.pantry
 
 import java.util.Date
 

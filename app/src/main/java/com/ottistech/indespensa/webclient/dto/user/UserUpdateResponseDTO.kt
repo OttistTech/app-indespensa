@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.webclient.dto
+package com.ottistech.indespensa.webclient.dto.user
 
 data class UserUpdateResponseDTO (
     val name: String,

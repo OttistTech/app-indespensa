@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ottistech.indespensa.R
@@ -39,6 +40,36 @@ class MainActivity : AppCompatActivity() {
             navController.setGraph(R.navigation.main_enterprise_navigation)
         }
         binding.mainBottomNavigation.setupWithNavController(navController)
+
+        binding.mainBottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    navController.navigate(R.id.nav_home, null, NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_home, true)
+                        .build())
+                    true
+                }
+                R.id.nav_shoplist -> {
+                    navController.navigate(R.id.nav_shoplist, null, NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_shoplist, true)
+                        .build())
+                    true
+                }
+                R.id.nav_profile -> {
+                    navController.navigate(R.id.nav_profile, null, NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_profile, true)
+                        .build())
+                    true
+                }
+                R.id.nav_recipe_list -> {
+                    navController.navigate(R.id.nav_recipe_list, null, NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_recipe_list, true)
+                        .build())
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun changeBottomNavigationBarVisibility(visibility: Int) {

@@ -1,9 +1,10 @@
 package com.ottistech.indespensa.webclient.service
 
-import com.ottistech.indespensa.webclient.dto.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemUpdateDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,7 +18,7 @@ interface PantryService {
     suspend fun createItem(
         @Path("user_id") userId: Long,
         @Body pantryItem: PantryItemCreateDTO
-    ) : Response<PantryItemDTO>
+    ) : Response<PantryItemFullDTO>
 
     @GET("pantry/{user_id}/list")
     suspend fun listItems(
@@ -26,6 +27,11 @@ interface PantryService {
 
     @PATCH("pantry/update-items-amount")
     suspend fun updateItemsAmount(
-        @Body pantryItems: List<PantryItemUpdateDTO>
-    ) : Response<List<PantryItemUpdateDTO>>
+        @Body pantryItems: List<PantryItemUpdateAmountDTO>
+    ) : Response<List<PantryItemUpdateAmountDTO>>
+
+    @GET("pantry/{pantry_item_id}/details")
+    suspend fun getItemDetails(
+        @Path("pantry_item_id") pantryItemId: Long
+    ) : Response<PantryItemDetailsDTO>
 }

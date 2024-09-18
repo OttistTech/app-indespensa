@@ -3,9 +3,6 @@ package com.ottistech.indespensa.data.repository
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.CategoryRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
-import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 

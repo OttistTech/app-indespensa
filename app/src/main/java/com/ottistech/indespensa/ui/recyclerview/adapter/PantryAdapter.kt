@@ -3,20 +3,18 @@ package com.ottistech.indespensa.ui.recyclerview.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.CardPantryItemBinding
-import com.ottistech.indespensa.ui.helpers.formatAsString
 import com.ottistech.indespensa.ui.helpers.loadImage
-import com.ottistech.indespensa.webclient.dto.PantryItemPartialDTO
-import java.util.Date
-import java.util.concurrent.TimeUnit
+import com.ottistech.indespensa.ui.helpers.renderAmount
+import com.ottistech.indespensa.ui.helpers.renderValidityDate
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 
 class PantryAdapter(
     private val context: Context,
     pantryItemList: List<PantryItemPartialDTO> = ArrayList(),
-    val onChangeAmount: (itemId: Long, amount: Int) -> Unit
+    val onChangeAmount: (itemId: Long, amount: Int) -> Unit,
+    val onItemClick: (itemId: Long) -> Unit
 ) : RecyclerView.Adapter<PantryAdapter.PantryItemViewHolder>(){
 
     private var pantryItemsList : MutableList<PantryItemPartialDTO> = pantryItemList.toMutableList()
@@ -52,30 +50,17 @@ class PantryAdapter(
                     onChangeAmount(pantryItemsList[adapterPosition].pantryItemId, pantryItemsList[adapterPosition].pantryAmount)
                 }
             }
+            itemView.setOnClickListener {
+                onItemClick(pantryItem.pantryItemId)
+            }
         }
 
         fun bind(pantryItem: PantryItemPartialDTO) {
             this.pantryItem = pantryItem
             binding.cardPantryItemImage.loadImage(pantryItem.imageUrl)
             binding.cardPantryItemName.text = pantryItem.name
-            showAmount(pantryItem.pantryAmount)
-            showValidityDate(pantryItem.validityDate)
-        }
-
-        private fun showValidityDate(validityDate: Date) {
-            val dateView = binding.cardPantryItemValidityDate
-            val currentDate = Date()
-            val daysLeft = TimeUnit.MILLISECONDS.toDays(validityDate.time - currentDate.time)
-            if(daysLeft > 10) {
-                dateView.setTextColor(ContextCompat.getColor(context, R.color.green))
-            } else {
-                dateView.setTextColor(ContextCompat.getColor(context, R.color.red))
-            }
-            dateView.text = validityDate.formatAsString()
-        }
-
-        private fun showAmount(amount: Int) {
-            binding.cardPantryItemAmount.text = context.getString(R.string.amount_template, amount)
+            binding.cardPantryItemAmount.renderAmount(pantryItem.pantryAmount, "x")
+            binding.cardPantryItemValidityDate.renderValidityDate(pantryItem.validityDate)
         }
     }
 

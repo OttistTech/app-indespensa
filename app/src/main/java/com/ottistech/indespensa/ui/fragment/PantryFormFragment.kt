@@ -26,8 +26,8 @@ import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.webclient.dto.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.ProductDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import kotlinx.coroutines.launch
 
 class PantryFormFragment : Fragment() {
@@ -192,7 +192,7 @@ class PantryFormFragment : Fragment() {
         val isBrandValid = validator.validNotNull(binding.pantryFormInputBrand, binding.pantryFormInputBrandContainer, binding.pantryFormInputBrandError)
         // amount
         val isAmountValid = validator.validNotNull(binding.pantryFormInputAmount, binding.pantryFormInputAmountContainer, binding.pantryFormInputAmountError)
-        // unity
+        // unit
         val isUnityValid = validator.validNotNull(binding.pantryFormInputUnitSelect, binding.pantryFormInputUnitSelectContainer, binding.pantryFormInputUnitSelectError)
         // validity date
         val isValidityDateValid = validator.validNotNull(binding.pantryFormInputValidityDate, binding.pantryFormInputValidityDateContainer, binding.pantryFormInputValidityDateError)
