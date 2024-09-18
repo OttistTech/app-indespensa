@@ -2,11 +2,11 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.UserCreateDTO
-import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
+import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.UserService
 import org.json.JSONObject
@@ -94,14 +94,14 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean) : ResultWrapper<UserFullInfoDTO> {
+    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean) : ResultWrapper<UserFullIDTO> {
         try {
             Log.d(TAG, "[getUserFullInfo] Trying to fetch user info")
             val response = service.getUserFullInfo(userId, fullInfo)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[getUserFullInfo] User info fetched successfully")
                 ResultWrapper.Success(
-                    response.body() as UserFullInfoDTO
+                    response.body() as UserFullIDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())

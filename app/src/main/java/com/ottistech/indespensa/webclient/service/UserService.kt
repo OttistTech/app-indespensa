@@ -1,11 +1,10 @@
 package com.ottistech.indespensa.webclient.service
 
-import com.ottistech.indespensa.webclient.dto.UserCreateDTO
-import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateResponseDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
+import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -31,7 +30,7 @@ interface UserService {
     suspend fun getUserFullInfo(
         @Path("id") userId: Long,
         @Query("full-info") fullInfo: Boolean = true
-    ) : Response<UserFullInfoDTO>
+    ) : Response<UserFullIDTO>
 
     @PUT("users/update/{id}")
     suspend fun updateUser(

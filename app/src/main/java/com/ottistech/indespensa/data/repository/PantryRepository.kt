@@ -1,7 +1,6 @@
 package com.ottistech.indespensa.data.repository
 
 import android.content.Context
-import android.content.res.Resources.NotFoundException
 import android.graphics.Bitmap
 import android.util.Log
 import com.ottistech.indespensa.data.DataConstants
@@ -9,12 +8,14 @@ import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.PantryRemoteDatasource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
-import com.ottistech.indespensa.webclient.dto.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemUpdateDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
+import java.util.Date
 
 class PantryRepository(
     private val context: Context
@@ -22,7 +23,7 @@ class PantryRepository(
 
     private val TAG = "PANTRY REPOSITORY"
     private val remoteDataSource = PantryRemoteDatasource()
-    private val imageDatasource = ImageFirebaseDatasource(DataConstants.FIREBASE_STORAGE_PANTRY_ITEM)
+    private val imageDatasource = ImageFirebaseDatasource(DataConstants.FIREBASE_STORAGE_PRODUCTS)
 
     suspend fun createItem(
         pantryItem: PantryItemCreateDTO,
@@ -34,7 +35,7 @@ class PantryRepository(
             pantryItem.productImageUrl = imageDatasource.uploadImage(imageBitmap)
         }
         Log.d(TAG, "[createItem] Trying to create pantry item with $pantryItem")
-        val result : ResultWrapper<PantryItemDTO> = remoteDataSource.createItem(userId, pantryItem)
+        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.createItem(userId, pantryItem)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[createItem] Pantry item created successfully: ${result.value}")
@@ -44,7 +45,7 @@ class PantryRepository(
                 Log.e(TAG, "[createItem] Error while creating pantry item: $result")
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw NotFoundException(result.error)
+                        throw ResourceNotFoundException(result.error)
                     }
                     else -> false
                 }
@@ -73,10 +74,10 @@ class PantryRepository(
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems: List<PantryItemUpdateDTO>) {
-        if(pantryItems.isNotEmpty()) {
-            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
-            val result : ResultWrapper<List<PantryItemUpdateDTO>> = remoteDataSource.updateItemsAmount(pantryItems)
+    suspend fun updateItemsAmount(vararg items: PantryItemUpdateAmountDTO) {
+        if(items.isNotEmpty()) {
+            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
+            val result : ResultWrapper<List<PantryItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
             when(result) {
                 is ResultWrapper.Success -> {
                     Log.d(TAG, "[updateItemsAmount] Updated successfully ${result.value.size} items")
@@ -89,5 +90,29 @@ class PantryRepository(
                 }
             }
         }
+    }
+
+    suspend fun getItemDetails(itemId: Long) : PantryItemDetailsDTO? {
+        Log.d(TAG, "[getItemDetails] Trying to get item details with id $itemId")
+        val result : ResultWrapper<PantryItemDetailsDTO> = remoteDataSource.getItemDetails(itemId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[getItemDetails] Found pantry item details successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[getItemDetails] Error while getting pantry item details: $result")
+                throw ResourceNotFoundException("Could not find pantry item")
+            }
+            else -> {
+                Log.e(TAG, "[getItemDetails] Unexpected error occurred while getting pantry item details")
+                null
+            }
+        }
+    }
+
+    fun addItem(productId: Long, validityDate: Date): Boolean {
+        // TODO: Integrate this method
+        return true
     }
 }

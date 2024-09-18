@@ -23,7 +23,7 @@ import com.ottistech.indespensa.ui.helpers.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
 import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.webclient.dto.UserCreateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import kotlinx.coroutines.launch
 
 class SignupFragment : Fragment() {

@@ -3,8 +3,6 @@ package com.ottistech.indespensa.ui.helpers
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import androidx.core.content.ContextCompat
-import com.ottistech.indespensa.R
 
 fun makeSpanText(
     fullText: String,

@@ -8,15 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.webclient.dto.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.PantryItemUpdateDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
 import kotlinx.coroutines.launch
 
 class PantryViewModel(
     private val repository: PantryRepository
 ) : ViewModel() {
 
-    private val TAG = "UPDATE USER VIEWMODEL"
+    private val TAG = "PANTRY VIEWMODEL"
 
     private val _pantryState = MutableLiveData<List<PantryItemPartialDTO>?>()
     val pantryState: LiveData<List<PantryItemPartialDTO>?> = _pantryState
@@ -24,7 +24,7 @@ class PantryViewModel(
     private val _error = MutableLiveData<Int?>()
     val error: LiveData<Int?> = _error
 
-    private val pantryChanges = mutableListOf<PantryItemUpdateDTO>()
+    private val pantryChanges = mutableListOf<PantryItemUpdateAmountDTO>()
 
     fun fetchPantry() {
         Log.d(TAG, "[fetchPantry] Requesting pantry items information")
@@ -42,13 +42,13 @@ class PantryViewModel(
     fun syncChanges() {
         Log.d(TAG, "[syncChanges] Requesting for changed pantry items synchronization")
         viewModelScope.launch {
-            repository.updateItemsAmount(pantryChanges)
+            repository.updateItemsAmount(*pantryChanges.toTypedArray())
         }
     }
 
     fun registerItemChange(itemId: Long, amount: Int) {
         Log.d(TAG, "[registerItemChange] Pantry item $itemId amount was changed to $amount")
-        val change = PantryItemUpdateDTO(itemId, amount)
+        val change = PantryItemUpdateAmountDTO(itemId, amount)
         pantryChanges.add(change)
     }
 }

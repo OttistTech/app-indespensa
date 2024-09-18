@@ -2,7 +2,7 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.ProductDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.ProductService
 import org.json.JSONObject
