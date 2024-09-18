@@ -118,7 +118,9 @@ class ProductDetailsFragment : Fragment() {
             }
         }
         viewModel.message.observe(viewLifecycleOwner) { messageCode ->
-            handleViewModelMessage(messageCode)
+            messageCode?.let {
+                handleViewModelMessage(messageCode)
+            }
         }
         viewModel.itemAmount.observe(viewLifecycleOwner) { amount ->
             binding.productDetailsAmount.text = amount.toString()
