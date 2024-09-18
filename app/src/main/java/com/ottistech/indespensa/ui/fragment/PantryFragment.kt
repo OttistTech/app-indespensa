@@ -1,28 +1,23 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.databinding.FragmentPantryBinding
+import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.makeSpanText
-import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.PantryAdapter
 import com.ottistech.indespensa.ui.viewmodel.PantryViewModel
-import kotlinx.coroutines.launch
 
 class PantryFragment : Fragment() {
 
@@ -100,6 +95,9 @@ class PantryFragment : Fragment() {
             context = requireContext(),
             onChangeAmount = { itemId, amount ->
                 viewModel.registerItemChange(itemId, amount)
+            },
+            onItemClick = { itemId ->
+                navigateToProductDetails(itemId)
             }
         )
         return adapter
@@ -113,6 +111,12 @@ class PantryFragment : Fragment() {
 
     private fun navigateToPantryForm() {
         val action = PantryFragmentDirections.pantryToPantryForm()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToProductDetails(itemId: Long) {
+        val productItemType = ProductItemType.PANTRY_ITEM
+        val action = PantryFragmentDirections.pantryToProductDetails(itemId, productItemType)
         findNavController().navigate(action)
     }
 }

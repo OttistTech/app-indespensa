@@ -3,7 +3,7 @@ package com.ottistech.indespensa.data.repository
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.webclient.dto.ProductDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 

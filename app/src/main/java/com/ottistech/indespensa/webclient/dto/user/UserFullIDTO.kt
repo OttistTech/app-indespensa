@@ -1,8 +1,8 @@
-package com.ottistech.indespensa.webclient.dto
+package com.ottistech.indespensa.webclient.dto.user
 
 import java.util.Date
 
-data class UserFullInfoDTO(
+data class UserFullIDTO(
     val userId: Long,
     val type: String,
     val name: String,

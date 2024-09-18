@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
-import com.ottistech.indespensa.webclient.dto.UserCredentialsDTO
+import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
 
 class UserLocalDataSource(
     context: Context

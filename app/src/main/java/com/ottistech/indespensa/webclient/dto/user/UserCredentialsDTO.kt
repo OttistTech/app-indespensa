@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.webclient.dto
+package com.ottistech.indespensa.webclient.dto.user
 
 import com.ottistech.indespensa.shared.AppAccountType
 

@@ -18,7 +18,7 @@ import com.ottistech.indespensa.databinding.FragmentLoginBinding
 import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.webclient.dto.UserLoginDTO
+import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {

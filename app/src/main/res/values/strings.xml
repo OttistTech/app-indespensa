@@ -60,7 +60,6 @@
     <string name="cta_save">Salvar</string>
     <string name="result_not_found">%1$s não encontrado</string>
     <string name="created_successfully">%1$s criado com sucesso</string>
-    <string name="amount_template">%1$dx</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="cta_add_one">Adicionar um</string>
@@ -86,6 +85,12 @@
     <string name="home_access_pantry">Acessar despensa</string>
     <string name="pantry_text">Olá, %1$s! Este é o estado atual da sua despensa</string>
     <string name="pantry_message_empty">Sua despensa está vazia no momento</string>
+    <string name="label_amount_pantry">Quantidade na despensa:</string>
+    <string name="label_amount_shoplist">Quantidade na lista de compras:</string>
+    <string name="label_product_amount">Peso / Volume:</string>
+    <string name="label_validity_date">Validade:</string>
+    <string name="add_to_pantry">+ despensa</string>
+    <string name="add_to_shop_list">+ lista de compras</string>
 
     <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
     <string name="ingredient_product_amount">%.2f</string>

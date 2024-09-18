@@ -11,8 +11,8 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.model.FieldError
-import com.ottistech.indespensa.webclient.dto.UserFullInfoDTO
-import com.ottistech.indespensa.webclient.dto.UserUpdateDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import kotlinx.coroutines.launch
 
 class UpdateProfileViewModel(
@@ -21,8 +21,8 @@ class UpdateProfileViewModel(
 
     private val TAG = "UPDATE USER VIEWMODEL"
 
-    private val _userInfo = MutableLiveData<UserFullInfoDTO?>()
-    val userInfo: LiveData<UserFullInfoDTO?> = _userInfo
+    private val _userInfo = MutableLiveData<UserFullIDTO?>()
+    val userInfo: LiveData<UserFullIDTO?> = _userInfo
 
     private val _updateResult = MutableLiveData<Boolean>()
     val updateResult: LiveData<Boolean> = _updateResult

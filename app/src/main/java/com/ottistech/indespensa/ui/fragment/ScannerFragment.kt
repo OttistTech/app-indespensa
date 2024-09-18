@@ -28,7 +28,7 @@ import com.ottistech.indespensa.databinding.FragmentScannerBinding
 import com.ottistech.indespensa.ui.helpers.PermissionManager
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.webclient.dto.ProductDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
