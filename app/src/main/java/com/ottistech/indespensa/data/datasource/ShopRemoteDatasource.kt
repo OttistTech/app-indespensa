@@ -2,6 +2,8 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
@@ -46,4 +48,55 @@ class ShopRemoteDatasource {
             return ResultWrapper.NetworkError
         }
     }
+
+    suspend fun listItems(userId: Long) : ResultWrapper<List<ShopItemPartialDTO>> {
+        try {
+            Log.d(TAG, "[listItems] Trying to fetch pantry items for user $userId")
+            val response = service.listItems(userId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[listItems] Found pantry items for user $userId")
+                ResultWrapper.Success(
+                    response.body() as List<ShopItemPartialDTO>
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[listItems] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    } else -> {
+                    Log.e(TAG, "[listItems] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[listItems] Failed while listing pantry items", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<List<ProductItemUpdateAmountDTO>> {
+        try {
+            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
+            val response = service.updateItemsAmount(pantryItems)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[updateItemsAmount] Updated amount successfully for ${response.body()?.size}/${pantryItems.size} items")
+                ResultWrapper.Success(
+                    response.body() as List<ProductItemUpdateAmountDTO>
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                Log.e(TAG, "[updateItemsAmount] A not mapped error occurred")
+                ResultWrapper.Error(response.code(), error.get("detail").toString())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[updateItemsAmount] Failed while updating items amount", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
+
+
 }

@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.fragment.ShopListFragment">
+    tools:context=".ui.fragment.ShopFragment">
 
     <!--    TODO: Implement search bar -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
@@ -34,19 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
-                tools:text="11 ingredientes"
-                android:textColor="@color/secondary" />
+                tools:text="11 ingredientes na sua lista de compras" />
 
-            <TextView
-                android:id="@+id/shoplist_quantity_ingredients_complement"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/montserrat"
-                android:text="@string/shoplist_in_your_shopping_list"
-                android:textColor="@color/black" />
         </LinearLayout>
 
         <Button
@@ -85,13 +74,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/shoplist_recyclerview"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            tools:listitem="@layout/ingredient_shoplist_item"
-            />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/shoplist_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/card_shop_item" />
+
+            <ProgressBar
+                android:id="@+id/shop_progressbar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="108dp"
+                android:indeterminateBehavior="repeat"
+                android:indeterminateTint="@color/secondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.458"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/shoplist_recyclerview" />
+
+            <TextView
+                android:id="@+id/shop_message"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:text="Text Message"
+                android:theme="@style/IndespensaHeading2"
+                android:textColor="@color/gray"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/update_profile_form_button_logout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginHorizontal="16dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     </LinearLayout>
 

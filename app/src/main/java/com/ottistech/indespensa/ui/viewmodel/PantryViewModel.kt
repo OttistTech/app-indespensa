@@ -9,7 +9,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import kotlinx.coroutines.launch
 
 class PantryViewModel(
@@ -24,7 +24,7 @@ class PantryViewModel(
     private val _error = MutableLiveData<Int?>()
     val error: LiveData<Int?> = _error
 
-    private val pantryChanges = mutableListOf<PantryItemUpdateAmountDTO>()
+    private val pantryChanges = mutableListOf<ProductItemUpdateAmountDTO>()
 
     fun fetchPantry() {
         Log.d(TAG, "[fetchPantry] Requesting pantry items information")
@@ -48,7 +48,7 @@ class PantryViewModel(
 
     fun registerItemChange(itemId: Long, amount: Int) {
         Log.d(TAG, "[registerItemChange] Pantry item $itemId amount was changed to $amount")
-        val change = PantryItemUpdateAmountDTO(itemId, amount)
+        val change = ProductItemUpdateAmountDTO(itemId, amount)
         pantryChanges.add(change)
     }
 }

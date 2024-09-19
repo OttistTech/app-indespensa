@@ -4,7 +4,7 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,8 +27,8 @@ interface PantryService {
 
     @PATCH("pantry/update-items-amount")
     suspend fun updateItemsAmount(
-        @Body pantryItems: List<PantryItemUpdateAmountDTO>
-    ) : Response<List<PantryItemUpdateAmountDTO>>
+        @Body pantryItems: List<ProductItemUpdateAmountDTO>
+    ) : Response<List<ProductItemUpdateAmountDTO>>
 
     @GET("pantry/{pantry_item_id}/details")
     suspend fun getItemDetails(

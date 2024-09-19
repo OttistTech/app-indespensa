@@ -5,10 +5,10 @@ import android.util.Log
 import com.ottistech.indespensa.data.datasource.ShopRemoteDatasource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
@@ -42,12 +42,45 @@ class ShopRepository(
         }
     }
 
+    suspend fun listItems() : List<ShopItemPartialDTO>? {
+        val userId = context.getCurrentUser().userId
+        val result : ResultWrapper<List<ShopItemPartialDTO>> = remoteDataSource.listItems(userId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[listItems] Found shop items successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[listItems] Error while fetching user shop items: $result")
+                throw ResourceNotFoundException("Could not find any shop item")
+            }
+            else -> {
+                Log.e(TAG, "[listItems] Unexpected error occurred while fetching user shop items")
+                null
+            }
+        }
+    }
+
     fun getItemDetails(itemId: Long): ShopItemDetailsDTO? {
         // TODO: Integrate this method
         return null
     }
 
-    fun updateItemsAmount(vararg items: ShopItemUpdateAmountDTO) {
-        // TODO: Integrate this method
+    suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
+        if(items.isNotEmpty()) {
+            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
+            val result : ResultWrapper<List<ProductItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
+            when(result) {
+                is ResultWrapper.Success -> {
+                    Log.d(TAG, "[updateItemsAmount] Updated successfully ${result.value.size} items")
+                }
+                is ResultWrapper.Error -> {
+                    Log.e(TAG, "[updateItemsAmount] Error while while updating items amount: $result")
+                }
+                else -> {
+                    Log.e(TAG, "[updateItemsAmount] Unexpected error occurred while updating items amount")
+                }
+            }
+        }
     }
 }

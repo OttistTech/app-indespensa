@@ -76,10 +76,10 @@
     <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
 
     <!--    Shop List   -->
-    <string name="shoplist_ingredients_count">%1$d ingredientes</string>
-    <string name="shoplist_in_your_shopping_list">na sua lista de compras</string>
+    <string name="shoplist_ingredients_count">%1$s na sua lista de compras</string>
     <string name="shoplist_add_all_to_pantry">Adicionar todos à despensa</string>
     <string name="shoplist_purchase_history">Histórico de compras</string>
+    <string name="shoplist_message_empty">Sua lista de compras está vazia no momento</string>
 
     <!--  Pantry  -->
     <string name="home_access_pantry">Acessar despensa</string>

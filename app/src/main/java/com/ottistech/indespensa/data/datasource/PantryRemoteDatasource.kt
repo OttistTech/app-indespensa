@@ -6,7 +6,7 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.PantryService
 import org.json.JSONObject
@@ -83,14 +83,14 @@ class PantryRemoteDatasource {
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<PantryItemUpdateAmountDTO>) : ResultWrapper<List<PantryItemUpdateAmountDTO>> {
+    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<List<ProductItemUpdateAmountDTO>> {
         try {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
             val response = service.updateItemsAmount(pantryItems)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[updateItemsAmount] Updated amount successfully for ${response.body()?.size}/${pantryItems.size} items")
                 ResultWrapper.Success(
-                    response.body() as List<PantryItemUpdateAmountDTO>
+                    response.body() as List<ProductItemUpdateAmountDTO>
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())

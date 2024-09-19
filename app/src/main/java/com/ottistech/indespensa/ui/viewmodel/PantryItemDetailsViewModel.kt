@@ -10,7 +10,7 @@ import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import kotlinx.coroutines.launch
 
 class PantryItemDetailsViewModel(
@@ -53,7 +53,7 @@ class PantryItemDetailsViewModel(
         if(pantryItemId != null && newAmount != null) {
             viewModelScope.launch {
                 pantryRepository.updateItemsAmount(
-                    PantryItemUpdateAmountDTO(
+                    ProductItemUpdateAmountDTO(
                         pantryItemId,
                         newAmount
                     )

@@ -12,7 +12,7 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 import java.util.Date
@@ -74,10 +74,10 @@ class PantryRepository(
         }
     }
 
-    suspend fun updateItemsAmount(vararg items: PantryItemUpdateAmountDTO) {
+    suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
         if(items.isNotEmpty()) {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-            val result : ResultWrapper<List<PantryItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
+            val result : ResultWrapper<List<ProductItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
             when(result) {
                 is ResultWrapper.Success -> {
                     Log.d(TAG, "[updateItemsAmount] Updated successfully ${result.value.size} items")
