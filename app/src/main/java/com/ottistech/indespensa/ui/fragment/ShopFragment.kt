@@ -110,17 +110,5 @@ class ShopFragment : Fragment() {
         val action = ShopFragmentDirections.actionShoplistToProductDetails(itemId, productItemType)
         findNavController().navigate(action)
     }
-
-//    private fun loadData() {
-//        lifecycleScope.launch {
-//            val currentUser = requireContext().getCurrentUser()
-//            val shopItems = shopListRepository.listShopItems(currentUser.userId)
-//
-//            binding.shoplistQuantityIngredients.text = getString(R.string.shoplist_ingredients_count, shopItems.size)
-//
-//            adapter = ShopListAdapter(shopItems)
-//            binding.shoplistRecyclerview.adapter = adapter
-//        }
-//    }
 }
 

@@ -49,14 +49,14 @@ class ShopAdapter(
         private lateinit var shopItem: ShopItemPartialDTO
 
         init {
-            binding.cardPantryAdd.setOnClickListener {
+            binding.cardShopAdd.setOnClickListener {
                 shopItemList[adapterPosition].amount++
                 notifyItemChanged(adapterPosition)
                 onChangeAmount(shopItemList[adapterPosition].listItemId, shopItemList[adapterPosition].amount)
             }
-            binding.cardPantryRemove.setOnClickListener {
+            binding.cardShopRemove.setOnClickListener {
                 if(shopItemList[adapterPosition].amount-1 >= 0) {
-                    shopItemList[adapterPosition].amount --
+                    shopItemList[adapterPosition].amount--
                     notifyItemChanged(adapterPosition)
                     onChangeAmount(shopItemList[adapterPosition].listItemId, shopItemList[adapterPosition].amount)
                 }
