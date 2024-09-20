@@ -61,9 +61,23 @@ class ShopRepository(
         }
     }
 
-    fun getItemDetails(itemId: Long): ShopItemDetailsDTO? {
-        // TODO: Integrate this method
-        return null
+    suspend fun getItemDetails(itemId: Long): ShopItemDetailsDTO? {
+        Log.d(TAG, "[getItemDetails] Trying to get item details with id $itemId")
+        val result : ResultWrapper<ShopItemDetailsDTO> = remoteDataSource.getItemDetails(itemId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[getItemDetails] Found pantry item details successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[getItemDetails] Error while getting pantry item details: $result")
+                throw ResourceNotFoundException("Could not find pantry item")
+            }
+            else -> {
+                Log.e(TAG, "[getItemDetails] Unexpected error occurred while getting pantry item details")
+                null
+            }
+        }
     }
 
     suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
