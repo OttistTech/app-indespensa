@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/card_pantry_item_background">
+        android:background="@drawable/card_item_background">
 
         <ImageView
             android:id="@+id/card_pantry_item_image"
