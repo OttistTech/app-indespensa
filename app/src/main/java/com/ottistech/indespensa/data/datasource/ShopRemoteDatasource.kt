@@ -2,9 +2,9 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.ShopService
@@ -22,7 +22,7 @@ class ShopRemoteDatasource {
         shopItem: ShopItemCreateDTO
     ) : ResultWrapper<ShopItemPartialDTO> {
         try {
-            Log.d(TAG, "[addItem] Trying to ad shop item with $shopItem")
+            Log.d(TAG, "[addItem] Trying to add shop item with $shopItem")
             val response = service.addItem(userId, shopItem)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[addItem] Shop item added successfully")
@@ -51,10 +51,10 @@ class ShopRemoteDatasource {
 
     suspend fun listItems(userId: Long) : ResultWrapper<List<ShopItemPartialDTO>> {
         try {
-            Log.d(TAG, "[listItems] Trying to fetch pantry items for user $userId")
+            Log.d(TAG, "[listItems] Trying to fetch shop items for user $userId")
             val response = service.listItems(userId)
             return if(response.isSuccessful) {
-                Log.d(TAG, "[listItems] Found pantry items for user $userId")
+                Log.d(TAG, "[listItems] Found shop items for user $userId")
                 ResultWrapper.Success(
                     response.body() as List<ShopItemPartialDTO>
                 )
@@ -72,7 +72,7 @@ class ShopRemoteDatasource {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listItems] Failed while listing pantry items", e)
+            Log.e(TAG, "[listItems] Failed while listing shop items", e)
             return ResultWrapper.NetworkError
         }
     }
@@ -97,6 +97,33 @@ class ShopRemoteDatasource {
         }
     }
 
+    suspend fun getItemDetails(itemId: Long): ResultWrapper<ShopItemDetailsDTO> {
+        try {
+            Log.d(TAG, "[getItemDetails] Trying to get pantry item details for $itemId")
+            val response = service.getItemDetails(itemId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[getItemDetails] Found pantry item details successfully $itemId")
+                ResultWrapper.Success(
+                    response.body() as ShopItemDetailsDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[getItemDetails] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    } else -> {
+                    Log.e(TAG, "[getItemDetails] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
+            return ResultWrapper.NetworkError
+        }
+    }
 
 
 }
