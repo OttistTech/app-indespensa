@@ -2,6 +2,7 @@ package com.ottistech.indespensa.webclient.service
 
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import retrofit2.Response
 import retrofit2.http.Body
@@ -27,5 +28,10 @@ interface ShopService {
     suspend fun updateItemsAmount(
         @Body pantryItems: List<ProductItemUpdateAmountDTO>
     ) : Response<List<ProductItemUpdateAmountDTO>>
+
+    @GET("shop/{pantry_item_id}/details")
+    suspend fun getItemDetails(
+        @Path("pantry_item_id") pantryItemId: Long
+    ) : Response<ShopItemDetailsDTO>
 
 }
