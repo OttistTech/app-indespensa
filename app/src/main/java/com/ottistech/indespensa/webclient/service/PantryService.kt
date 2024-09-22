@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.webclient.service
 
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
@@ -34,4 +35,15 @@ interface PantryService {
     suspend fun getItemDetails(
         @Path("pantry_item_id") pantryItemId: Long
     ) : Response<PantryItemDetailsDTO>
+
+    @POST("pantry/{user_id}/add")
+    suspend fun addPantryItem(
+        @Path("user_id") userId: Long,
+        @Body pantryItemAdd: PantryItemAddDTO
+    ) : Response<PantryItemFullDTO>
+
+    @POST("pantry/{user_id}/add-all")
+    suspend fun addAllShopItemsToPantry(
+        @Path("user_id") userId: Long
+    ) : Response<Any>
 }
