@@ -11,7 +11,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 class DatePickerCreator {
-    fun createDatePicker(resultView: EditText, label: String, dateBackWards: Boolean): MaterialDatePicker<Long> {
+    fun createDatePicker(resultView: EditText? = null, label: String, dateBackWards: Boolean): MaterialDatePicker<Long> {
         val constraintsBuilder = CalendarConstraints.Builder().apply {
             if(dateBackWards) {
                 this.setValidator(DateValidatorPointBackward.now())
@@ -31,7 +31,7 @@ class DatePickerCreator {
             val simpleFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val date = Date(it + offsetFromUTC)
             val formattedDate = simpleFormat.format(date)
-            resultView.setText(formattedDate)
+            resultView?.setText(formattedDate)
         }
 
         return datePicker
