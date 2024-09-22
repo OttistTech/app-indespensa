@@ -39,6 +39,7 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.shoplistAddAllToPantryButton.isEnabled = false
 
         setupRecyclerView()
         setupObservers()
@@ -69,7 +70,7 @@ class ShopFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val recyclerView : RecyclerView = binding.shoplistRecyclerview
+        val recyclerView : RecyclerView = binding.shopRecyclerview
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
@@ -77,11 +78,14 @@ class ShopFragment : Fragment() {
     private fun setupObservers() {
         viewModel.shopState.observe(viewLifecycleOwner) { shopItems ->
             binding.shopProgressbar.visibility = View.GONE
-            if(shopItems != null) {
-                adapter.updateState(shopItems)
-                binding.shoplistRecyclerview.visibility = View.VISIBLE
-                val itemsInShopListText = shopItems.size.toString() + " ingredientes"
 
+            if (!shopItems.isNullOrEmpty()) {
+                adapter.updateState(shopItems)
+                binding.shopRecyclerview.visibility = View.VISIBLE
+
+                binding.shoplistAddAllToPantryButton.isEnabled = true
+
+                val itemsInShopListText = shopItems.size.toString() + " ingredientes"
                 binding.shoplistQuantityIngredients.text = makeSpanText(
                     getString(R.string.shoplist_ingredients_count, itemsInShopListText),
                     itemsInShopListText,
@@ -92,11 +96,17 @@ class ShopFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
             binding.shopProgressbar.visibility = View.GONE
-            when(error) {
+            when (error) {
                 UiConstants.ERROR_NOT_FOUND -> {
-                    binding.shoplistRecyclerview.visibility = View.GONE
+                    binding.shopRecyclerview.visibility = View.GONE
                     binding.shopMessage.text = getString(R.string.shoplist_message_empty)
                     binding.shopMessage.visibility = View.VISIBLE
+                    binding.shoplistAddAllToPantryButton.isEnabled = false
+                    binding.shoplistQuantityIngredients.text = makeSpanText(
+                        getString(R.string.shoplist_ingredients_count, "0 ingredientes"),
+                        "0 ingredientes",
+                        ContextCompat.getColor(requireContext(), R.color.secondary)
+                    )
                 }
                 null -> {
                     binding.shopMessage.visibility = View.GONE

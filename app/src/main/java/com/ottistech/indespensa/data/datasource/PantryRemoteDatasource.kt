@@ -133,7 +133,7 @@ class PantryRemoteDatasource {
         }
     }
 
-    suspend fun addItem(userId: Long,shopItemId: Long, validityDate: Date) : ResultWrapper<PantryItemFullDTO> {
+    suspend fun addItem(userId: Long, shopItemId: Long, validityDate: Date) : ResultWrapper<PantryItemFullDTO> {
         try {
             val pantryItemAdd = PantryItemAddDTO(
                 shopItemId,
@@ -173,38 +173,4 @@ class PantryRemoteDatasource {
         }
     }
 
-    suspend fun addAllShopItemsToPantry(userId: Long) : ResultWrapper<Any> {
-        try {
-            Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry")
-            val response = service.addAllShopItemsToPantry(userId)
-
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
-                ResultWrapper.Success(
-                    "Added all shop items to pantry successfully"
-                )
-            } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                    Log.e(TAG, "[addAllShopItemsToPantry] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding all shop items to pantry", e)
-            return ResultWrapper.NetworkError
-        }
-    }
 }

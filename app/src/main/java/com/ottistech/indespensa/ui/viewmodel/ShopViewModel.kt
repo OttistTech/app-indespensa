@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,8 @@ class ShopViewModel(
     private val repository: ShopRepository
 ) : ViewModel() {
 
+    private val TAG = "SHOP VIEWMODEL"
+
     private val _shopState = MutableLiveData<List<ShopItemPartialDTO>?>()
     val shopState: LiveData<List<ShopItemPartialDTO>?> = _shopState
 
@@ -24,6 +27,8 @@ class ShopViewModel(
     private val shopChanges = mutableListOf<ProductItemUpdateAmountDTO>()
 
     fun fetchShop() {
+        Log.d(TAG, "[fetchShop] Requesting shop items information")
+
         viewModelScope.launch {
             try {
                 val shopItems = repository.listItems()
@@ -35,16 +40,19 @@ class ShopViewModel(
         }
     }
 
-    fun registerItemChange(itemId: Long, amount: Int) {
-        val change = ProductItemUpdateAmountDTO(itemId, amount)
-        shopChanges.add(change)
-    }
-
     fun syncChanges() {
+        Log.d(TAG, "[syncChanges] Requesting for changed shop items synchronization")
+
         viewModelScope.launch {
             repository.updateItemsAmount(*shopChanges.toTypedArray())
         }
     }
 
+    fun registerItemChange(itemId: Long, amount: Int) {
+        Log.d(TAG, "[registerItemChange] Shop item $itemId amount was changed to $amount")
+
+        val change = ProductItemUpdateAmountDTO(itemId, amount)
+        shopChanges.add(change)
+    }
 
 }

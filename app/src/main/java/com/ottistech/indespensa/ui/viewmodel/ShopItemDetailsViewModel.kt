@@ -91,8 +91,4 @@ class ShopItemDetailsViewModel(
         }
     }
 
-    fun addAllShopItemsToPantry(userId: Long, validityDate: Date) {
-        Log.d(TAG, "[addAllShopItemsToPantry] Requesting for adding all shop item to pantry")
-
-    }
 }

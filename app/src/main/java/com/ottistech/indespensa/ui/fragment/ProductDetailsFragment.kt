@@ -15,7 +15,6 @@ import com.ottistech.indespensa.databinding.FragmentProductDetailsBinding
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.renderAmount
 import com.ottistech.indespensa.ui.helpers.renderValidityDate
@@ -75,7 +74,7 @@ class ProductDetailsFragment : Fragment() {
                     (viewModel as PantryItemDetailsViewModel).addToShopList()
                 }
                 is ShopItemDetailsViewModel -> {
-                    val datePicker = DatePickerCreator().createDatePicker(label = "Select validity date", dateBackWards = false)
+                    val datePicker = DatePickerCreator().createDatePicker(label = "Selecione a data de validade", dateBackWards = false)
 
                     datePicker.show(parentFragmentManager, "date_picker")
 
