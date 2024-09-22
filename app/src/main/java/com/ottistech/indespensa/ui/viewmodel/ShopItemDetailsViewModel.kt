@@ -11,7 +11,6 @@ import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
-import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemUpdateAmountDTO
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -76,15 +75,24 @@ class ShopItemDetailsViewModel(
     fun addToPantry(validityDate: Date) {
         Log.d(TAG, "[addToPantry] Requesting for adding item to pantry")
         val productId: Long? = _itemDetails.value?.productId
+
         if(productId != null) {
             viewModelScope.launch {
-                val result = pantryRepository.addItem(productId, validityDate)
-                if(result) {
-                    _message.value = UiConstants.OK
-                } else {
-                    _message.value = UiConstants.FAIL
+                _itemDetails.value?.let { item ->
+                    val result = pantryRepository.addItem(item.itemId, validityDate)
+
+                    if(result != null) {
+                        _message.value = UiConstants.OK
+                    } else {
+                        _message.value = UiConstants.FAIL
+                    }
                 }
             }
         }
+    }
+
+    fun addAllShopItemsToPantry(userId: Long, validityDate: Date) {
+        Log.d(TAG, "[addAllShopItemsToPantry] Requesting for adding all shop item to pantry")
+
     }
 }

@@ -15,13 +15,13 @@ import kotlinx.coroutines.launch
 
 class PantryItemDetailsViewModel(
     private val pantryRepository: PantryRepository,
-    private val shopRepository: ShopRepository
+    private val shopRepository: ShopRepository,
 ) : ViewModel(), ProductItemDetailsViewModel {
 
     private val TAG = "PANTRY ITEM DETAILS VIEWMODEL"
 
-    private val _itemDetails = MutableLiveData<PantryItemDetailsDTO>()
-    override val itemDetails: LiveData<PantryItemDetailsDTO> = _itemDetails
+    private val _itemDetails = MutableLiveData<PantryItemDetailsDTO?>()
+    override val itemDetails: MutableLiveData<PantryItemDetailsDTO?> = _itemDetails
 
     private val _message = MutableLiveData<Int?>()
     override val message: LiveData<Int?> = _message

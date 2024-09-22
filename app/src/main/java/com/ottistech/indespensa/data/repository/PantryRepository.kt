@@ -6,8 +6,11 @@ import android.util.Log
 import com.ottistech.indespensa.data.DataConstants
 import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.PantryRemoteDatasource
+import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
@@ -15,6 +18,7 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
+import java.time.LocalDate
 import java.util.Date
 
 class PantryRepository(
@@ -111,8 +115,68 @@ class PantryRepository(
         }
     }
 
-    fun addItem(productId: Long, validityDate: Date): Boolean {
-        // TODO: Integrate this method
-        return true
+    suspend fun addItem(shopItemId: Long, validityDate: Date): PantryItemFullDTO? {
+        val userId = context.getCurrentUser().userId
+        Log.d(TAG, "[addItem] Trying to add item to pantry for user $userId")
+        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[addItem] Added pantry item successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[addItem] Error adding item to pantry: ${result.error}, code: ${result.code}")
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
+                    else -> null
+                }
+            }
+            else -> {
+                Log.e(TAG, "[addItem] Unexpected result: $result")
+                null
+            }
+        }
     }
+
+    suspend fun addAllShopItemsToPantry(userId: Long) : Boolean {
+        Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry for user $userId")
+        val result: ResultWrapper<Any> = remoteDataSource.addAllShopItemsToPantry(userId)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
+                true
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[addAllShopItemsToPantry] Error adding shop items to pantry: ${result.error}, code: ${result.code}")
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
+                    else -> false
+                }
+            }
+            else -> {
+                Log.e(TAG, "[addAllShopItemsToPantry] Unexpected result: $result")
+                false
+            }
+        }
+
+    }
+
 }

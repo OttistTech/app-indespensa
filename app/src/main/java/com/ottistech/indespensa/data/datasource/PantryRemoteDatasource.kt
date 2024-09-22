@@ -2,15 +2,17 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.PantryService
 import org.json.JSONObject
 import java.net.HttpURLConnection
+import java.util.Date
 
 class PantryRemoteDatasource {
 
@@ -127,6 +129,81 @@ class PantryRemoteDatasource {
             }
         } catch (e: Exception) {
             Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun addItem(userId: Long,shopItemId: Long, validityDate: Date) : ResultWrapper<PantryItemFullDTO> {
+        try {
+            val pantryItemAdd = PantryItemAddDTO(
+                shopItemId,
+                validityDate
+            )
+
+            Log.d(TAG, "[addItem] Trying to add item to pantry")
+            val response = service.addPantryItem(userId, pantryItemAdd)
+
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[addItem] Added items to pantry successfully")
+                ResultWrapper.Success(
+                    response.body() as PantryItemFullDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[addItem] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[addItem] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[addItem] A not mapped error occurred")
+                        ResultWrapper.Error(null, "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding all shop items to pantry", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun addAllShopItemsToPantry(userId: Long) : ResultWrapper<Any> {
+        try {
+            Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry")
+            val response = service.addAllShopItemsToPantry(userId)
+
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
+                ResultWrapper.Success(
+                    "Added all shop items to pantry successfully"
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                    Log.e(TAG, "[addAllShopItemsToPantry] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding all shop items to pantry", e)
             return ResultWrapper.NetworkError
         }
     }
