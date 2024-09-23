@@ -17,9 +17,12 @@
 
     <fragment
         android:id="@+id/nav_shoplist"
-        android:name="com.ottistech.indespensa.ui.fragment.ShopListFragment"
+        android:name="com.ottistech.indespensa.ui.fragment.ShopFragment"
         android:label="fragment_shoplist"
         tools:layout="@layout/fragment_shoplist">
+        <action
+            android:id="@+id/action_shoplist_to_product_details"
+            app:destination="@id/product_details_dest"/>
     </fragment>
 
     <fragment

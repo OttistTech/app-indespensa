@@ -9,8 +9,8 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
-import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemUpdateAmountDTO
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -21,8 +21,8 @@ class ShopItemDetailsViewModel(
 
     private val TAG = "SHOP ITEM DETAILS VIEWMODEL"
 
-    private val _itemDetails = MutableLiveData<ShopItemDetailsDTO>()
-    override val itemDetails: LiveData<ShopItemDetailsDTO> = _itemDetails
+    private val _itemDetails = MutableLiveData<ShopItemDetailsDTO?>()
+    override val itemDetails: MutableLiveData<ShopItemDetailsDTO?> = _itemDetails
 
     private val _message = MutableLiveData<Int?>()
     override val message: LiveData<Int?> = _message
@@ -54,7 +54,7 @@ class ShopItemDetailsViewModel(
         if(shopItemId != null && newAmount != null) {
             viewModelScope.launch {
                 shopRepository.updateItemsAmount(
-                    ShopItemUpdateAmountDTO(
+                    ProductItemUpdateAmountDTO(
                         shopItemId,
                         newAmount
                     )
@@ -75,15 +75,20 @@ class ShopItemDetailsViewModel(
     fun addToPantry(validityDate: Date) {
         Log.d(TAG, "[addToPantry] Requesting for adding item to pantry")
         val productId: Long? = _itemDetails.value?.productId
+
         if(productId != null) {
             viewModelScope.launch {
-                val result = pantryRepository.addItem(productId, validityDate)
-                if(result) {
-                    _message.value = UiConstants.OK
-                } else {
-                    _message.value = UiConstants.FAIL
+                _itemDetails.value?.let { item ->
+                    val result = pantryRepository.addItem(item.itemId, validityDate)
+
+                    if(result != null) {
+                        _message.value = UiConstants.OK
+                    } else {
+                        _message.value = UiConstants.FAIL
+                    }
                 }
             }
         }
     }
+
 }

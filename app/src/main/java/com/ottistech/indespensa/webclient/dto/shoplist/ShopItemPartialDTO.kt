@@ -5,7 +5,7 @@ data class ShopItemPartialDTO (
     val userId: Long,
     val productName: String,
     val imageUrl: String,
-    val amount: Int,
+    var amount: Int,
     val productAmount: Double,
     val productUnit: String
 )

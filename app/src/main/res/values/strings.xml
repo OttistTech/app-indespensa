@@ -75,6 +75,12 @@
     <string name="update_profile_logout_confirmation_message">Deseja mesmo sair?</string>
     <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
 
+    <!--    Shop List   -->
+    <string name="shoplist_ingredients_count">%1$s na sua lista de compras</string>
+    <string name="shoplist_add_all_to_pantry">Adicionar todos à despensa</string>
+    <string name="shoplist_purchase_history">Histórico de compras</string>
+    <string name="shoplist_message_empty">Sua lista de compras está vazia no momento</string>
+
     <!--  Pantry  -->
     <string name="home_access_pantry">Acessar despensa</string>
     <string name="pantry_text">Olá, %1$s! Este é o estado atual da sua despensa</string>
@@ -86,5 +92,6 @@
     <string name="add_to_pantry">+ despensa</string>
     <string name="add_to_shop_list">+ lista de compras</string>
 
-
+    <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
+    <string name="ingredient_product_amount">%.2f</string>
 </resources>

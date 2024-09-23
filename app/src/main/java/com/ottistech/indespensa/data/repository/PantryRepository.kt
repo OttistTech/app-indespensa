@@ -6,13 +6,15 @@ import android.util.Log
 import com.ottistech.indespensa.data.DataConstants
 import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.PantryRemoteDatasource
+import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 import java.util.Date
@@ -74,10 +76,10 @@ class PantryRepository(
         }
     }
 
-    suspend fun updateItemsAmount(vararg items: PantryItemUpdateAmountDTO) {
+    suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
         if(items.isNotEmpty()) {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-            val result : ResultWrapper<List<PantryItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
+            val result : ResultWrapper<List<ProductItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
             when(result) {
                 is ResultWrapper.Success -> {
                     Log.d(TAG, "[updateItemsAmount] Updated successfully ${result.value.size} items")
@@ -111,8 +113,36 @@ class PantryRepository(
         }
     }
 
-    fun addItem(productId: Long, validityDate: Date): Boolean {
-        // TODO: Integrate this method
-        return true
+    suspend fun addItem(shopItemId: Long, validityDate: Date): PantryItemFullDTO? {
+        val userId = context.getCurrentUser().userId
+        Log.d(TAG, "[addItem] Trying to add item to pantry for user $userId")
+        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[addItem] Added pantry item successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[addItem] Error adding item to pantry: ${result.error}, code: ${result.code}")
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
+                    else -> null
+                }
+            }
+            else -> {
+                Log.e(TAG, "[addItem] Unexpected result: $result")
+                null
+            }
+        }
     }
+
 }

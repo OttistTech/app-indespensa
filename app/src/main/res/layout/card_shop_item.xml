@@ -13,7 +13,7 @@
         android:background="@drawable/card_item_background">
 
         <ImageView
-            android:id="@+id/card_pantry_item_image"
+            android:id="@+id/ingredient_image"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:scaleType="centerCrop"
@@ -28,11 +28,11 @@
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/card_pantry_item_image"
+            app:layout_constraintStart_toEndOf="@id/ingredient_image"
             android:layout_marginStart="12dp">
 
             <TextView
-                android:id="@+id/card_pantry_item_name"
+                android:id="@+id/ingredient_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -48,7 +48,7 @@
                 android:layout_marginTop="8dp">
 
                 <TextView
-                    android:id="@+id/card_pantry_item_amount"
+                    android:id="@+id/ingredient_amount"
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
                     android:maxWidth="24dp"
@@ -58,20 +58,30 @@
                     tools:text="12x"/>
 
                 <TextView
-                    android:id="@+id/card_pantry_item_validity_date"
-                    android:layout_width="72dp"
+                    android:id="@+id/ingredient_unit"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxWidth="72dp"
                     android:maxLines="1"
                     android:textStyle="normal"
                     android:theme="@style/IndespensaHeading5"
                     android:layout_marginStart="12dp"
-                    tools:text="06/11/2007"/>
+                    tools:text="350"/>
+
+                <TextView
+                    android:id="@+id/ingredient_unit_type"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="72dp"
+                    android:maxLines="1"
+                    android:textStyle="normal"
+                    android:theme="@style/IndespensaHeading5"
+                    tools:text="g"/>
             </LinearLayout>
         </LinearLayout>
 
         <Button
-            android:id="@+id/card_pantry_add"
+            android:id="@+id/card_shop_add"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:padding="0dp"
@@ -82,11 +92,11 @@
             android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/card_pantry_remove"
+            app:layout_constraintEnd_toStartOf="@id/card_shop_remove"
             android:layout_marginEnd="8dp"/>
 
         <Button
-            android:id="@+id/card_pantry_remove"
+            android:id="@+id/card_shop_remove"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:padding="0dp"

@@ -6,32 +6,33 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.data.repository.PantryRepository
+import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import kotlinx.coroutines.launch
 
-class PantryViewModel(
-    private val repository: PantryRepository
+class ShopViewModel(
+    private val repository: ShopRepository
 ) : ViewModel() {
 
-    private val TAG = "PANTRY VIEWMODEL"
+    private val TAG = "SHOP VIEWMODEL"
 
-    private val _pantryState = MutableLiveData<List<PantryItemPartialDTO>?>()
-    val pantryState: LiveData<List<PantryItemPartialDTO>?> = _pantryState
+    private val _shopState = MutableLiveData<List<ShopItemPartialDTO>?>()
+    val shopState: LiveData<List<ShopItemPartialDTO>?> = _shopState
 
     private val _error = MutableLiveData<Int?>()
     val error: LiveData<Int?> = _error
 
-    private val pantryChanges = mutableListOf<ProductItemUpdateAmountDTO>()
+    private val shopChanges = mutableListOf<ProductItemUpdateAmountDTO>()
 
-    fun fetchPantry() {
-        Log.d(TAG, "[fetchPantry] Requesting pantry items information")
+    fun fetchShop() {
+        Log.d(TAG, "[fetchShop] Requesting shop items information")
+
         viewModelScope.launch {
             try {
-                val pantryItems = repository.listItems()
-                _pantryState.value = pantryItems
+                val shopItems = repository.listItems()
+                _shopState.value = shopItems
                 _error.value = null
             } catch(e: ResourceNotFoundException) {
                 _error.value = UiConstants.ERROR_NOT_FOUND
@@ -40,15 +41,18 @@ class PantryViewModel(
     }
 
     fun syncChanges() {
-        Log.d(TAG, "[syncChanges] Requesting for changed pantry items synchronization")
+        Log.d(TAG, "[syncChanges] Requesting for changed shop items synchronization")
+
         viewModelScope.launch {
-            repository.updateItemsAmount(*pantryChanges.toTypedArray())
+            repository.updateItemsAmount(*shopChanges.toTypedArray())
         }
     }
 
     fun registerItemChange(itemId: Long, amount: Int) {
-        Log.d(TAG, "[registerItemChange] Pantry item $itemId amount was changed to $amount")
+        Log.d(TAG, "[registerItemChange] Shop item $itemId amount was changed to $amount")
+
         val change = ProductItemUpdateAmountDTO(itemId, amount)
-        pantryChanges.add(change)
+        shopChanges.add(change)
     }
+
 }

@@ -20,7 +20,11 @@ class PantryAdapter(
     private var pantryItemsList : MutableList<PantryItemPartialDTO> = pantryItemList.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PantryItemViewHolder {
-        val itemView = CardPantryItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val itemView = CardPantryItemBinding.inflate(
+            LayoutInflater.from(context),
+            parent,
+            false)
+
         return PantryItemViewHolder(itemView)
     }
 
