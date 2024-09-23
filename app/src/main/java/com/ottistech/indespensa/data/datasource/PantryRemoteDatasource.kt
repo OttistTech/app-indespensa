@@ -168,9 +168,45 @@ class PantryRemoteDatasource {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding all shop items to pantry", e)
+            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding shop item to pantry", e)
             return ResultWrapper.NetworkError
         }
     }
+
+    suspend fun addAllShopItemsToPantry(userId: Long): ResultWrapper<Any> {
+        return try {
+            Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry")
+            val response = service.addAllShopItemsToPantry(userId)
+            if (response.isSuccessful) {
+                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
+                ResultWrapper.Success("Added all shop items to pantry successfully")
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                Log.d(TAG, response.code().toString())
+
+                when (response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[addAllShopItemsToPantry] A not mapped error occurred")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed while adding shop all items to pantry", e)
+            ResultWrapper.NetworkError
+        }
+
+    }
+
 
 }

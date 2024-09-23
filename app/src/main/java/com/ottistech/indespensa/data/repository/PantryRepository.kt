@@ -145,4 +145,35 @@ class PantryRepository(
         }
     }
 
+    suspend fun addAllShopItemsToPantry(): Boolean {
+        val userId = context.getCurrentUser().userId
+
+        Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry of user $userId")
+        val result: ResultWrapper<Any> = remoteDataSource.addAllShopItemsToPantry(userId)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
+                true
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[addAllShopItemsToPantry] Error adding all shop items to pantry of user: ${result.error}, code: ${result.code}")
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
+                    else -> false
+                }
+            }
+            else -> {
+                Log.e(TAG, "[addAllShopItemsToPantry] Unexpected result: $result")
+                false
+            }
+        }
+
+    }
+
 }
