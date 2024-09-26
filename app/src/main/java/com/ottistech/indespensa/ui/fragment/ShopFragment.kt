@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShoplistBinding
 import com.ottistech.indespensa.shared.ProductItemType
@@ -31,7 +33,8 @@ class ShopFragment : Fragment() {
         binding = FragmentShoplistBinding.inflate(inflater, container, false)
         adapter = setupAdapter()
         viewModel = ShopViewModel(
-            ShopRepository(requireContext())
+            ShopRepository(requireContext()),
+            PantryRepository(requireContext())
         )
 
         return binding.root
@@ -43,6 +46,7 @@ class ShopFragment : Fragment() {
 
         setupRecyclerView()
         setupObservers()
+        setupUiInteractions()
     }
 
     override fun onResume() {
@@ -112,6 +116,22 @@ class ShopFragment : Fragment() {
                     binding.shopMessage.visibility = View.GONE
                 }
             }
+        }
+
+        viewModel.message.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                if (it == UiConstants.OK) {
+                    Toast.makeText(requireContext(), "Todos os itens foram adicionados à despensa!", Toast.LENGTH_SHORT).show()
+                } else if (it == UiConstants.FAIL) {
+                    Toast.makeText(requireContext(), "Erro ao adicionar itens à despensa", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun setupUiInteractions() {
+        binding.shoplistAddAllToPantryButton.setOnClickListener {
+            viewModel.addAllItemsFromShopToPantry()
         }
     }
 
