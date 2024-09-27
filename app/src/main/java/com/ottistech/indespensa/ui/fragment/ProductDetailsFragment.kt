@@ -110,7 +110,11 @@ class ProductDetailsFragment : Fragment() {
                 itemDetails.productUnit
             )
             if(itemDetails is PantryItemDetailsDTO) {
-                productDetailsValidityDate.renderValidityDate(itemDetails.validityDate)
+                if (itemDetails.validityDate != null) {
+                    productDetailsValidityDate.renderValidityDate(itemDetails.validityDate)
+                } else {
+                    productDetailsValidityDateContainer.visibility = View.GONE
+                }
             }
         }
         showContent()
@@ -152,7 +156,7 @@ class ProductDetailsFragment : Fragment() {
         if(args.itemType == ProductItemType.PANTRY_ITEM) {
             findNavController().popBackStack(R.id.pantry_dest, false)
         } else {
-            findNavController().popBackStack(R.id.pantry_dest, false) // TODO: change to shop list screen
+            findNavController().popBackStack(R.id.nav_shoplist, false)
         }
     }
 

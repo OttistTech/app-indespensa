@@ -16,5 +16,5 @@ data class PantryItemDetailsDTO (
     override val productAmount: BigDecimal,
     override val productUnit: String,
     override val amount: Int,
-    val validityDate: Date
+    val validityDate: Date?
 ) : ProductItemDetailsDTO

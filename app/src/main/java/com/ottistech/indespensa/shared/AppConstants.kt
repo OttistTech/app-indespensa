@@ -20,4 +20,10 @@ object AppConstants {
     )
 
     val TERMS_AND_CONDITIONS_URL : String = "https://terms-and-conditions-webpage.onrender.com"
+
+    val PREMIUM_CAROUSEL_MESSAGES: List<String> = listOf(
+        "Filtros de receitas personalizados",
+        "Histórico de compras",
+        "Despensa compartilhada"
+    )
 }

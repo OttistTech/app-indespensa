@@ -69,6 +69,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="IndespensaHeading6" parent="IndespensaText">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="IndespensaConfirmationDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>

@@ -11,6 +11,7 @@ import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.exception.ResourceGoneException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
+import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
 import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
@@ -20,7 +21,7 @@ import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
 class UserRepository (
-    context: Context
+    private val context: Context
 ) {
 
     private val TAG = "USER REPOSITORY"
@@ -216,6 +217,41 @@ class UserRepository (
         }
         Log.e(TAG, "[getUserCredentials] Failed while getting current user credentials")
         throw AuthenticationException()
+    }
+
+    suspend fun updateUserBecomePremium() : Boolean {
+        val userId = context.getCurrentUser().userId
+
+        val result: ResultWrapper<Any> = remoteDataSource.updateUserBecomePremium(userId)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[updateUserBecomePremium] User become premium successfully")
+                localDataSource.saveUser(getUserCredentials().copy(
+                    isPremium = true
+                ))
+                true
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[updateUserBecomePremium] Error become premium user: ${result.error}, code: ${result.code}")
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_GONE -> {
+                        throw ResourceGoneException(result.error)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
+                    else -> false
+                }
+            }
+            else -> {
+                Log.e(TAG, "[updateUserBecomePremium] Unexpected result: $result")
+                false
+            }
+        }
     }
 
 }

@@ -32,8 +32,20 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profile_to_updateProfile"
-            app:destination="@id/updateProfileFragment" />
+            app:destination="@id/update_profile_dest" />
+        <action
+            android:id="@+id/action_profile_to_premium"
+            app:destination="@id/premium_dest" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/premium_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.PremiumFragment"
+        android:label="fragment_premium"
+        tools:layout="@layout/fragment_premium">
+        <action
+            android:id="@+id/premium_to_home"
+            app:destination="@id/nav_home"/>
     </fragment>
 
     <fragment
@@ -57,7 +69,7 @@
         tools:layout="@layout/fragment_scanner" />
   
     <fragment
-        android:id="@+id/updateProfileFragment"
+        android:id="@+id/update_profile_dest"
         android:name="com.ottistech.indespensa.ui.fragment.UpdateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" >

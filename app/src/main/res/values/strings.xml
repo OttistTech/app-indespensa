@@ -94,4 +94,15 @@
 
     <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
     <string name="ingredient_product_amount">%.2f</string>
+    <string name="premium_slogan">Filtros de receita personalizados</string>
+
+    <!--  Premium  -->
+    <string name="payment_title">Estamos quase lá…</string>
+    <string name="payment_text">Realize o pagamento de apenas %1$s para ser premium</string>
+    <string name="payment_confirm_payment">Confirmar pagamento</string>
+    <string name="premium_title">InDespensa Premium</string>
+    <string name="premium_text">Ainda mais organização e praticidade para você</string>
+    <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>
+    <string name="premium_label_only">Por apenas</string>
+    <string name="premium_price_current">R$%.2f</string>
 </resources>
