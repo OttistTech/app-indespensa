@@ -40,19 +40,41 @@
 
         <ImageView
             android:id="@+id/payment_qrcode"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/premium_normal_text"
             app:srcCompat="@drawable/qrcode" />
 
         <Button
-            android:id="@+id/payment_confirm_payment_button"
-            android:layout_width="match_parent"
+            android:id="@+id/payment_confirm_copy_pix"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/button_primary_background"
+            android:enabled="true"
+            android:fontFamily="@font/montserrat"
+            android:text="@string/payment_confirm_payment_copy_pix"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/payment_qrcode" />
+
+        <Button
+            android:id="@+id/payment_confirm_payment_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/button_terciary_background"
             android:backgroundTint="@color/transparent"
@@ -66,6 +88,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/payment_qrcode" />
+            app:layout_constraintTop_toBottomOf="@+id/payment_confirm_copy_pix" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

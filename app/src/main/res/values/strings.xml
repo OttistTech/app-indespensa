@@ -100,6 +100,7 @@
     <string name="payment_title">Estamos quase lá…</string>
     <string name="payment_text">Realize o pagamento de apenas %1$s para ser premium</string>
     <string name="payment_confirm_payment">Confirmar pagamento</string>
+    <string name="payment_confirm_payment_copy_pix">Copiar chave PIX</string>
     <string name="premium_title">InDespensa Premium</string>
     <string name="premium_text">Ainda mais organização e praticidade para você</string>
     <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>

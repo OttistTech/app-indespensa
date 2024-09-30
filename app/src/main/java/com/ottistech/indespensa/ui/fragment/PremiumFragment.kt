@@ -66,6 +66,7 @@ class PremiumFragment : Fragment() {
                 )
             }
         }
+
     }
 
     override fun onDestroyView() {
