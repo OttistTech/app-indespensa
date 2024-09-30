@@ -1,6 +1,7 @@
 package com.ottistech.indespensa.webclient.service
 
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
@@ -13,7 +14,7 @@ import retrofit2.http.Path
 
 interface ShopService {
 
-    @POST("shop/{user_id}/add") //TODO: change endpoint after API refact
+    @POST("shop/{user_id}/add")
     suspend fun addItem(
         @Path("user_id") userId: Long,
         @Body listItem: ShopItemCreateDTO
@@ -34,4 +35,8 @@ interface ShopService {
         @Path("pantry_item_id") pantryItemId: Long
     ) : Response<ShopItemDetailsDTO>
 
+    @GET("shop/{user_id}/list/history")
+    suspend fun getHistory(
+        @Path("user_id") userId: Long
+    ) : Response<List<PurchaseDTO>>
 }

@@ -44,6 +44,10 @@ class ShopFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.shoplistAddAllToPantryButton.isEnabled = false
 
+        binding.shopPurchaseHistoryButton.setOnClickListener {
+            navigateToShopHistory()
+        }
+
         setupRecyclerView()
         setupObservers()
         setupUiInteractions()
@@ -138,6 +142,11 @@ class ShopFragment : Fragment() {
     private fun navigateToProductDetails(itemId: Long) {
         val productItemType = ProductItemType.SHOP_LIST_ITEM
         val action = ShopFragmentDirections.actionShoplistToProductDetails(itemId, productItemType)
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToShopHistory() {
+        val action = ShopFragmentDirections.shoplistToShopHistory()
         findNavController().navigate(action)
     }
 }
