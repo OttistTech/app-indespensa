@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.DialogPaymentBinding
 import com.ottistech.indespensa.shared.AppConstants.PIX_KEY
