@@ -33,7 +33,6 @@ class PaymentDialogCreator(
         binding.paymentConfirmPaymentButton.setOnClickListener {
             onConfirm()
 
-            // Open new window showing that user is now premium
              dialog.dismiss()
         }
 
