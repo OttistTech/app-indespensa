@@ -20,4 +20,12 @@ object AppConstants {
     )
 
     val TERMS_AND_CONDITIONS_URL : String = "https://terms-and-conditions-webpage.onrender.com"
+
+    val PREMIUM_CAROUSEL_MESSAGES: List<String> = listOf(
+        "Filtros de receitas personalizados",
+        "Histórico de compras",
+        "Despensa compartilhada"
+    )
+
+    val PIX_KEY = "00020126360014br.gov.bcb.pix0114+5511970566577520400005303986540519.995802BR5925DAVI PIASSI BARROS DOS SA6009Sao Paulo62070503***630414C7"
 }

@@ -64,7 +64,9 @@ class PantryAdapter(
             binding.cardPantryItemImage.loadImage(pantryItem.imageUrl)
             binding.cardPantryItemName.text = pantryItem.name
             binding.cardPantryItemAmount.renderAmount(pantryItem.pantryAmount, "x")
-            binding.cardPantryItemValidityDate.renderValidityDate(pantryItem.validityDate)
+            pantryItem.validityDate?.let {
+                binding.cardPantryItemValidityDate.renderValidityDate(it)
+            }
         }
     }
 

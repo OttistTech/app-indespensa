@@ -176,14 +176,14 @@ class UserRemoteDataSource {
         return try {
             Log.d(TAG, "[deactivateUser] Trying to deactivate user")
             val response = service.deactivateUser(userId)
-            if (response.isSuccessful) {
+            return if (response.isSuccessful) {
                 Log.d(TAG, "[deactivateUser] User deactivated successfully")
                 ResultWrapper.Success("User deactivated successfully")
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
                 Log.d(TAG, response.code().toString())
 
-                when (response.code()) {
+                return when (response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
                         Log.e(TAG, "[deactivateUser] $detail")
@@ -207,6 +207,45 @@ class UserRemoteDataSource {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to deactivate user", e)
+            ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun updateUserBecomePremium(userId: Long) : ResultWrapper<Any> {
+        return try {
+            Log.d(TAG, "[updateUserBecomePremium] Trying to update user to premium")
+            val response = service.updateUserBecomePremium(userId)
+            return if (response.isSuccessful) {
+                Log.d(TAG, "[updateUserBecomePremium] User become premium successfully")
+                ResultWrapper.Success("User become premium successfully")
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                Log.d(TAG, response.code().toString())
+
+                return when (response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[updateUserBecomePremium] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_GONE -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[updateUserBecomePremium] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        Log.e(TAG, "[updateUserBecomePremium] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[updateUserBecomePremium] A not mapped error occurred")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to update user to premium", e)
             ResultWrapper.NetworkError
         }
     }
