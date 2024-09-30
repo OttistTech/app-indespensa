@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_shoplist_to_product_details"
             app:destination="@id/product_details_dest"/>
+        <action
+            android:id="@+id/shoplist_to_shop_history"
+            app:destination="@id/shop_history_dest"/>
     </fragment>
 
     <fragment
@@ -97,5 +100,11 @@
             android:name="itemType"
             app:argType="com.ottistech.indespensa.shared.ProductItemType" />
     </fragment>
+
+    <fragment
+        android:id="@+id/shop_history_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.ShopHistoryFragment"
+        android:label="fragment_shop_history"
+        tools:layout="@layout/fragment_shop_history"/>
 
 </navigation>

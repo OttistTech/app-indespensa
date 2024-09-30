@@ -3,6 +3,7 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
@@ -121,6 +122,34 @@ class ShopRemoteDatasource {
             }
         } catch (e: Exception) {
             Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun getHistory(userId: Long): ResultWrapper<List<PurchaseDTO>> {
+        try {
+            Log.d(TAG, "[getHistory] Trying to get history for $userId")
+            val response = service.getHistory(userId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[getHistory] Found history successfully")
+                ResultWrapper.Success(
+                    response.body() as List<PurchaseDTO>
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[getHistory] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    } else -> {
+                    Log.e(TAG, "[getHistory] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[getHistory] Failed while getting history", e)
             return ResultWrapper.NetworkError
         }
     }
