@@ -6,6 +6,7 @@ import com.ottistech.indespensa.data.datasource.ShopRemoteDatasource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
+import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
@@ -94,6 +95,26 @@ class ShopRepository(
                 else -> {
                     Log.e(TAG, "[updateItemsAmount] Unexpected error occurred while updating items amount")
                 }
+            }
+        }
+    }
+
+    suspend fun getHistory(): List<PurchaseDTO>? {
+        val userId = context.getCurrentUser().userId
+        Log.d(TAG, "[getHistory] Trying to get history with id $userId")
+        val result : ResultWrapper<List<PurchaseDTO>> = remoteDataSource.getHistory(userId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[getHistory] Found history successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[getHistory] Error while getting history: $result")
+                throw ResourceNotFoundException("Could not find history")
+            }
+            else -> {
+                Log.e(TAG, "[getHistory] Unexpected error occurred while getting history")
+                null
             }
         }
     }

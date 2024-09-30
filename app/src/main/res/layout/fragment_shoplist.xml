@@ -41,7 +41,7 @@
         <Button
             android:id="@+id/shoplist_add_all_to_pantry_button"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/button_primary_background"
             android:enabled="true"
@@ -59,7 +59,7 @@
         <Button
             android:id="@+id/shop_purchase_history_button"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/button_secondary_background"
             android:enabled="true"

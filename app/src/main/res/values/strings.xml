@@ -50,7 +50,7 @@
     <!--  Main - Pages  -->
     <string name="page_home_title">Home</string>
     <string name="page_shoplist_title">Lista de compras\n</string>
-    <string name="page_profile_title">Perfil\n</string>
+    <string name="page_profile_title">Perfil</string>
     <string name="page_recipe_list_title">Lista de receitas</string>
 
     <!--  Common  -->
@@ -64,6 +64,11 @@
     <string name="minus">-</string>
     <string name="cta_add_one">Adicionar um</string>
     <string name="cta_remove_one">Remover um</string>
+    <string name="label_product_amount">Peso / Volume:</string>
+    <string name="label_validity_date">Validade:</string>
+    <string name="ingredient_amount">%1$d x</string>
+    <string name="ingredient_product_amount">%.2f</string>
+    <string name="ingredients_number">%1$d ingredientes</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -80,20 +85,18 @@
     <string name="shoplist_add_all_to_pantry">Adicionar todos à despensa</string>
     <string name="shoplist_purchase_history">Histórico de compras</string>
     <string name="shoplist_message_empty">Sua lista de compras está vazia no momento</string>
+    <string name="label_amount_shoplist">Quantidade na lista de compras:</string>
+    <string name="add_to_shop_list">+ lista de compras</string>
+    <string name="shop_history">Histórico de compras</string>
+    <string name="purchases_number">%1$d compras</string>
+    <string name="shop_history_message_empty">Não há compras registradas no seu perfil!</string>
 
     <!--  Pantry  -->
     <string name="home_access_pantry">Acessar despensa</string>
     <string name="pantry_text">Olá, %1$s! Este é o estado atual da sua despensa</string>
     <string name="pantry_message_empty">Sua despensa está vazia no momento</string>
     <string name="label_amount_pantry">Quantidade na despensa:</string>
-    <string name="label_amount_shoplist">Quantidade na lista de compras:</string>
-    <string name="label_product_amount">Peso / Volume:</string>
-    <string name="label_validity_date">Validade:</string>
     <string name="add_to_pantry">+ despensa</string>
-    <string name="add_to_shop_list">+ lista de compras</string>
-
-    <string name="ingredient_amount">%1$d x</string>  <!-- Placeholder para inteiros -->
-    <string name="ingredient_product_amount">%.2f</string>
     <string name="premium_slogan">Filtros de receita personalizados</string>
 
     <!--  Premium  -->
