@@ -3,6 +3,8 @@ name: App Indespensa Workflow - Main
 on:
   pull_request:
     branches: [ "main", "QA" ]
+  push:
+    branches: ["main", "QA" ]
 
 jobs:
   build:
@@ -18,9 +20,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Build the project using Maven
-      - name: Build with Maven
-        run: mvn clean install
+      # Build the project using Gradle
+      - name: Build with Gradle
+        run: ./gradlew clean build
 
       # Output message for successful build
       - name: Check build success
