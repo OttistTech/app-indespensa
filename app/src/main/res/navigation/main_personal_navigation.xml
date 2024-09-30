@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation.xml"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.ottistech.indespensa.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/home_to_pantry"
+            app:destination="@id/pantry_dest"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_shoplist"
+        android:name="com.ottistech.indespensa.ui.fragment.ShopFragment"
+        android:label="fragment_shoplist"
+        tools:layout="@layout/fragment_shoplist">
+        <action
+            android:id="@+id/action_shoplist_to_product_details"
+            app:destination="@id/product_details_dest"/>
+        <action
+            android:id="@+id/shoplist_to_shop_history"
+            app:destination="@id/shop_history_dest"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.ottistech.indespensa.ui.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_to_updateProfile"
+            app:destination="@id/update_profile_dest" />
+        <action
+            android:id="@+id/action_profile_to_premium"
+            app:destination="@id/premium_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/premium_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.PremiumFragment"
+        android:label="fragment_premium"
+        tools:layout="@layout/fragment_premium">
+        <action
+            android:id="@+id/premium_to_home"
+            app:destination="@id/nav_home"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/pantry_form_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.PantryFormFragment"
+        android:label="pantry_form"
+        tools:layout="@layout/fragment_pantry_form">
+        <action
+            android:id="@+id/pantry_form_to_scanner"
+            app:destination="@id/scanner_dest"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/scanner_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.ScannerFragment"
+        android:label="fragment_scanner"
+        tools:layout="@layout/fragment_scanner" />
+  
+    <fragment
+        android:id="@+id/update_profile_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.UpdateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" >
+        <action
+            android:id="@+id/action_updateProfile_to_termsAndConditions"
+            app:destination="@id/terms_and_conditions_dest" />
+    </fragment>
+  
+    <fragment
+        android:id="@+id/terms_and_conditions_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.TermsAndConditionsFragment"
+        android:label="fragment_terms_and_conditions"
+        tools:layout="@layout/fragment_terms_and_conditions" />
+
+    <fragment
+        android:id="@+id/pantry_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.PantryFragment"
+        android:label="fragment_pantry"
+        tools:layout="@layout/fragment_pantry" >
+        <action
+            android:id="@+id/pantry_to_pantry_form"
+            app:destination="@id/pantry_form_dest" />
+        <action
+            android:id="@+id/pantry_to_product_details"
+            app:destination="@id/product_details_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/product_details_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details">
+        <argument
+            android:name="itemId"
+            app:argType="long" />
+        <argument
+            android:name="itemType"
+            app:argType="com.ottistech.indespensa.shared.ProductItemType" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/shop_history_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.ShopHistoryFragment"
+        android:label="fragment_shop_history"
+        tools:layout="@layout/fragment_shop_history"/>
+
+</navigation>

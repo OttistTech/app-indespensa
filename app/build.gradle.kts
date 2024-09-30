@@ -4,6 +4,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -43,6 +44,8 @@ android {
 dependencies {
     val room_version = "2.6.1"
     val retrofit_version = "2.9.0"
+    val navigationVersion = "2.7.7"
+    val cameraVersion = "1.2.2"
 
     // ANDROID CORE
     implementation("androidx.core:core-ktx:1.13.1")
@@ -52,6 +55,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.tbuonomo:dotsindicator:4.2")
     // FIREBASE SERVICES
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
@@ -63,11 +68,26 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     // HTTP CLIENT
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
     // DEVICE SQLITE DATABASE
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+    // NAVIGATION
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    // BARCODE SCANNING
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+    // CAMERA
+    implementation("androidx.camera:camera-core:$cameraVersion")
+    implementation("androidx.camera:camera-camera2:$cameraVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraVersion")
+    implementation("androidx.camera:camera-view:$cameraVersion")
+    implementation("androidx.camera:camera-video:1.2.2")
+    implementation("androidx.camera:camera-extensions:1.2.2")
+    // ENCRYPTED PREFERENCES
+    implementation("androidx.security:security-crypto:1.1.0-alpha03")
+
 
     testImplementation("junit:junit:4.13.2")
 

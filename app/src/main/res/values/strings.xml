@@ -1,4 +1,112 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--  App  -->
     <string name="app_name">InDespensa</string>
     <string name="app_name_uppercase">InDESPENSA</string>
+    <string name="app_slogan">O indispensável na sua cozinha</string>
+
+    <!--  Landing  -->
+    <string name="lading_cta_signup">cadastre-se</string>
+    <string name="lading_cta_signup_business">conta empresarial</string>
+    <string name="landing_request_login">Entrar</string>
+    <string name="landing_request_login_cta">Já tem uma conta?</string>
+    <string name="lading_cta_login">Entrar</string>
+
+    <!--  Form  -->
+    <string name="form_hint_name">Nome</string>
+    <string name="form_hint_enterprise_type">Tipo de comércio</string>
+    <string name="form_hint_email">E-mail</string>
+    <string name="form_hint_password">Senha</string>
+    <string name="form_hint_street">Rua</string>
+    <string name="form_hint_cep">CEP</string>
+    <string name="form_hint_address_number">Número</string>
+    <string name="form_hint_city">Cidade</string>
+    <string name="form_hint_food">Alimento</string>
+    <string name="form_hint_state">Estado</string>
+    <string name="form_hint_category">Categoria</string>
+    <string name="form_hint_description">Descrição</string>
+    <string name="form_hint_confirm_password">Confirmar senha</string>
+    <string name="form_hint_brand">Marca</string>
+    <string name="form_hint_amount">Peso / Volume</string>
+    <string name="form_hint_unit">Un.</string>
+    <string name="form_hint_validity_date">Data de validade</string>
+    <string name="form_app_terms_start_text">Concordo com os</string>
+    <string name="form_app_terms_link">Termos de uso</string>
+    <string name="form_error_not_null">%1$s é obrigatório</string>
+    <string name="form_error_not_email">%1$s deve ser um e-mail</string>
+    <string name="form_error_not_cep">%1$s deve ser um CEP</string>
+    <string name="form_error_repeat_password">A senha deve ser a mesma</string>
+    <string name="form_error_min_length">%1$s deve ter no mínimo %2$d caracteres</string>
+    <string name="form_error_max_length">%1$s deve ter no máximo %2$d caracteres</string>
+    <string name="form_error_password">A senha deve %1$s</string>
+    <string name="form_error_checkbox">CheckBox Obrigatório</string>
+    <string name="form_error_conflict">%1$s já está em uso</string>
+    <string name="form_hint_birthdate">Data de nascimento</string>
+    <string name="form_login_no_account">Não tem uma conta?</string>
+    <string name="form_login_signup_link">Cadastre-se</string>
+    <string name="form_login_unauthorizated_error">Senha incorreta!</string>
+    <string name="form_login_notfound_error">Usuário não existe!</string>
+    <string name="form_login_already_deactivated_error">Usuário desativado!</string>
+
+    <!--  Main - Pages  -->
+    <string name="page_home_title">Home</string>
+    <string name="page_shoplist_title">Lista de compras\n</string>
+    <string name="page_profile_title">Perfil</string>
+    <string name="page_recipe_list_title">Lista de receitas</string>
+
+    <!--  Common  -->
+    <string name="cta_cancel">Cancelar</string>
+    <string name="cta_remove">Remover</string>
+    <string name="cta_exit">Sair</string>
+    <string name="cta_save">Salvar</string>
+    <string name="result_not_found">%1$s não encontrado</string>
+    <string name="created_successfully">%1$s criado com sucesso</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="cta_add_one">Adicionar um</string>
+    <string name="cta_remove_one">Remover um</string>
+    <string name="label_product_amount">Peso / Volume:</string>
+    <string name="label_validity_date">Validade:</string>
+    <string name="ingredient_amount">%1$d x</string>
+    <string name="ingredient_product_amount">%.2f</string>
+    <string name="ingredients_number">%1$d ingredientes</string>
+
+    <!--  Scanner  -->
+    <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
+    <string name="cta_scan">Escanear</string>
+
+    <!--  Update Profile  -->
+    <string name="update_profile_your_account">Sua conta</string>
+    <string name="update_profile_deactivate_confirmation_message">Excluir sua conta?</string>
+    <string name="update_profile_logout_confirmation_message">Deseja mesmo sair?</string>
+    <string name="update_profile_see_terms_and_conditions">Ver termos de uso</string>
+
+    <!--    Shop List   -->
+    <string name="shoplist_ingredients_count">%1$s na sua lista de compras</string>
+    <string name="shoplist_add_all_to_pantry">Adicionar todos à despensa</string>
+    <string name="shoplist_purchase_history">Histórico de compras</string>
+    <string name="shoplist_message_empty">Sua lista de compras está vazia no momento</string>
+    <string name="label_amount_shoplist">Quantidade na lista de compras:</string>
+    <string name="add_to_shop_list">+ lista de compras</string>
+    <string name="shop_history">Histórico de compras</string>
+    <string name="purchases_number">%1$d compras</string>
+    <string name="shop_history_message_empty">Não há compras registradas no seu perfil!</string>
+
+    <!--  Pantry  -->
+    <string name="home_access_pantry">Acessar despensa</string>
+    <string name="pantry_text">Olá, %1$s! Este é o estado atual da sua despensa</string>
+    <string name="pantry_message_empty">Sua despensa está vazia no momento</string>
+    <string name="label_amount_pantry">Quantidade na despensa:</string>
+    <string name="add_to_pantry">+ despensa</string>
+    <string name="premium_slogan">Filtros de receita personalizados</string>
+
+    <!--  Premium  -->
+    <string name="payment_title">Estamos quase lá…</string>
+    <string name="payment_text">Realize o pagamento de apenas %1$s para ser premium</string>
+    <string name="payment_confirm_payment">Confirmar pagamento</string>
+    <string name="payment_confirm_payment_copy_pix">Copiar chave PIX</string>
+    <string name="premium_title">InDespensa Premium</string>
+    <string name="premium_text">Ainda mais organização e praticidade para você</string>
+    <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>
+    <string name="premium_label_only">Por apenas</string>
+    <string name="premium_price_current">R$%.2f</string>
 </resources>

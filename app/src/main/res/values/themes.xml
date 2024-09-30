@@ -9,9 +9,80 @@
 
     <!--  Splash Screen Theme Configurations  -->
     <style name="IndespensaSplashScreen" parent="Theme.SplashScreen.IconBackground">
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/white_logo_with_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_white_with_background</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/secondary</item>
         <item name="windowSplashScreenAnimationDuration">2000</item>
         <item name="postSplashScreenTheme">@style/Theme.InDespensa</item>
+    </style>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/gray</item>
+        <item name="hintTextColor">@color/gray</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+    </style>
+
+    <style name="CustomTextInputLayoutDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/gray</item>
+        <item name="hintTextColor">@color/gray</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+    </style>
+
+    <style name="IndespensaText">
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="IndespensaFormErrorMessage" parent="IndespensaText">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="IndespensaHeading1" parent="IndespensaText">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IndespensaHeading2" parent="IndespensaText">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IndespensaHeading3" parent="IndespensaText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IndespensaHeading4" parent="IndespensaText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IndespensaHeading5" parent="IndespensaText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IndespensaHeading6" parent="IndespensaText">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="IndespensaConfirmationDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="IndespensaRoundedFab">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 </resources>

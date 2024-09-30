@@ -9,6 +9,7 @@
     <color name="pastelGreen">#BCD8C0</color>
     <color name="pastelOrange">#FEAD98</color>
     <color name="alertRed">#FFE4DD</color>
-    <color name="gray">#F1F1F1</color>
-    <color name="lightGray">#8B8A8A</color>
+    <color name="lightGray">#F1F1F1</color>
+    <color name="gray">#8B8A8A</color>
+    <color name="transparent">#00000000</color>
 </resources>
