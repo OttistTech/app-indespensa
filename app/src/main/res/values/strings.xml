@@ -109,4 +109,13 @@
     <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>
     <string name="premium_label_only">Por apenas</string>
     <string name="premium_price_current">R$%.2f</string>
+
+    <!--  Recipe  -->
+    <string name="recipe_details_item_amount">%1$s%2$s</string>
+    <string name="ingredients_count">Ingredientes (%1$d/%2$d)</string>
+    <string name="preparation_mode">Modo de Preparo - %1$s</string>
+    <string name="recipe_details_prepare_recipe">Preparar receita</string>
+    <string name="dialog_rating_title">Avaliação</string>
+    <string name="dialog_rating_feedback">O que você achou dessa receita?</string>
+
 </resources>

@@ -49,6 +49,14 @@ fun ImageView.loadImage(url: String?) {
     }
 }
 
+// Overloaded function to load a drawable resource
+fun ImageView.loadImage(resId: Int) {
+    load(resId) {
+        placeholder(R.drawable.alternative_image)
+        error(R.drawable.alternative_image)
+    }
+}
+
 // Function used to obtain the current user credentials from anywhere in the Application
 fun Context.getCurrentUser() : UserCredentialsDTO {
     return UserRepository(this).getUserCredentials()
