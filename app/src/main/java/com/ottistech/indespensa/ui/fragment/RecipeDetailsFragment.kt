@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeDetailsBinding
+import com.ottistech.indespensa.shared.RecipeLevels
 import com.ottistech.indespensa.ui.dialog.RatingDialogCreator
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
@@ -45,7 +46,7 @@ class RecipeDetailsFragment : Fragment() {
         setupObservers()
 
         // TODO: get this recipe_id passed by args
-        val recipeId = 19L
+        val recipeId = 13L
         viewModel.fetchRecipeDetails(recipeId)
 
         val ratingDialogCreator = RatingDialogCreator(requireContext())
@@ -102,64 +103,53 @@ class RecipeDetailsFragment : Fragment() {
         binding.recipeDetailsImage.loadImage(recipeDetails.imageUrl)
 
         val preparationTime = recipeDetails.preparationTime.toString() + "min"
+
         val amountIngredients = recipeDetails.amountIngredients
         val amountInPantry = recipeDetails.amountInPantry
         val spanExcerpt = "$amountInPantry/$amountIngredients"
 
+        val ingredientsQuantityColor = when ((amountInPantry * 100) / amountIngredients) {
+            in 0..80 -> ContextCompat.getColor(requireContext(), R.color.red)
+            in 81..99 -> ContextCompat.getColor(requireContext(), R.color.secondary)
+            100 -> ContextCompat.getColor(requireContext(), R.color.green)
+            else -> ContextCompat.getColor(requireContext(), R.color.green)
+        }
+
+        binding.recipeDetailsIngredientsQuantity.text = makeSpanText(
+            getString(R.string.ingredients_count, amountInPantry, amountIngredients),
+            spanExcerpt,
+            ingredientsQuantityColor
+        )
+
         when (recipeDetails.level) {
-            "Fácil" -> {
+            RecipeLevels.EASY.level -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.green)
 
                 binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.easy_difficulty, 0, 0, 0)
                 binding.recipeDetailsFood.setTextColor(color)
-                binding.recipeDetailsPrepareMethod.text = makeSpanText(
-                    getString(R.string.preparation_mode, preparationTime),
-                    preparationTime,
-                    color
-                )
 
-                binding.recipeDetailsIngredientsQuantity.text = makeSpanText(
-                    getString(R.string.ingredients_count, amountInPantry, amountIngredients),
-                    spanExcerpt,
-                    color
-                )
             }
-            "Inter" -> {
+            RecipeLevels.INTER.level -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.secondary)
 
                 binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inter_difficulty, 0, 0, 0)
                 binding.recipeDetailsFood.setTextColor(color)
-                binding.recipeDetailsPrepareMethod.text = makeSpanText(
-                    getString(R.string.preparation_mode, preparationTime),
-                    preparationTime,
-                    color
-                )
 
-                binding.recipeDetailsIngredientsQuantity.text = makeSpanText(
-                    getString(R.string.ingredients_count, amountInPantry, amountIngredients),
-                    spanExcerpt,
-                    color
-                )
             }
-            "Complexo" -> {
+            RecipeLevels.COMPLEX.level -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.red)
 
                 binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.complex_difficulty, 0, 0, 0)
                 binding.recipeDetailsFood.setTextColor(color)
-
-                binding.recipeDetailsPrepareMethod.text = makeSpanText(
-                    getString(R.string.preparation_mode, preparationTime),
-                    preparationTime,
-                    color
-                )
-
-                binding.recipeDetailsIngredientsQuantity.text = makeSpanText(
-                    getString(R.string.ingredients_count, amountInPantry, amountIngredients),
-                    spanExcerpt,
-                    color
-                )
             }
         }
+
+        val prepareMethodColor = ContextCompat.getColor(requireContext(), R.color.green)
+        binding.recipeDetailsPrepareMethod.text = makeSpanText(
+            getString(R.string.preparation_mode, preparationTime),
+            preparationTime,
+            prepareMethodColor
+        )
 
         binding.recipeDetailsFood.text = recipeDetails.level
         binding.recipeDetailsTitle.text = recipeDetails.title

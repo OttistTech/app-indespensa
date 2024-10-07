@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--  App  -->
     <string name="app_name">InDespensa</string>
     <string name="app_name_uppercase">InDESPENSA</string>
@@ -117,5 +117,6 @@
     <string name="recipe_details_prepare_recipe">Preparar receita</string>
     <string name="dialog_rating_title">Avaliação</string>
     <string name="dialog_rating_feedback">O que você achou dessa receita?</string>
+    <string name="dialog_rating_send">Enviar</string>
 
 </resources>

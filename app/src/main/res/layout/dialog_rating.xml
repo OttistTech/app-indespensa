@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:fillViewport="true"
@@ -45,6 +44,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="12dp"
             android:numStars="5"
+            android:progressTint="#F59132"
             android:progress="1"
             android:rating="0"
             android:stepSize="1"
@@ -54,20 +54,22 @@
 
         <Button
             android:id="@+id/dialog_rating_button_rating"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_terciary_background"
             android:enabled="true"
             android:fontFamily="@font/montserrat"
-            android:text="Enviar"
+            android:text="@string/dialog_rating_send"
             android:textAllCaps="true"
             android:textColor="@color/primary"
             android:textStyle="bold"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appCompatRatingBar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
