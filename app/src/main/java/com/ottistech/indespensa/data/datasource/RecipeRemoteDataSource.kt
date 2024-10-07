@@ -42,7 +42,6 @@ class RecipeRemoteDataSource {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getRecipeDetails] DEU RED", e)
             return ResultWrapper.NetworkError
         }
     }
