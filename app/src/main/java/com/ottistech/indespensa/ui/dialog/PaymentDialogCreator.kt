@@ -25,7 +25,7 @@ class PaymentDialogCreator(
     ) {
         val binding = DialogPaymentBinding.inflate(LayoutInflater.from(context))
 
-        val dialog = AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context, R.style.IndespensaDialog)
             .setView(binding.root)
             .create()
 

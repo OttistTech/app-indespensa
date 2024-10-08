@@ -19,7 +19,7 @@ class ConfirmationDialogCreator(
         binding.dialogConfirmationMessage.text = message
         binding.dialogConfirmationConfirm.text = actionText
 
-        val dialog = AlertDialog.Builder(context, R.style.IndespensaConfirmationDialog)
+        val dialog = AlertDialog.Builder(context, R.style.IndespensaDialog)
             .setView(binding.root)
             .create()
 

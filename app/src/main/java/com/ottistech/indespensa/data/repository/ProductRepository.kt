@@ -4,6 +4,7 @@ import android.util.Log
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
+import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
@@ -31,6 +32,27 @@ class ProductRepository {
                 }
             }
             else -> null
+        }
+    }
+
+    suspend fun search(query: String) : List<ProductSearchResponseDTO> {
+        Log.d(TAG, "[search] Trying to search products matching $query")
+        val result : ResultWrapper<List<ProductSearchResponseDTO>> = remoteDataSource.search(query)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[search] Found ${result.value.size} products successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[search] Error while looking for product by barcode: $result")
+                when(result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    else -> throw Exception(result.error)
+                }
+            }
+            else -> throw Exception("A not mapped error occurred")
         }
     }
 

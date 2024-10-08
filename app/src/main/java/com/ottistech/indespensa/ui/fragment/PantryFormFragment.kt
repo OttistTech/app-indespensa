@@ -194,11 +194,11 @@ class PantryFormFragment : Fragment() {
         // amount
         val isAmountValid = validator.validNotNull(binding.pantryFormInputAmount, binding.pantryFormInputAmountContainer, binding.pantryFormInputAmountError)
         // unit
-        val isUnityValid = validator.validNotNull(binding.pantryFormInputUnitSelect, binding.pantryFormInputUnitSelectContainer, binding.pantryFormInputUnitSelectError)
+        val isUnitValid = validator.validNotNull(binding.pantryFormInputUnitSelect, binding.pantryFormInputUnitSelectContainer, binding.pantryFormInputUnitSelectError)
         // validity date
         val isValidityDateValid = validator.validNotNull(binding.pantryFormInputValidityDate, binding.pantryFormInputValidityDateContainer, binding.pantryFormInputValidityDateError)
 
         return isNameValid && isFoodValid && isCategoryValid && isDescriptionValid &&
-                isBrandValid && isAmountValid && isUnityValid && isValidityDateValid
+                isBrandValid && isAmountValid && isUnitValid && isValidityDateValid
     }
 }
