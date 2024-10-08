@@ -197,7 +197,6 @@ class IngredientDialogCreator(
     private fun generateFormIngredient() : RecipeIngredientDTO {
         return RecipeIngredientDTO(
             foodId=selectedProduct!!.foodId,
-//            foodName=selectedProduct!!.foodName,
             foodName=selectedProduct!!.foodName,
             amount=binding.dialogIngredientInputAmount.text.toString().toInt(),
             unit= binding.dialogIngredientInputUnitSelect.text.toString(),

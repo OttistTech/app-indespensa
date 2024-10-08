@@ -44,7 +44,7 @@ class ProductRepository {
                 result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[search] Error while looking for product by barcode: $result")
+                Log.e(TAG, "[search] Error while looking for product by query: $result")
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)

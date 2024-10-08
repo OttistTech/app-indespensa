@@ -68,7 +68,7 @@ class ProductRemoteDataSource {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[search] Failed while looking for product by barcode", e)
+            Log.e(TAG, "[search] Failed while looking for products by query", e)
             return ResultWrapper.NetworkError
         }
     }
