@@ -17,6 +17,7 @@ import com.ottistech.indespensa.ui.dialog.RatingDialogCreator
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.makeSpanText
+import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.RecipeDetailsAdapter
 import com.ottistech.indespensa.ui.viewmodel.RecipeDetailsViewModel
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
@@ -46,7 +47,10 @@ class RecipeDetailsFragment : Fragment() {
         setupObservers()
 
         // TODO: get this recipe_id passed by args
-        val recipeId = 13L
+        val recipeId = 20L
+
+        binding.recipeDetailsContent.visibility = View.GONE
+        binding.recipeDetailsProgressbar.visibility = View.VISIBLE
         viewModel.fetchRecipeDetails(recipeId)
 
         val ratingDialogCreator = RatingDialogCreator(requireContext())
@@ -87,22 +91,23 @@ class RecipeDetailsFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.recipeDetails.observe(viewLifecycleOwner) { recipeDetails ->
+
+            binding.recipeDetailsProgressbar.visibility = View.GONE
             recipeDetails?.let {
                 updateRecipeUI(it)
-            } ?: run {
-                Toast.makeText(requireContext(), "Recipe details not found", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(requireContext(), error?.message, Toast.LENGTH_LONG).show()
+            error?.message?.let {
+                showToast(it)
+                navigateToHome()
+            }
         }
     }
 
     private fun updateRecipeUI(recipeDetails: RecipeDetailsDTO) {
         binding.recipeDetailsImage.loadImage(recipeDetails.imageUrl)
-
-        val preparationTime = recipeDetails.preparationTime.toString() + "min"
 
         val amountIngredients = recipeDetails.amountIngredients
         val amountInPantry = recipeDetails.amountInPantry
@@ -144,6 +149,7 @@ class RecipeDetailsFragment : Fragment() {
             }
         }
 
+        val preparationTime = recipeDetails.preparationTime.toString() + "min"
         val prepareMethodColor = ContextCompat.getColor(requireContext(), R.color.green)
         binding.recipeDetailsPrepareMethod.text = makeSpanText(
             getString(R.string.preparation_mode, preparationTime),
@@ -154,7 +160,7 @@ class RecipeDetailsFragment : Fragment() {
         binding.recipeDetailsFood.text = recipeDetails.level
         binding.recipeDetailsTitle.text = recipeDetails.title
 
-        binding.ratingBar.rating = recipeDetails.numStars.toFloat()
+        binding.recipeDetailsRatingBar.rating = recipeDetails.numStars.toFloat()
 
         binding.recipeDetailsDescription.text = recipeDetails.description
 
@@ -162,6 +168,8 @@ class RecipeDetailsFragment : Fragment() {
         binding.recipeDetailsItemsList.adapter = adapter
 
         binding.recipeDetailsPrepareMethodStepByStep.text = recipeDetails.preparationMethod
+
+        binding.recipeDetailsContent.visibility = View.VISIBLE
     }
 
     private fun navigateToHome() {

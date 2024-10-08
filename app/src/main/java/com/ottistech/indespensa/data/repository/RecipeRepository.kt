@@ -27,8 +27,8 @@ class RecipeRepository(
             }
             is ResultWrapper.Error -> {
                 when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> throw ResourceNotFoundException("Could not find recipe details")
-                    HttpURLConnection.HTTP_BAD_REQUEST -> throw BadRequestException("Bad request")
+                    HttpURLConnection.HTTP_NOT_FOUND -> throw ResourceNotFoundException("Não foi possível encontrar essa receita")
+                    HttpURLConnection.HTTP_BAD_REQUEST -> throw BadRequestException("Tente novamente mais tarde!")
                     else -> {
                         null
                     }

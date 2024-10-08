@@ -40,9 +40,9 @@ class RecipeDetailsViewModel(
                     onSuccess()
                 }
             } catch (e: ResourceNotFoundException) {
-                onError("No recipes found with ID: $recipeId")
+                onError("Não foi possível avaliar a receita.")
             } catch (e: BadRequestException) {
-                onError("Bad request")
+                onError("Tente novamente mais tarde!")
             }
         }
     }
