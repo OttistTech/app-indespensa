@@ -15,7 +15,7 @@
         <item name="postSplashScreenTheme">@style/Theme.InDespensa</item>
     </style>
 
-    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="IndespensaTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/gray</item>
         <item name="hintTextColor">@color/gray</item>
         <item name="android:textColorHint">@color/gray</item>
@@ -23,20 +23,27 @@
         <item name="android:fontFamily">@font/montserrat_medium</item>
     </style>
 
-    <style name="CustomTextInputLayoutDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+    <style name="IndespensaTextInputLayoutDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxStrokeColor">@color/gray</item>
         <item name="hintTextColor">@color/gray</item>
         <item name="android:textColorHint">@color/gray</item>
         <item name="android:fontFamily">@font/montserrat_medium</item>
     </style>
 
-    <style name="IndespensaText">
-        <item name="android:fontFamily">@font/montserrat</item>
-    </style>
-
     <style name="IndespensaFormErrorMessage" parent="IndespensaText">
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="IndespensaSectionTitle">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textSize">@dimen/text_regular</item>
+    </style>
+
+    <style name="IndespensaText">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="IndespensaHeading1" parent="IndespensaText">
@@ -75,7 +82,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="IndespensaConfirmationDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="IndespensaDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>

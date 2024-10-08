@@ -97,6 +97,34 @@ class FieldValidations(
         }
     }
 
+    fun validMaxValue(inputView: TextView, inputContainer: TextInputLayout, errorMessageView: TextView, maxValue: Int) : Boolean {
+        return if(validNotNull(inputView, inputContainer, errorMessageView)) {
+            if(inputView.text!!.toString().toInt() > maxValue) {
+                setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_max_value, inputView.hint, maxValue))
+                false
+            } else {
+                removeFieldError(inputContainer, errorMessageView)
+                true
+            }
+        } else {
+            false
+        }
+    }
+
+    fun validMinValue(inputView: TextView, inputContainer: TextInputLayout, errorMessageView: TextView, minValue: Int) : Boolean {
+        return if(validNotNull(inputView, inputContainer, errorMessageView)) {
+            if(inputView.text!!.toString().toInt() < minValue) {
+                setFieldError(inputContainer, errorMessageView, context.getString(R.string.form_error_min_value, inputView.hint, minValue))
+                false
+            } else {
+                removeFieldError(inputContainer, errorMessageView)
+                true
+            }
+        } else {
+            false
+        }
+    }
+
     fun setFieldError(inputContainer: TextInputLayout?, errorMessageView: TextView, error: String) {
         errorMessageView.text = error
         errorMessageView.visibility = View.VISIBLE

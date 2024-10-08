@@ -13,6 +13,9 @@
         <action
             android:id="@+id/home_to_pantry"
             app:destination="@id/pantry_dest"/>
+        <action
+            android:id="@+id/home_to_recipe_form"
+            app:destination="@id/recipe_form_dest"/>
     </fragment>
 
     <fragment
@@ -118,5 +121,11 @@
         android:name="com.ottistech.indespensa.ui.fragment.ShopHistoryFragment"
         android:label="fragment_shop_history"
         tools:layout="@layout/fragment_shop_history"/>
+
+    <fragment
+        android:id="@+id/recipe_form_dest"
+        android:name="com.ottistech.indespensa.ui.fragment.RecipeFormFragment"
+        android:label="fragment_recipe_form"
+        tools:layout="@layout/fragment_recipe_form" />
 
 </navigation>
