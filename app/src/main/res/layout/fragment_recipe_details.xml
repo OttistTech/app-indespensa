@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     tools:context=".ui.fragment.RecipeDetailsFragment">
 
     <ProgressBar
@@ -31,7 +31,6 @@
             android:id="@+id/recipe_details_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFF"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,13 +40,12 @@
             <ImageView
                 android:id="@+id/recipe_details_image"
                 android:layout_width="0dp"
-                android:layout_height="259dp"
-                android:layout_marginTop="16dp"
+                android:layout_height="256dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/placeholder_image" />
+                tools:src="@drawable/alternative_image" />
 
             <TextView
                 android:id="@+id/recipe_details_food"
@@ -68,7 +66,7 @@
                 android:id="@+id/recipe_details_first_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="32dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -84,14 +82,15 @@
 
                 <androidx.appcompat.widget.AppCompatRatingBar
                     android:id="@+id/recipe_details_rating_bar"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:numStars="5"
                     android:progressTint="#F59132"
                     android:progress="1"
                     android:rating="0"
                     android:stepSize="1"
-                    android:isIndicator="true" />
+                    android:isIndicator="true"/>
 
                 <TextView
                     android:id="@+id/recipe_details_description"
@@ -106,20 +105,13 @@
                     android:theme="@style/IndespensaText"
                     tools:text="Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição " />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
-
                     <TextView
                         android:id="@+id/recipe_details_ingredients_quantity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_semibold"
-                        android:textColor="@color/secondary"
+                        android:theme="@style/IndespensaSectionTitle"
+                        android:layout_marginTop="16dp"
                         tools:text="Ingredientes (5/5)" />
-
-                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recipe_details_items_list"
@@ -130,7 +122,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recipe_details_ingredients_quantity"
                     tools:itemCount="2"
-                    tools:listitem="@layout/card_recipe_details_item" />
+                    tools:listitem="@layout/card_ingredient" />
 
                 <TextView
                     android:id="@+id/recipe_details_message"
@@ -152,9 +144,8 @@
                     android:id="@+id/recipe_details_prepare_method"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:theme="@style/IndespensaSectionTitle"
                     android:layout_marginTop="16dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:textColor="@color/secondary"
                     tools:text="Modo de Preparo - 21 min" />
 
                 <TextView
@@ -172,8 +163,8 @@
                 <Button
                     android:id="@+id/recipe_details_prepare_button"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="44dp"
+                    android:layout_marginVertical="16dp"
                     android:background="@drawable/button_primary_background"
                     android:enabled="true"
                     android:fontFamily="@font/montserrat"

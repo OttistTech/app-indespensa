@@ -13,21 +13,21 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeDetailsBinding
 import com.ottistech.indespensa.shared.RecipeLevels
+import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.RatingDialogCreator
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.makeSpanText
 import com.ottistech.indespensa.ui.helpers.showToast
-import com.ottistech.indespensa.ui.recyclerview.adapter.RecipeDetailsAdapter
+import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter
 import com.ottistech.indespensa.ui.viewmodel.RecipeDetailsViewModel
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
-import com.ottistech.indespensa.webclient.dto.recipe.RecipeDetailsDTO
-import com.ottistech.indespensa.webclient.dto.recipe.RecipeIngredientDetailsDTO
+import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
 
 class RecipeDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentRecipeDetailsBinding
-    private lateinit var adapter: RecipeDetailsAdapter
+    private lateinit var adapter: IngredientAdapter
     private lateinit var viewModel: RecipeDetailsViewModel
 
     override fun onCreateView(
@@ -35,7 +35,7 @@ class RecipeDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false)
-        adapter = setupAdapter(emptyList())
+        adapter = setupAdapter()
         viewModel = RecipeDetailsViewModel(RecipeRepository(requireContext()))
 
         return binding.root
@@ -77,16 +77,16 @@ class RecipeDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupAdapter(ingredientsList: List<RecipeIngredientDetailsDTO>): RecipeDetailsAdapter {
-        return RecipeDetailsAdapter(
-            context = requireContext(),
-            ingredientsList = ingredientsList
+    private fun setupAdapter(): IngredientAdapter {
+        return IngredientAdapter(
+            context=requireContext(),
+            mode=UiMode.READ
         )
     }
 
     private fun setupRecyclerView() {
-        binding.recipeDetailsItemsList.layoutManager = LinearLayoutManager(requireContext())
         binding.recipeDetailsItemsList.adapter = adapter
+        binding.recipeDetailsItemsList.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setupObservers() {
@@ -106,12 +106,12 @@ class RecipeDetailsFragment : Fragment() {
         }
     }
 
-    private fun updateRecipeUI(recipeDetails: RecipeDetailsDTO) {
+    private fun updateRecipeUI(recipeDetails: RecipeFullDTO) {
         binding.recipeDetailsImage.loadImage(recipeDetails.imageUrl)
 
         val amountIngredients = recipeDetails.amountIngredients
         val amountInPantry = recipeDetails.amountInPantry
-        val spanExcerpt = "$amountInPantry/$amountIngredients"
+        val spanExcerpt = "($amountInPantry/$amountIngredients)"
 
         val ingredientsQuantityColor = when ((amountInPantry * 100) / amountIngredients) {
             in 0..80 -> ContextCompat.getColor(requireContext(), R.color.red)
@@ -164,7 +164,7 @@ class RecipeDetailsFragment : Fragment() {
 
         binding.recipeDetailsDescription.text = recipeDetails.description
 
-        adapter = setupAdapter(recipeDetails.ingredients)
+        adapter.updateState(recipeDetails.ingredients)
         binding.recipeDetailsItemsList.adapter = adapter
 
         binding.recipeDetailsPrepareMethodStepByStep.text = recipeDetails.preparationMethod

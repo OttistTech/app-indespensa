@@ -23,6 +23,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.homeFab.setOnClickListener {
+            navigateToRecipeForm()
+        }
+
         binding.homeAccessPantry.setOnClickListener {
             navigateToPantry()
         }
@@ -42,4 +46,8 @@ class HomeFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun navigateToRecipeForm() {
+        val action = HomeFragmentDirections.homeToRecipeForm()
+        findNavController().navigate(action)
+    }
 }

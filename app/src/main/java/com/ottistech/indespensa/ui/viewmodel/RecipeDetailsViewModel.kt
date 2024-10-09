@@ -8,15 +8,15 @@ import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
-import com.ottistech.indespensa.webclient.dto.recipe.RecipeDetailsDTO
+import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
 import kotlinx.coroutines.launch
 
 class RecipeDetailsViewModel(
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {
 
-    private val _recipeDetails = MutableLiveData<RecipeDetailsDTO?>()
-    val recipeDetails: LiveData<RecipeDetailsDTO?> = _recipeDetails
+    private val _recipeDetails = MutableLiveData<RecipeFullDTO?>()
+    val recipeDetails: LiveData<RecipeFullDTO?> = _recipeDetails
 
     private val _error = MutableLiveData<Exception?>()
     val error: LiveData<Exception?> = _error

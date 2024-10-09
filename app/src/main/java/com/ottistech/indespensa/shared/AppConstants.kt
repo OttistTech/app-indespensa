@@ -28,4 +28,10 @@ object AppConstants {
     )
 
     val PIX_KEY = "00020126360014br.gov.bcb.pix0114+5511970566577520400005303986540519.995802BR5925DAVI PIASSI BARROS DOS SA6009Sao Paulo62070503***630414C7"
+
+    val RECIPE_LEVELS: List<String> = listOf(
+        "Fácil",
+        "Inter",
+        "Avançado"
+    )
 }

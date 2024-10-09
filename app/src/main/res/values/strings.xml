@@ -29,6 +29,9 @@
     <string name="form_hint_amount">Peso / Volume</string>
     <string name="form_hint_unit">Un.</string>
     <string name="form_hint_validity_date">Data de validade</string>
+    <string name="form_hint_time">Tempo (min.)</string>
+    <string name="form_hint_level">Nível</string>
+    <string name="form_hint_preparation_method">Modo de preparo</string>
     <string name="form_app_terms_start_text">Concordo com os</string>
     <string name="form_app_terms_link">Termos de uso</string>
     <string name="form_error_not_null">%1$s é obrigatório</string>
@@ -37,9 +40,12 @@
     <string name="form_error_repeat_password">A senha deve ser a mesma</string>
     <string name="form_error_min_length">%1$s deve ter no mínimo %2$d caracteres</string>
     <string name="form_error_max_length">%1$s deve ter no máximo %2$d caracteres</string>
+    <string name="form_error_min_value">%1$s deve ser no mínimo %2$d</string>
+    <string name="form_error_max_value">%1$s deve ser no máximo %2$d</string>
     <string name="form_error_password">A senha deve %1$s</string>
-    <string name="form_error_checkbox">CheckBox Obrigatório</string>
+    <string name="form_error_checkbox">Check Obrigatório</string>
     <string name="form_error_conflict">%1$s já está em uso</string>
+    <string name="form_error_no_ingredients">Selecione pelo menos um ingrediente</string>
     <string name="form_hint_birthdate">Data de nascimento</string>
     <string name="form_login_no_account">Não tem uma conta?</string>
     <string name="form_login_signup_link">Cadastre-se</string>
@@ -69,6 +75,8 @@
     <string name="ingredient_amount">%1$d x</string>
     <string name="ingredient_product_amount">%.2f</string>
     <string name="ingredients_number">%1$d ingredientes</string>
+    <string name="search_product">Buscar produtos</string>
+    <string name="cta_conclude">Concluir</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -118,5 +126,11 @@
     <string name="dialog_rating_title">Avaliação</string>
     <string name="dialog_rating_feedback">O que você achou dessa receita?</string>
     <string name="dialog_rating_send">Enviar</string>
-
+    <string name="recipe_general_information">Informações gerais</string>
+    <string name="recipe_ingredients">Ingredientes</string>
+    <string name="add_ingredient">+ Ingrediente</string>
+    <string name="recipe_preparation_method">Passo a passo</string>
+    <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
+    <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
+    <string name="recipe">Receita</string>
 </resources>
