@@ -36,6 +36,13 @@ class RecipeFormViewModel(
         _ingredients.value = updatedList
     }
 
+    fun removeIngredient(position: Int) {
+        val currentList = _ingredients.value ?: mutableListOf()
+        val updatedList = currentList.toMutableList()
+        updatedList.removeAt(position)
+        _ingredients.value = updatedList
+    }
+
     fun save(
         formRecipe: RecipeCreateDTO,
         imageBitmap: Bitmap?
@@ -56,5 +63,4 @@ class RecipeFormViewModel(
             }
         }
     }
-
 }

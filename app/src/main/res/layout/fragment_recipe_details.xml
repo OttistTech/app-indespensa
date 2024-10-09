@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.fragment.RecipeDetailsFragment">
+
+    <ProgressBar
+        android:id="@+id/recipe_details_progressbar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTint="@color/secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/recipe_details_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/recipe_details_image"
+                android:layout_width="0dp"
+                android:layout_height="256dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/alternative_image" />
+
+            <TextView
+                android:id="@+id/recipe_details_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-24dp"
+                android:background="@drawable/pill_white_backgroud"
+                android:drawablePadding="8dp"
+                android:elevation="4dp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:theme="@style/IndespensaHeading4"
+                app:layout_constraintStart_toStartOf="@id/recipe_details_first_info"
+                app:layout_constraintTop_toBottomOf="@id/recipe_details_image"
+                tools:drawableStartCompat="@drawable/easy_difficulty"
+                tools:text="Comida" />
+
+            <LinearLayout
+                android:id="@+id/recipe_details_first_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recipe_details_image">
+
+                <TextView
+                    android:id="@+id/recipe_details_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/IndespensaHeading1"
+                    tools:text="Title" />
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/recipe_details_rating_bar"
+                    style="@style/Widget.AppCompat.RatingBar.Indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:progressTint="#F59132"
+                    android:progress="1"
+                    android:rating="0"
+                    android:stepSize="1"
+                    android:isIndicator="true"/>
+
+                <TextView
+                    android:id="@+id/recipe_details_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fadeScrollbars="false"
+                    android:maxHeight="80dp"
+                    android:overScrollMode="always"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/gray"
+                    android:theme="@style/IndespensaText"
+                    tools:text="Descrição Descrição Descrição Descrição Descrição Descrição Descrição Descrição " />
+
+                    <TextView
+                        android:id="@+id/recipe_details_ingredients_quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/IndespensaSectionTitle"
+                        android:layout_marginTop="16dp"
+                        tools:text="Ingredientes (5/5)" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recipe_details_items_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recipe_details_ingredients_quantity"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/card_ingredient" />
+
+                <TextView
+                    android:id="@+id/recipe_details_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:theme="@style/IndespensaHeading2"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/recipe_details_ingredients_quantity"
+                    tools:text="Text Message" />
+
+
+                <TextView
+                    android:id="@+id/recipe_details_prepare_method"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/IndespensaSectionTitle"
+                    android:layout_marginTop="16dp"
+                    tools:text="Modo de Preparo - 21 min" />
+
+                <TextView
+                    android:id="@+id/recipe_details_prepare_method_step_by_step"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fadeScrollbars="false"
+                    android:overScrollMode="always"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/gray"
+                    android:theme="@style/IndespensaText"
+                    tools:text="Passo 1 Passo 2 Passo 3 Passo 4" />
+
+                <Button
+                    android:id="@+id/recipe_details_prepare_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="@drawable/button_primary_background"
+                    android:enabled="true"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/recipe_details_prepare_recipe"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,16 +8,19 @@ import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.RecipeRemoteDataSource
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
-class RecipeRepository (
+class RecipeRepository(
     private val context: Context
-){
+) {
+
     private val TAG = "RECIPE REPOSITORY"
     private val remoteDataSource = RecipeRemoteDataSource()
     private val imageDatasource = ImageFirebaseDatasource(DataConstants.FIREBASE_STORAGE_RECIPES)
@@ -52,6 +55,54 @@ class RecipeRepository (
                 }
             }
             else -> false
+        }
+    }
+
+    suspend fun getRecipeDetails(recipeId: Long): RecipeFullDTO? {
+        val userId = context.getCurrentUser().userId
+        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.getRecipeDetails(recipeId, userId)
+
+        return when(result) {
+            is ResultWrapper.Success -> {
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> throw ResourceNotFoundException("Não foi possível encontrar essa receita")
+                    HttpURLConnection.HTTP_BAD_REQUEST -> throw BadRequestException("Tente novamente mais tarde!")
+                    else -> {
+                        null
+                    }
+                }
+            }
+            else -> {
+                null
+            }
+        }
+    }
+
+    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO) : Boolean {
+        val result: ResultWrapper<Any> = remoteDataSource.rateRecipe(recipeId, rateRecipeRequestDTO)
+
+        return when (result) {
+            is ResultWrapper.Success -> {
+                result.value
+                true
+            }
+            is ResultWrapper.Error -> {
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    else -> false
+                }
+            }
+            else -> {
+                false
+            }
         }
     }
 }

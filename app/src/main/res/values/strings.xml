@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--  App  -->
     <string name="app_name">InDespensa</string>
     <string name="app_name_uppercase">InDESPENSA</string>
@@ -29,6 +29,9 @@
     <string name="form_hint_amount">Peso / Volume</string>
     <string name="form_hint_unit">Un.</string>
     <string name="form_hint_validity_date">Data de validade</string>
+    <string name="form_hint_time">Tempo (min.)</string>
+    <string name="form_hint_level">Nível</string>
+    <string name="form_hint_preparation_method">Modo de preparo</string>
     <string name="form_app_terms_start_text">Concordo com os</string>
     <string name="form_app_terms_link">Termos de uso</string>
     <string name="form_error_not_null">%1$s é obrigatório</string>
@@ -72,6 +75,8 @@
     <string name="ingredient_amount">%1$d x</string>
     <string name="ingredient_product_amount">%.2f</string>
     <string name="ingredients_number">%1$d ingredientes</string>
+    <string name="search_product">Buscar produtos</string>
+    <string name="cta_conclude">Concluir</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -112,16 +117,20 @@
     <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>
     <string name="premium_label_only">Por apenas</string>
     <string name="premium_price_current">R$%.2f</string>
+
+    <!--  Recipe  -->
+    <string name="recipe_details_item_amount">%1$s%2$s</string>
+    <string name="ingredients_count">Ingredientes (%1$d/%2$d)</string>
+    <string name="preparation_mode">Modo de Preparo - %1$s</string>
+    <string name="recipe_details_prepare_recipe">Preparar receita</string>
+    <string name="dialog_rating_title">Avaliação</string>
+    <string name="dialog_rating_feedback">O que você achou dessa receita?</string>
+    <string name="dialog_rating_send">Enviar</string>
     <string name="recipe_general_information">Informações gerais</string>
-    <string name="form_hint_time">Tempo (min.)</string>
-    <string name="form_hint_level">Nível</string>
     <string name="recipe_ingredients">Ingredientes</string>
     <string name="add_ingredient">+ Ingrediente</string>
     <string name="recipe_preparation_method">Passo a passo</string>
     <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
-    <string name="search_product">Buscar produtos</string>
     <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
-    <string name="cta_conclude">Concluir</string>
-    <string name="form_hint_preparation_method">Modo de preparo</string>
     <string name="recipe">Receita</string>
 </resources>

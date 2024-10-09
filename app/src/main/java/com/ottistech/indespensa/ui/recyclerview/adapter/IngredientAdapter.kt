@@ -14,7 +14,9 @@ import com.ottistech.indespensa.webclient.dto.recipe.RecipeIngredientDTO
 class IngredientAdapter (
     private val context: Context,
     ingredients: List<RecipeIngredientDTO> = ArrayList(),
-    private val mode: UiMode
+    private val mode: UiMode,
+    val onItemRemoved: (position: Int) -> Unit = {},
+    val onItemAdded: (item: RecipeIngredientDTO) -> Unit = {}
 ) : RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder>() {
 
     private var ingredientList : MutableList<RecipeIngredientDTO> = ingredients.toMutableList()
@@ -42,15 +44,23 @@ class IngredientAdapter (
         notifyDataSetChanged()
     }
 
+    fun removeItem(position: Int) {
+        ingredientList.removeAt(position)
+        onItemRemoved(position)
+        notifyItemRemoved(position)
+    }
+
+    fun addItem(item: RecipeIngredientDTO) {
+        ingredientList.add(item)
+        onItemAdded(item)
+        notifyItemInserted(ingredientList.size - 1)
+    }
+
     inner class IngredientViewHolder(
         private val binding: CardIngredientBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var ingredient: RecipeIngredientDTO
-
-        init {
-            // listeners
-        }
 
         fun bind(ingredient: RecipeIngredientDTO) {
             this.ingredient = ingredient
@@ -69,7 +79,7 @@ class IngredientAdapter (
                     val icon: Drawable = if(ingredient.isInPantry) {
                         context.getDrawable(R.drawable.ic_check)!!
                     } else {
-                        context.getDrawable(R.drawable.ic_alert)!!
+                        context.getDrawable(R.drawable.ic_x)!!
                     }
                     ingredientIcon.setImageDrawable(icon)
                 }

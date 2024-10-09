@@ -195,7 +195,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/button_tertiary_background"
+                android:background="@drawable/button_terciary_background"
                 android:backgroundTint="@color/transparent"
                 android:enabled="true"
                 android:fontFamily="@font/montserrat"

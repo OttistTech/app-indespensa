@@ -2,17 +2,17 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
+
+import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
+import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
-import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.PantryService
 import com.ottistech.indespensa.webclient.service.RecipeService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
 class RecipeRemoteDataSource {
+
     private val TAG = "RECIPE REMOTE DATASOURCE"
     private val service : RecipeService =
         RetrofitInitializer().getService(RecipeService::class.java)
@@ -50,6 +50,65 @@ class RecipeRemoteDataSource {
         } catch (e: Exception) {
             Log.e(TAG, "[create] Failed while creating recipe", e)
             return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun getRecipeDetails(recipeId: Long, userId: Long) : ResultWrapper<RecipeFullDTO> {
+        try {
+            val response = service.getRecipeDetails(recipeId, userId)
+
+            return if(response.isSuccessful) {
+                ResultWrapper.Success(
+                    response.body() as RecipeFullDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        Log.e(TAG, "[deactivateUser] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        ResultWrapper.Error(null, "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            return ResultWrapper.NetworkError
+        }
+    }
+
+    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO): ResultWrapper<Any> {
+        return try {
+            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO)
+
+            return if (response.isSuccessful) {
+                ResultWrapper.Success("Recipe rated successfully")
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                Log.d(TAG, response.code().toString())
+
+                return when (response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            ResultWrapper.NetworkError
         }
     }
 }

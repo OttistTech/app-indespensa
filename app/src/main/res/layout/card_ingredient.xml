@@ -15,7 +15,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             tools:text="250g"
-            android:theme="@style/IndespensaHeading3"
+            android:theme="@style/IndespensaHeading4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,8 +47,8 @@
 
         <ImageView
             android:id="@+id/ingredient_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             tools:src="@drawable/ic_check"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/ingredient_name"

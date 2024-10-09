@@ -1,6 +1,5 @@
 package com.ottistech.indespensa.ui.fragment
 
-import com.ottistech.indespensa.R
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,7 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeFormBinding
 import com.ottistech.indespensa.shared.AppConstants
@@ -22,6 +23,7 @@ import com.ottistech.indespensa.ui.dialog.IngredientDialogCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter
+import com.ottistech.indespensa.ui.recyclerview.helper.ingredientItemTouchHelper
 import com.ottistech.indespensa.ui.viewmodel.RecipeFormViewModel
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 
@@ -62,6 +64,7 @@ class RecipeFormFragment : Fragment() {
         binding.recipeFormAddIngredientButton.setOnClickListener {
             dialogCreator.showDialog() { ingredient ->
                 viewModel.addIngredient(ingredient)
+                ingredientsAdapter.addItem(ingredient)
             }
         }
 
@@ -87,12 +90,6 @@ class RecipeFormFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.ingredients.observe(viewLifecycleOwner) { ingredients ->
-            ingredients?.let {
-                ingredientsAdapter.updateState(it)
-            }
-        }
-
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
             when(feedback) {
                 UiConstants.ERROR_NOT_FOUND -> showToast("Algum dos ingredientes não foi encontrado!")
@@ -110,13 +107,24 @@ class RecipeFormFragment : Fragment() {
     private fun setupAdapter() {
         ingredientsAdapter = IngredientAdapter(
             context=requireContext(),
-            mode=UiMode.EDIT
+            mode=UiMode.EDIT,
+            onItemRemoved={ position ->
+                viewModel.removeIngredient(position)
+                showToast("Ingrediente removido")
+            },
+            onItemAdded={ item ->
+                viewModel.addIngredient(item)
+                showToast("Ingrediente adicionado")
+            }
         )
     }
 
     private fun setupRecyclerView() {
-        binding.recipeFormIngredientsList.adapter = ingredientsAdapter
-        binding.recipeFormIngredientsList.layoutManager = LinearLayoutManager(context)
+        with(binding.recipeFormIngredientsList) {
+            this.adapter = ingredientsAdapter
+            this.layoutManager = LinearLayoutManager(context)
+            ItemTouchHelper(ingredientItemTouchHelper).attachToRecyclerView(this)
+        }
     }
 
     private fun validateForm() : Boolean {
