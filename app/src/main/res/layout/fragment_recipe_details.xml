@@ -48,7 +48,7 @@
                 tools:src="@drawable/alternative_image" />
 
             <TextView
-                android:id="@+id/recipe_details_food"
+                android:id="@+id/recipe_details_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-24dp"
@@ -60,7 +60,7 @@
                 app:layout_constraintStart_toStartOf="@id/recipe_details_first_info"
                 app:layout_constraintTop_toBottomOf="@id/recipe_details_image"
                 tools:drawableStartCompat="@drawable/easy_difficulty"
-                tools:text="Comida" />
+                tools:text="Inter" />
 
             <LinearLayout
                 android:id="@+id/recipe_details_first_info"
@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
-                    android:progressTint="#F59132"
+                    android:progressTint="@color/secondary"
                     android:progress="1"
                     android:rating="0"
                     android:stepSize="1"

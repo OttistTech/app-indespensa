@@ -31,8 +31,8 @@ class HomeFragment : Fragment() {
             navigateToPantry()
         }
 
-        binding.homeAccessRecipe.setOnClickListener {
-            navigateToRecipeDetails()
+        binding.homeRecipeSearch.setOnClickListener {
+            navigateToRecipeSearch()
         }
     }
 
@@ -41,13 +41,13 @@ class HomeFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun navigateToRecipeDetails() {
-        val action = HomeFragmentDirections.homeToRecipeDetails()
+    private fun navigateToRecipeForm() {
+        val action = HomeFragmentDirections.homeToRecipeForm()
         findNavController().navigate(action)
     }
 
-    private fun navigateToRecipeForm() {
-        val action = HomeFragmentDirections.homeToRecipeForm()
+    private fun navigateToRecipeSearch() {
+        val action = HomeFragmentDirections.homeToRecipeSearch()
         findNavController().navigate(action)
     }
 }
