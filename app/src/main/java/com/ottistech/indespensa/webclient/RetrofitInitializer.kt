@@ -1,6 +1,8 @@
 package com.ottistech.indespensa.webclient
 
 import com.google.gson.GsonBuilder
+import com.ottistech.indespensa.shared.RecipeLevel
+import com.ottistech.indespensa.webclient.adapters.RecipeLevelAdapter
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -8,6 +10,7 @@ class RetrofitInitializer {
 
     val gson = GsonBuilder()
         .setDateFormat("yyyy-MM-dd")
+        .registerTypeAdapter(RecipeLevel::class.java, RecipeLevelAdapter())
         .create()
 
     private fun getRetrofit() : Retrofit {

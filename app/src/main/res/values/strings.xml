@@ -121,6 +121,7 @@
     <!--  Recipe  -->
     <string name="recipe_details_item_amount">%1$s%2$s</string>
     <string name="ingredients_count">Ingredientes (%1$d/%2$d)</string>
+    <string name="ingredients_count_short">(%1$d/%2$d) ingr.</string>
     <string name="preparation_mode">Modo de Preparo - %1$s</string>
     <string name="recipe_details_prepare_recipe">Preparar receita</string>
     <string name="dialog_rating_title">Avaliação</string>
@@ -133,4 +134,14 @@
     <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
     <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
     <string name="recipe">Receita</string>
+    <string name="search_recipe">Buscar receita</string>
+    <string name="search_all_filters">ver todos os filtros</string>
+    <string name="search_clear_filters">limpar filtros</string>
+    <string name="recommended_recipes">Receitas para você</string>
+    <string name="recommended_recipes_description">Encontre aqui a melhor receita para o seu dia. Nós te ajudamos com isso!</string>
+    <string name="time_minutes">%1$dmin</string>
+    <string name="recipe_filters">Filtros de receita</string>
+    <string name="cta_apply">Aplicar</string>
+    <string name="form_hint_avalilability">Disponibilidade</string>
+    <string name="form_hint_preparation_time">Tempo de preparo</string>
 </resources>

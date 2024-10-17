@@ -23,7 +23,7 @@ class RatingDialogCreator(
 
         var userRating = 0
 
-        binding.appCompatRatingBar.setOnRatingBarChangeListener { _, rating, _ ->
+        binding.dialogRatingBar.setOnRatingBarChangeListener { _, rating, _ ->
             userRating = rating.toInt()
         }
 

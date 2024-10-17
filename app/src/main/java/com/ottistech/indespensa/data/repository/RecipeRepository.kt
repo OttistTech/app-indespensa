@@ -10,10 +10,14 @@ import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.shared.AppAccountType
+import com.ottistech.indespensa.shared.IngredientState
+import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.webclient.dto.Pageable
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
+import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
@@ -102,6 +106,50 @@ class RecipeRepository(
             }
             else -> {
                 false
+            }
+        }
+    }
+
+    suspend fun list(
+        queryText: String?,
+        pageNumber: Int = 0,
+        level: RecipeLevel?,
+        availability: IngredientState?,
+        minPreparationTime: Int?,
+        maxPreparationTime: Int?
+    ) : Pageable<List<RecipePartialDTO>> {
+        val userId = context.getCurrentUser().userId
+        val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
+            queryText=queryText,
+            userId=userId,
+            pageNumber=pageNumber,
+            level=level,
+            availability=availability,
+            minPreparationTime=minPreparationTime,
+            maxPreparationTime=maxPreparationTime
+        )
+
+        when (result) {
+            is ResultWrapper.Success -> {
+                return if(result.value?.content?.isNotEmpty() == true) {
+                     result.value
+                } else {
+                    throw ResourceNotFoundException("No recipes found")
+                }
+            }
+            is ResultWrapper.Error -> {
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    else -> throw Exception("Could not fetch recipes")
+                }
+            }
+            else -> {
+                throw Exception("Could not fetch recipes")
             }
         }
     }

@@ -23,7 +23,6 @@ import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldValidations
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.helpers.toDate
@@ -130,7 +129,7 @@ class PantryFormFragment : Fragment() {
 
     private fun generatePantryItem(): PantryItemCreateDTO {
         return PantryItemCreateDTO(
-            productEanCode= productEanCode.toString(),
+            productEanCode= productEanCode,
             productName= binding.pantryFormInputName.text.toString(),
             productDescription= binding.pantryFormInputDescription.text.toString(),
             productImageUrl= productImageUrl,

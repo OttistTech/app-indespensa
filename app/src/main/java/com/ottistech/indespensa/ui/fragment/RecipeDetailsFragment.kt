@@ -8,11 +8,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeDetailsBinding
-import com.ottistech.indespensa.shared.RecipeLevels
+import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.RatingDialogCreator
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
@@ -29,6 +30,7 @@ class RecipeDetailsFragment : Fragment() {
     private lateinit var binding: FragmentRecipeDetailsBinding
     private lateinit var adapter: IngredientAdapter
     private lateinit var viewModel: RecipeDetailsViewModel
+    private val args : RecipeDetailsFragmentArgs by navArgs<RecipeDetailsFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,12 +48,9 @@ class RecipeDetailsFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
 
-        // TODO: get this recipe_id passed by args
-        val recipeId = 20L
-
         binding.recipeDetailsContent.visibility = View.GONE
         binding.recipeDetailsProgressbar.visibility = View.VISIBLE
-        viewModel.fetchRecipeDetails(recipeId)
+        viewModel.fetchRecipeDetails(args.recipeId)
 
         val ratingDialogCreator = RatingDialogCreator(requireContext())
         binding.recipeDetailsPrepareButton.setOnClickListener {
@@ -64,7 +63,7 @@ class RecipeDetailsFragment : Fragment() {
 
                 viewModel.handleRatingClick(
                     rateRecipeRequestDTO = rateRecipeDTO,
-                    recipeId = recipeId,
+                    recipeId = args.recipeId,
                     onSuccess = {
                         Toast.makeText(requireContext(), "Receita avaliada com sucesso!", Toast.LENGTH_SHORT).show()
                         navigateToHome()
@@ -127,25 +126,25 @@ class RecipeDetailsFragment : Fragment() {
         )
 
         when (recipeDetails.level) {
-            RecipeLevels.EASY.level -> {
+            RecipeLevel.EASY -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.green)
 
-                binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.easy_difficulty, 0, 0, 0)
-                binding.recipeDetailsFood.setTextColor(color)
+                binding.recipeDetailsLevel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_easy, 0, 0, 0)
+                binding.recipeDetailsLevel.setTextColor(color)
 
             }
-            RecipeLevels.INTER.level -> {
+            RecipeLevel.INTER -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.secondary)
 
-                binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.inter_difficulty, 0, 0, 0)
-                binding.recipeDetailsFood.setTextColor(color)
+                binding.recipeDetailsLevel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_inter, 0, 0, 0)
+                binding.recipeDetailsLevel.setTextColor(color)
 
             }
-            RecipeLevels.COMPLEX.level -> {
+            RecipeLevel.ADVANCED -> {
                 val color = ContextCompat.getColor(requireContext(), R.color.red)
 
-                binding.recipeDetailsFood.setCompoundDrawablesWithIntrinsicBounds(R.drawable.complex_difficulty, 0, 0, 0)
-                binding.recipeDetailsFood.setTextColor(color)
+                binding.recipeDetailsLevel.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_advanced, 0, 0, 0)
+                binding.recipeDetailsLevel.setTextColor(color)
             }
         }
 
@@ -157,7 +156,7 @@ class RecipeDetailsFragment : Fragment() {
             prepareMethodColor
         )
 
-        binding.recipeDetailsFood.text = recipeDetails.level
+        binding.recipeDetailsLevel.text = recipeDetails.level.displayName
         binding.recipeDetailsTitle.text = recipeDetails.title
 
         binding.recipeDetailsRatingBar.rating = recipeDetails.numStars.toFloat()

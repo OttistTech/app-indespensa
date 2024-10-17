@@ -25,23 +25,50 @@
         android:layout_marginHorizontal="16dp"
         android:enabled="true"/>
 
-    <Button
-        android:id="@+id/home_access_recipe"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="44dp"
-        android:background="@drawable/button_primary_background"
-        android:enabled="true"
-        android:fontFamily="@font/montserrat"
-        android:text="Acessar detalhes de uma receita"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="@null"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_access_pantry" />
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/home_access_pantry"
+        app:layout_constraintStart_toStartOf="@id/home_access_pantry"
+        app:layout_constraintEnd_toEndOf="@id/home_access_pantry"
+        android:layout_marginTop="@dimen/margin_4">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recommended_recipes"
+            style="@style/IndespensaSectionTitle" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recommended_recipes_description"
+            style="@style/IndespensaText"
+            android:textSize="@dimen/text_small"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/home_recipe_search_container"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:theme="@style/IndespensaTextInputLayout"
+            app:boxStrokeWidth="2dp"
+            app:endIconMode="custom"
+            android:focusable="false"
+            android:clickable="true"
+            app:endIconDrawable="@drawable/ic_search"
+            android:layout_marginTop="@dimen/margin_2">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/home_recipe_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingBottom="12dp"
+                android:focusable="false"
+                android:clickable="true"
+                android:hint="@string/search_recipe"
+                android:textSize="16sp"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/home_fab"

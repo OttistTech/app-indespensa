@@ -1,8 +1,12 @@
 package com.ottistech.indespensa.webclient.service
 
+import com.ottistech.indespensa.shared.IngredientState
+import com.ottistech.indespensa.shared.RecipeLevel
+import com.ottistech.indespensa.webclient.dto.Pageable
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
+import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,4 +32,16 @@ interface RecipeService {
     suspend fun create(
         @Body recipe: RecipeCreateDTO
     ) : Response<RecipeFullDTO>
+
+    @GET("recipes/list")
+    suspend fun list(
+        @Query("userId") userId: Long,
+        @Query("page") pageNumber: Int,
+        @Query("size") pageSize: Int,
+        @Query("pattern") queryText: String?,
+        @Query("level") level: RecipeLevel?,
+        @Query("availability") availability: IngredientState?,
+        @Query("startPreparationTime") minPreparationTime: Int?,
+        @Query("endPreparationTime") maxPreparationTime: Int?
+    ) : Response<Pageable<List<RecipePartialDTO>>>
 }

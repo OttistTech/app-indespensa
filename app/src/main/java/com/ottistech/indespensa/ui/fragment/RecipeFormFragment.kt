@@ -17,6 +17,7 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeFormBinding
 import com.ottistech.indespensa.shared.AppConstants
+import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.IngredientDialogCreator
@@ -153,7 +154,7 @@ class RecipeFormFragment : Fragment() {
                 imageUrl=null,
                 title=recipeFormInputName.text.toString(),
                 description=recipeFormInputDescription.text.toString(),
-                level=recipeFormSelectLevel.text.toString(),
+                level=RecipeLevel.fromString(recipeFormSelectLevel.text.toString())!!,
                 preparationTime=recipeFormInputTime.text.toString().toInt(),
                 preparationMethod=recipeFormPreparationMethodInput.text.toString(),
                 ingredients=null

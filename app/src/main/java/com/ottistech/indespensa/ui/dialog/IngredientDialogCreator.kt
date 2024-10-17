@@ -148,7 +148,6 @@ class IngredientDialogCreator(
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearCallbacks()
-
                 searchRunnable = Runnable {
                     val query = s.toString()
                     if (query.isNotEmpty()) {
