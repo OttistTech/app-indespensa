@@ -153,4 +153,39 @@ class RecipeRepository(
             }
         }
     }
+
+    suspend fun list(
+        pageNumber: Int = 0
+    ) : Pageable<List<RecipePartialDTO>> {
+        val userId = 1L
+        val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
+            userId=userId,
+            pageNumber=pageNumber
+        )
+
+        when (result) {
+            is ResultWrapper.Success -> {
+                return if(result.value?.content?.isNotEmpty() == true) {
+                    Log.d(TAG, "Find some recipes made by you $result")
+                    result.value
+                } else {
+                    throw ResourceNotFoundException("User doesn't created any recipes")
+                }
+            }
+            is ResultWrapper.Error -> {
+                when (result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                        throw ResourceUnauthorizedException(result.error)
+                    }
+                    else -> throw Exception("Could not fetch recipes")
+                }
+            }
+            else -> {
+                throw Exception("Could not fetch recipes")
+            }
+        }
+    }
 }

@@ -38,10 +38,11 @@ interface RecipeService {
         @Query("userId") userId: Long,
         @Query("page") pageNumber: Int,
         @Query("size") pageSize: Int,
-        @Query("pattern") queryText: String?,
-        @Query("level") level: RecipeLevel?,
-        @Query("availability") availability: IngredientState?,
-        @Query("startPreparationTime") minPreparationTime: Int?,
-        @Query("endPreparationTime") maxPreparationTime: Int?
+        @Query("pattern") queryText: String? = null,
+        @Query("level") level: RecipeLevel? = null,
+        @Query("createdByYou") createdByYou: Boolean? = false,
+        @Query("availability") availability: IngredientState? = null,
+        @Query("startPreparationTime") minPreparationTime: Int? = null,
+        @Query("endPreparationTime") maxPreparationTime: Int? = null
     ) : Response<Pageable<List<RecipePartialDTO>>>
 }

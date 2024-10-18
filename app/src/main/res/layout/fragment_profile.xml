@@ -1,15 +1,248 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp"
     tools:context=".ui.fragment.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:gravity="center"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/page_profile_title" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Seu perfil"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Você no InDespensa"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <LinearLayout
+            android:id="@+id/home_dashboard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_4"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView3">
+
+            <LinearLayout
+                android:id="@+id/home_dashboard_box1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@drawable/dash_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profile_big_number_data1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/secondary"
+                    android:textSize="@dimen/text_title_4"
+                    tools:text="76" />
+
+                <TextView
+                    android:id="@+id/profile_big_number_label1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_1"
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:maxLines="2"
+                    android:textAlignment="center"
+                    android:theme="@style/IndespensaHeading4"
+                    tools:text="Itens na despensa" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/margin_1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/home_dashboard_box2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@drawable/dash_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profile_big_number_data2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textColor="@color/secondary"
+                    android:textSize="@dimen/text_title_4"
+                    tools:text="12" />
+
+                <TextView
+                    android:id="@+id/profile_big_number_label2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_1"
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:maxLines="2"
+                    android:textAlignment="center"
+                    android:theme="@style/IndespensaHeading4"
+                    tools:text="Compras realizadas" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/margin_1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/home_dashboard_box3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dash_background"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/padding_3"
+                    android:paddingVertical="@dimen/padding_4">
+
+                    <TextView
+                        android:id="@+id/profile_big_number_data3"
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/secondary"
+                        android:textSize="@dimen/text_title_1"
+                        tools:text="32" />
+
+                    <TextView
+                        android:id="@+id/profile_big_number_label3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/margin_1"
+                        android:maxLines="2"
+                        android:theme="@style/IndespensaHeading5"
+                        tools:text="Produtos já vencidos" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/dash_background"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/padding_3"
+                    android:paddingVertical="@dimen/padding_4">
+
+                    <TextView
+                        android:id="@+id/profile_big_number_data4"
+                        android:layout_width="28dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:maxLines="1"
+                        android:textAlignment="center"
+                        android:textColor="@color/secondary"
+                        android:textSize="@dimen/text_title_1"
+                        tools:text="89" />
+
+                    <TextView
+                        android:id="@+id/profile_big_number_label4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/margin_1"
+                        android:maxLines="2"
+                        android:theme="@style/IndespensaHeading5"
+                        tools:text="Receitas preparadas" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/profile_recipes_made_by_you"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:text="Receitas criadas por você"
+            android:textColor="@color/secondary"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_dashboard" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profile_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_recipes_made_by_you"
+            tools:listitem="@layout/card_recipe_item" />
+
+        <TextView
+            android:id="@+id/profile_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_3"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray"
+            android:theme="@style/IndespensaHeading4"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_recipes_made_by_you" />
+
+        <ProgressBar
+            android:id="@+id/profile_progressbar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            android:indeterminateBehavior="repeat"
+            android:indeterminateTint="@color/secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_recycler_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

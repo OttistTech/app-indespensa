@@ -134,6 +134,10 @@
     <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
     <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
     <string name="recipe">Receita</string>
+    <string name="profile_items_in_pantry">Itens na despensa</string>
+    <string name="profile_purchases_made">Compras realizadas</string>
+    <string name="profile_products_already_expired">Produtos já vencidos</string>
+    <string name="profile_recipes_made">Receitas preparadas</string>
     <string name="search_recipe">Buscar receita</string>
     <string name="search_all_filters">ver todos os filtros</string>
     <string name="search_clear_filters">limpar filtros</string>
