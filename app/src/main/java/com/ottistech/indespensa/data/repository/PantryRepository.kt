@@ -10,6 +10,7 @@ import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
@@ -173,7 +174,26 @@ class PantryRepository(
                 false
             }
         }
+    }
 
+    suspend fun listCloseValidityItems() : List<PantryItemCloseValidityDTO> {
+        val userId = context.getCurrentUser().userId
+        Log.d(TAG, "[listCloseValidityItems] Trying to fetch pantry items for user $userId")
+        val result : ResultWrapper<List<PantryItemCloseValidityDTO>> = remoteDataSource.listCloseValidityItems(userId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                Log.d(TAG, "[listCloseValidityItems] Found pantry items successfully")
+                result.value
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[listCloseValidityItems] Error while fetching user pantry items: $result")
+                throw ResourceNotFoundException("Could not find any pantry item")
+            }
+            else -> {
+                Log.e(TAG, "[listCloseValidityItems] Unexpected error occurred while fetching user pantry items")
+                throw Exception("Could not fetch pantry items")
+            }
+        }
     }
 
 }

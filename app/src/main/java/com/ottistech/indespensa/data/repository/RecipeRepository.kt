@@ -111,12 +111,12 @@ class RecipeRepository(
     }
 
     suspend fun list(
-        queryText: String?,
+        queryText: String? = null,
         pageNumber: Int = 0,
-        level: RecipeLevel?,
-        availability: IngredientState?,
-        minPreparationTime: Int?,
-        maxPreparationTime: Int?
+        level: RecipeLevel? = null,
+        availability: IngredientState? = null,
+        minPreparationTime: Int? = null,
+        maxPreparationTime: Int? = null
     ) : Pageable<List<RecipePartialDTO>> {
         val userId = context.getCurrentUser().userId
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
@@ -138,6 +138,7 @@ class RecipeRepository(
                 }
             }
             is ResultWrapper.Error -> {
+                Log.e(TAG, "[list] Error while listing recipes: $result")
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)

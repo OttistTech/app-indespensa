@@ -1,6 +1,7 @@
 package com.ottistech.indespensa.webclient.service
 
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
@@ -46,4 +47,9 @@ interface PantryService {
     suspend fun addAllShopItemsToPantry(
         @Path("user_id") userId: Long
     ) : Response<Any>
+
+    @GET("pantry/{user_id}/soon-to-expire")
+    suspend fun listCloseValidityItems(
+        @Path("user_id") userId: Long
+    ) : Response<List<PantryItemCloseValidityDTO>>
 }

@@ -52,6 +52,8 @@
     <string name="form_login_unauthorizated_error">Senha incorreta!</string>
     <string name="form_login_notfound_error">Usuário não existe!</string>
     <string name="form_login_already_deactivated_error">Usuário desativado!</string>
+    <string name="form_hint_avalilability">Disponibilidade</string>
+    <string name="form_hint_preparation_time">Tempo de preparo</string>
 
     <!--  Main - Pages  -->
     <string name="page_home_title">Home</string>
@@ -73,10 +75,14 @@
     <string name="label_product_amount">Peso / Volume:</string>
     <string name="label_validity_date">Validade:</string>
     <string name="ingredient_amount">%1$d x</string>
-    <string name="ingredient_product_amount">%.2f</string>
+    <string name="ingredient_product_amount">%.1f</string>
     <string name="ingredients_number">%1$d ingredientes</string>
     <string name="search_product">Buscar produtos</string>
     <string name="cta_conclude">Concluir</string>
+    <string name="search_all_filters">ver todos os filtros</string>
+    <string name="search_clear_filters">limpar filtros</string>
+    <string name="time_minutes">%1$dmin</string>
+    <string name="cta_apply">Aplicar</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -106,6 +112,8 @@
     <string name="label_amount_pantry">Quantidade na despensa:</string>
     <string name="add_to_pantry">+ despensa</string>
     <string name="premium_slogan">Filtros de receita personalizados</string>
+    <string name="pantry">Sua despensa</string>
+    <string name="close_validity">Próximos da validade</string>
 
     <!--  Premium  -->
     <string name="payment_title">Estamos quase lá…</string>
@@ -119,7 +127,7 @@
     <string name="premium_price_current">R$%.2f</string>
 
     <!--  Recipe  -->
-    <string name="recipe_details_item_amount">%1$s%2$s</string>
+    <string name="recipe_details_item_amount">%1$.1f%2$s</string>
     <string name="ingredients_count">Ingredientes (%1$d/%2$d)</string>
     <string name="ingredients_count_short">(%1$d/%2$d) ingr.</string>
     <string name="preparation_mode">Modo de Preparo - %1$s</string>
@@ -135,13 +143,13 @@
     <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
     <string name="recipe">Receita</string>
     <string name="search_recipe">Buscar receita</string>
-    <string name="search_all_filters">ver todos os filtros</string>
-    <string name="search_clear_filters">limpar filtros</string>
     <string name="recommended_recipes">Receitas para você</string>
     <string name="recommended_recipes_description">Encontre aqui a melhor receita para o seu dia. Nós te ajudamos com isso!</string>
-    <string name="time_minutes">%1$dmin</string>
     <string name="recipe_filters">Filtros de receita</string>
-    <string name="cta_apply">Aplicar</string>
-    <string name="form_hint_avalilability">Disponibilidade</string>
-    <string name="form_hint_preparation_time">Tempo de preparo</string>
+
+    <!--  DashBoard  -->
+    <string name="dashboard_personal_big_number_label_1">Itens na despensa</string>
+    <string name="dashboard_personal_big_number_label_2">Última compra</string>
+    <string name="dashboard_personal_big_number_label_3">Próximos do vencimento</string>
+    <string name="dashboard_personal_big_number_label_4">Receitas possíveis</string>
 </resources>
