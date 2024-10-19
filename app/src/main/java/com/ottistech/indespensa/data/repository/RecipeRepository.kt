@@ -116,7 +116,8 @@ class RecipeRepository(
         level: RecipeLevel? = null,
         availability: IngredientState? = null,
         minPreparationTime: Int? = null,
-        maxPreparationTime: Int? = null
+        maxPreparationTime: Int? = null,
+        createdByYou: Boolean? = false
     ) : Pageable<List<RecipePartialDTO>> {
         val userId = context.getCurrentUser().userId
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
@@ -126,7 +127,8 @@ class RecipeRepository(
             level=level,
             availability=availability,
             minPreparationTime=minPreparationTime,
-            maxPreparationTime=maxPreparationTime
+            maxPreparationTime=maxPreparationTime,
+            createdByYou=createdByYou
         )
 
         when (result) {
@@ -139,41 +141,6 @@ class RecipeRepository(
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[list] Error while listing recipes: $result")
-                when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw ResourceNotFoundException(result.error)
-                    }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        throw ResourceUnauthorizedException(result.error)
-                    }
-                    else -> throw Exception("Could not fetch recipes")
-                }
-            }
-            else -> {
-                throw Exception("Could not fetch recipes")
-            }
-        }
-    }
-
-    suspend fun list(
-        pageNumber: Int = 0
-    ) : Pageable<List<RecipePartialDTO>> {
-        val userId = context.getCurrentUser().userId
-        val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
-            userId=userId,
-            pageNumber=pageNumber
-        )
-
-        when (result) {
-            is ResultWrapper.Success -> {
-                return if(result.value?.content?.isNotEmpty() == true) {
-                    Log.d(TAG, "Find some recipes made by you $result")
-                    result.value
-                } else {
-                    throw ResourceNotFoundException("User doesn't created any recipes")
-                }
-            }
-            is ResultWrapper.Error -> {
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)

@@ -81,7 +81,8 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 val response = recipeRepository.list(
-                    pageNumber=page
+                    pageNumber=page,
+                    createdByYou=true
                 )
 
                 _recipes.value = response.content
