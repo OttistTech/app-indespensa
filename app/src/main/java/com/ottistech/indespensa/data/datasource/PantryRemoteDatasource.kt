@@ -3,6 +3,7 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
@@ -205,7 +206,34 @@ class PantryRemoteDatasource {
             Log.e(TAG, "Failed while adding shop all items to pantry", e)
             ResultWrapper.NetworkError
         }
+    }
 
+    suspend fun listCloseValidityItems(userId: Long) : ResultWrapper<List<PantryItemCloseValidityDTO>> {
+        try {
+            Log.d(TAG, "[listCloseValidityItems] Trying to fetch pantry items for user $userId")
+            val response = service.listCloseValidityItems(userId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[listCloseValidityItems] Found pantry items for user $userId")
+                ResultWrapper.Success(
+                    response.body() as List<PantryItemCloseValidityDTO>
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[listCloseValidityItems] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    } else -> {
+                    Log.e(TAG, "[listCloseValidityItems] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[listCloseValidityItems] Failed while listing pantry items", e)
+            return ResultWrapper.NetworkError
+        }
     }
 
 

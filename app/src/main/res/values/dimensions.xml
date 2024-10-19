@@ -15,7 +15,13 @@
     <dimen name="margin_4">16dp</dimen>
     <dimen name="margin_5">20dp</dimen>
     <dimen name="margin_6">24dp</dimen>
+    <dimen name="margin_7">28dp</dimen>
+    <dimen name="margin_8">32dp</dimen>
 
     <dimen name="text_small">12sp</dimen>
     <dimen name="text_regular">16sp</dimen>
+    <dimen name="text_title_1">20sp</dimen>
+    <dimen name="text_title_2">24sp</dimen>
+    <dimen name="text_title_3">28sp</dimen>
+    <dimen name="text_title_4">32sp</dimen>
 </resources>

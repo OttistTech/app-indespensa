@@ -77,7 +77,7 @@
     </style>
 
     <style name="IndespensaHeading6" parent="IndespensaText">
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">8sp</item>
         <item name="android:textColor">@color/gray</item>
         <item name="android:textStyle">normal</item>
     </style>
