@@ -32,9 +32,9 @@ class DashboardRemoteDataSource {
                         Log.e(TAG, "[getPersonalData] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                    Log.e(TAG, "[getPersonalData] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
+                        Log.e(TAG, "[getPersonalData] A not mapped error occurred")
+                        ResultWrapper.Error(null, "Unexpected Error")
+                    }
                 }
             }
         } catch (e: Exception) {

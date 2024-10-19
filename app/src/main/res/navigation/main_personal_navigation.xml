@@ -22,6 +22,9 @@
         <action
             android:id="@+id/home_to_recipe_search"
             app:destination="@id/recipe_search_dest"/>
+        <action
+            android:id="@+id/home_to_product_details"
+            app:destination="@id/product_details_dest"/>
     </fragment>
 
     <fragment
