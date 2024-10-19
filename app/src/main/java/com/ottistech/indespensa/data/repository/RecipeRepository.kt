@@ -158,7 +158,7 @@ class RecipeRepository(
     suspend fun list(
         pageNumber: Int = 0
     ) : Pageable<List<RecipePartialDTO>> {
-        val userId = 1L
+        val userId = context.getCurrentUser().userId
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
             userId=userId,
             pageNumber=pageNumber

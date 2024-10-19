@@ -62,6 +62,15 @@ class SignupFragment : Fragment() {
             AppAccountType.BUSINESS -> {
                binding.signupFormInputBirthdateContainer.visibility = View.GONE
             }
+            AppAccountType.ADMIN -> {
+                binding.signupFormInputEnterpriseTypeContainer.visibility = View.GONE
+
+                val datePickerCreator = DatePickerCreator()
+                datePicker = datePickerCreator.createDatePicker(binding.signupFormInputBirthdate, getString(R.string.form_hint_birthdate), true)
+                binding.signupFormInputBirthdate.setOnClickListener {
+                    datePicker.show(parentFragmentManager, "DATE PICKER")
+                }
+            }
         }
 
         var passwordVisibility = false
