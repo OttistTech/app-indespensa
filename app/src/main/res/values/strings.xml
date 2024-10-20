@@ -156,5 +156,11 @@
     <string name="dashboard_personal_big_number_label_2">Última compra</string>
     <string name="dashboard_personal_big_number_label_3">Próximos do vencimento</string>
     <string name="dashboard_personal_big_number_label_4">Receitas possíveis</string>
+    <string name="profile">Seu perfil</string>
+    <string name="your_stats">Você no InDespensa</string>
+    <string name="recipes_created_by_you">Receitas criadas por você</string>
+    <string name="premium_cta">Quero ser premium</string>
+    <string name="premium_title_cta">Assine o InDespensa Premium</string>
+    <string name="cta_leave_premium">Deixar premium</string>
 
 </resources>

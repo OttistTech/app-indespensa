@@ -54,6 +54,7 @@ class ProfileFragment : Fragment() {
 
         if (requireContext().getCurrentUser().isPremium) {
             binding.profilePremiumInfo.visibility = View.GONE
+            binding.profileCancelPremium.visibility = View.VISIBLE
         }
     }
 
