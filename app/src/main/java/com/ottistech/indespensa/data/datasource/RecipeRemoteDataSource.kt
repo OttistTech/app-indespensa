@@ -136,7 +136,7 @@ class RecipeRemoteDataSource {
                 availability=availability,
                 minPreparationTime=minPreparationTime,
                 maxPreparationTime=maxPreparationTime,
-                createdByYou = createdByYou
+                createdByYou=createdByYou
             )
 
             return if (response.isSuccessful) {
