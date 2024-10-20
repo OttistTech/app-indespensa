@@ -32,12 +32,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if(getCurrentUser().type == AppAccountType.PERSONAL) {
-            binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
-            navController.setGraph(R.navigation.main_personal_navigation)
-        } else {
-            binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_enterprise)
-            navController.setGraph(R.navigation.main_enterprise_navigation)
+        when (getCurrentUser().type) {
+            AppAccountType.PERSONAL -> {
+                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
+                navController.setGraph(R.navigation.main_personal_navigation)
+            }
+            AppAccountType.BUSINESS -> {
+                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_enterprise)
+                navController.setGraph(R.navigation.main_enterprise_navigation)
+            }
+            else -> {
+                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
+                navController.setGraph(R.navigation.main_personal_navigation)
+            }
         }
         binding.mainBottomNavigation.setupWithNavController(navController)
 

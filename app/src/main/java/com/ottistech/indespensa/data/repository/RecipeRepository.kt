@@ -116,7 +116,8 @@ class RecipeRepository(
         level: RecipeLevel? = null,
         availability: IngredientState? = null,
         minPreparationTime: Int? = null,
-        maxPreparationTime: Int? = null
+        maxPreparationTime: Int? = null,
+        createdByYou: Boolean? = false
     ) : Pageable<List<RecipePartialDTO>> {
         val userId = context.getCurrentUser().userId
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
@@ -126,7 +127,8 @@ class RecipeRepository(
             level=level,
             availability=availability,
             minPreparationTime=minPreparationTime,
-            maxPreparationTime=maxPreparationTime
+            maxPreparationTime=maxPreparationTime,
+            createdByYou=createdByYou
         )
 
         when (result) {

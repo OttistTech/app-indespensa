@@ -123,7 +123,8 @@ class RecipeRemoteDataSource {
         level: RecipeLevel?,
         availability: IngredientState?,
         minPreparationTime: Int?,
-        maxPreparationTime: Int?
+        maxPreparationTime: Int?,
+        createdByYou: Boolean?
     ) : ResultWrapper<Pageable<List<RecipePartialDTO>>?> {
         return try {
             val response = service.list(
@@ -134,7 +135,8 @@ class RecipeRemoteDataSource {
                 level=level,
                 availability=availability,
                 minPreparationTime=minPreparationTime,
-                maxPreparationTime=maxPreparationTime
+                maxPreparationTime=maxPreparationTime,
+                createdByYou=createdByYou
             )
 
             return if (response.isSuccessful) {

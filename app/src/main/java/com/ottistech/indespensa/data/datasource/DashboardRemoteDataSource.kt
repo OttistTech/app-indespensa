@@ -3,7 +3,7 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
+import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.DashboardService
 import org.json.JSONObject
@@ -42,4 +42,33 @@ class DashboardRemoteDataSource {
             return ResultWrapper.NetworkError
         }
     }
+
+    suspend fun getProfileData(userId: Long) : ResultWrapper<ProfileDashboardDTO> {
+        try {
+            Log.d(TAG, "[getProfileData] Trying to get profile dashboard data for $userId")
+            val response = service.getProfileData(userId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[getProfileData] Found personal profile data successfully $userId")
+                ResultWrapper.Success(
+                    response.body() as ProfileDashboardDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[getProfileData] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    } else -> {
+                    Log.e(TAG, "[getProfileData] A not mapped error occurred")
+                    ResultWrapper.Error(null, "Unexpected Error")
+                }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[getProfileData] Failed while getting profile dashboard data", e)
+            return ResultWrapper.NetworkError
+        }
+    }
+
 }

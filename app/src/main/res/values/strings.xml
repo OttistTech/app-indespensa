@@ -112,8 +112,8 @@
     <string name="label_amount_pantry">Quantidade na despensa:</string>
     <string name="add_to_pantry">+ despensa</string>
     <string name="premium_slogan">Filtros de receita personalizados</string>
-    <string name="pantry">Sua despensa</string>
     <string name="close_validity">Próximos da validade</string>
+    <string name="pantry">Sua despensa</string>
 
     <!--  Premium  -->
     <string name="payment_title">Estamos quase lá…</string>
@@ -142,6 +142,10 @@
     <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
     <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
     <string name="recipe">Receita</string>
+    <string name="profile_items_in_pantry">Itens na despensa</string>
+    <string name="profile_purchases_made">Compras realizadas</string>
+    <string name="profile_products_already_expired">Produtos já vencidos</string>
+    <string name="profile_recipes_made">Receitas preparadas</string>
     <string name="search_recipe">Buscar receita</string>
     <string name="recommended_recipes">Receitas para você</string>
     <string name="recommended_recipes_description">Encontre aqui a melhor receita para o seu dia. Nós te ajudamos com isso!</string>
@@ -152,4 +156,11 @@
     <string name="dashboard_personal_big_number_label_2">Última compra</string>
     <string name="dashboard_personal_big_number_label_3">Próximos do vencimento</string>
     <string name="dashboard_personal_big_number_label_4">Receitas possíveis</string>
+    <string name="profile">Seu perfil</string>
+    <string name="your_stats">Você no InDespensa</string>
+    <string name="recipes_created_by_you">Receitas criadas por você</string>
+    <string name="premium_cta">Quero ser premium</string>
+    <string name="premium_title_cta">Assine o InDespensa Premium</string>
+    <string name="cta_leave_premium">Deixar premium</string>
+
 </resources>
