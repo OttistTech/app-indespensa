@@ -159,37 +159,4 @@ class RecipeRemoteDataSource {
             ResultWrapper.NetworkError
         }
     }
-
-//    suspend fun list(
-//        userId: Long,
-//        pageNumber: Int
-//    ) : ResultWrapper<Pageable<List<RecipePartialDTO>>?> {
-//        return try {
-//            val response = service.list(
-//                userId=userId,
-//                pageNumber=pageNumber,
-//                pageSize=10,
-//                createdByYou=true
-//            )
-//
-//            return if (response.isSuccessful) {
-//                ResultWrapper.Success(response.body())
-//            } else {
-//                val error = JSONObject(response.errorBody()!!.string())
-//                Log.d(TAG, response.code().toString())
-//
-//                return when (response.code()) {
-//                    HttpURLConnection.HTTP_NOT_FOUND -> {
-//                        val detail = error.get("detail").toString()
-//                        ResultWrapper.Error(response.code(), detail)
-//                    }
-//                    else -> {
-//                        ResultWrapper.Error(response.code(), "Unexpected Error")
-//                    }
-//                }
-//            }
-//        } catch (e: Exception) {
-//            ResultWrapper.NetworkError
-//        }
-//    }
 }
