@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity() {
                 binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_enterprise)
                 navController.setGraph(R.navigation.main_enterprise_navigation)
             }
-            else -> {
-                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
-                navController.setGraph(R.navigation.main_personal_navigation)
+            AppAccountType.ADMIN -> {
+                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_admin)
+                navController.setGraph(R.navigation.main_admin_navigation)
             }
         }
         binding.mainBottomNavigation.setupWithNavController(navController)
@@ -71,6 +71,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_recipe_list -> {
                     navController.navigate(R.id.nav_recipe_list, null, NavOptions.Builder()
                         .setPopUpTo(R.id.nav_recipe_list, true)
+                        .build())
+                    true
+                }
+                R.id.nav_dashboard -> {
+                    navController.navigate(R.id.nav_dashboard, null, NavOptions.Builder()
+                        .setPopUpTo(R.id.nav_dashboard, true)
                         .build())
                     true
                 }

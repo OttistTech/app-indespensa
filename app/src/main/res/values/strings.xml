@@ -162,5 +162,7 @@
     <string name="premium_cta">Quero ser premium</string>
     <string name="premium_title_cta">Assine o InDespensa Premium</string>
     <string name="cta_leave_premium">Deixar premium</string>
+    <string name="page_dashboard_title">DashBoard</string>
+    <string name="indespensa_admin_title">Administrador Indespensa</string>
 
 </resources>
