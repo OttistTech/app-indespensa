@@ -81,8 +81,8 @@ class UpdateProfileFragment : Fragment() {
 
         binding.updateProfileFormButtonLogout.setOnClickListener {
             dialogCreator.showDialog(
-                getString(R.string.update_profile_logout_confirmation_message),
-                getString(R.string.cta_exit)
+                title=getString(R.string.update_profile_logout_confirmation_message),
+                actionText=getString(R.string.cta_exit)
             ) {
                 viewModel.logoutUser()
                 navigateToAuth()
@@ -91,8 +91,8 @@ class UpdateProfileFragment : Fragment() {
 
         binding.updateProfileFormButtonRemoveAccount.setOnClickListener {
             dialogCreator.showDialog(
-                getString(R.string.update_profile_deactivate_confirmation_message),
-                getString(R.string.cta_remove),
+                title=getString(R.string.update_profile_deactivate_confirmation_message),
+                actionText=getString(R.string.cta_remove),
             ) {
                 viewModel.deactivateUser()
                 navigateToAuth()

@@ -1,4 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Base application theme. -->
     <style name="Base.Theme.InDespensa" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -113,5 +115,31 @@
     <style name="IndespensaTag.Selected">
         <item name="android:background">@drawable/tag_filter_selected</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="IndespensaButton" parent="Widget.MaterialComponents.Button">
+        <item name="textAllCaps">true</item>
+        <item name="android:layout_marginTop">@dimen/margin_2</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">@dimen/letter_spacing_all_caps</item>
+        <item name="android:enabled">true</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
+    <style name="IndespensaButton.primary" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_primary_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="IndespensaButton.secondary" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_secondary_background</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="IndespensaProgressbar" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateTint">@color/secondary</item>
     </style>
 </resources>

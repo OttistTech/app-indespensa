@@ -10,7 +10,7 @@ import com.ottistech.indespensa.data.repository.DashboardRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.data.repository.UserRepository
-import com.ottistech.indespensa.ui.model.feedback.Error
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
@@ -66,7 +66,7 @@ class HomeViewModel(
                 _isDashboardLoading.value = false
                 _feedback.value = Feedback(
                     FeedbackId.PERSONAL_DASHBOARD,
-                    Error.UNHANDLED,
+                    FeedbackCode.UNHANDLED,
                     "Ops! Não foi possível carregar o DashBoard."
                 )
             }
@@ -85,14 +85,14 @@ class HomeViewModel(
                 _closeValidityItems.value = null
                 _feedback.value = Feedback(
                     FeedbackId.CLOSE_VALIDITY_ITEMS,
-                    Error.NOT_FOUND,
+                    FeedbackCode.NOT_FOUND,
                     "Nenhum item próximo da validade encontrado!"
                 )
             } catch (e: Exception) {
                 _isCloseValidityItemsLoading.value = false
                 _feedback.value = Feedback(
                     FeedbackId.CLOSE_VALIDITY_ITEMS,
-                    Error.UNHANDLED,
+                    FeedbackCode.UNHANDLED,
                     "Não foi possível carregar os itens próximos da validade!"
                 )
             }
@@ -113,7 +113,7 @@ class HomeViewModel(
                     _recipes.value = null
                     _feedback.value = Feedback(
                         FeedbackId.RECIPES_LIST,
-                        Error.NOT_FOUND,
+                        FeedbackCode.NOT_FOUND,
                         "Nenhuma receita recomendada encontrada!"
                     )
                 }
@@ -121,7 +121,7 @@ class HomeViewModel(
                 _isRecipesLoading.value = false
                 _feedback.value = Feedback(
                     FeedbackId.RECIPES_LIST,
-                    Error.UNHANDLED,
+                    FeedbackCode.UNHANDLED,
                     "Não foi possível carregar as receitas!"
                 )
             }

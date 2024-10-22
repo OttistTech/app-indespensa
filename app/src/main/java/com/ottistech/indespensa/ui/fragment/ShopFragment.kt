@@ -1,42 +1,54 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
+import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShoplistBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.ui.dialog.ConfirmationDialogCreator
 import com.ottistech.indespensa.ui.helpers.makeSpanText
+import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
+import com.ottistech.indespensa.ui.recyclerview.adapter.ProductSearchAdapter
 import com.ottistech.indespensa.ui.recyclerview.adapter.ShopAdapter
 import com.ottistech.indespensa.ui.viewmodel.ShopViewModel
+import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 
 class ShopFragment : Fragment() {
 
     private lateinit var binding: FragmentShoplistBinding
-    private lateinit var adapter: ShopAdapter
+    private lateinit var shopListAdapter: ShopAdapter
+    private lateinit var searchAdapter: ProductSearchAdapter
     private lateinit var viewModel: ShopViewModel
+    private lateinit var confirmationDialogCreator: ConfirmationDialogCreator
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentShoplistBinding.inflate(inflater, container, false)
-        adapter = setupAdapter()
         viewModel = ShopViewModel(
             ShopRepository(requireContext()),
-            PantryRepository(requireContext())
+            PantryRepository(requireContext()),
+            ProductRepository(),
+            ShopRepository(requireContext())
         )
-
+        confirmationDialogCreator = ConfirmationDialogCreator(requireContext())
         return binding.root
     }
 
@@ -44,28 +56,27 @@ class ShopFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.shoplistAddAllToPantryButton.isEnabled = false
 
-        binding.shopPurchaseHistoryButton.setOnClickListener {
-            navigateToShopHistory()
-        }
-
+        setupAdapter()
         setupRecyclerView()
         setupObservers()
         setupUiInteractions()
+        setupSearchBar()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.shopProgressbar.visibility = View.VISIBLE
+        binding.shoplistProgressbar.visibility = View.VISIBLE
         viewModel.fetchShop()
     }
 
     override fun onStop() {
         super.onStop()
         viewModel.syncChanges()
+        viewModel.clearCallbacks()
     }
 
-    private fun setupAdapter(): ShopAdapter {
-        val adapter = ShopAdapter(
+    private fun setupAdapter() {
+        shopListAdapter = ShopAdapter(
             context = requireContext(),
             onChangeAmount = { itemId, amount ->
                 viewModel.registerItemChange(itemId, amount)
@@ -74,61 +85,113 @@ class ShopFragment : Fragment() {
                 navigateToProductDetails(itemId)
             }
         )
-        return adapter
+        searchAdapter = ProductSearchAdapter(
+            requireContext()
+        ) { product ->
+            viewModel.clearCallbacks()
+            confirmationDialogCreator.showDialog(
+                "+ Lista de compras",
+                "Deseja adicionar ${product.productName} à lista de compras?",
+                product.imageUrl,
+                "Adicionar"
+            ) {
+                viewModel.addItemToShopList(product.productId)
+            }
+
+        }
     }
 
     private fun setupRecyclerView() {
-        val recyclerView : RecyclerView = binding.shopRecyclerview
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        with(binding.shoplistProductList) {
+            adapter = shopListAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        with(binding.shoplistSearchResultList) {
+            adapter = searchAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun setupObservers() {
         viewModel.shopState.observe(viewLifecycleOwner) { shopItems ->
-            binding.shopProgressbar.visibility = View.GONE
-
+            binding.shoplistProgressbar.visibility = View.GONE
             if (!shopItems.isNullOrEmpty()) {
-                adapter.updateState(shopItems)
-                binding.shopRecyclerview.visibility = View.VISIBLE
-
+                binding.shoplistMessage.visibility = View.GONE
                 binding.shoplistAddAllToPantryButton.isEnabled = true
-
-                val itemsInShopListText = shopItems.size.toString() + " ingredientes"
-                binding.shoplistQuantityIngredients.text = makeSpanText(
-                    getString(R.string.shoplist_ingredients_count, itemsInShopListText),
-                    itemsInShopListText,
-                    ContextCompat.getColor(requireContext(), R.color.secondary)
-                )
+                binding.shoplistProductList.visibility = View.VISIBLE
+                handleShopListResult(shopItems)
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            binding.shopProgressbar.visibility = View.GONE
-            when (error) {
-                UiConstants.ERROR_NOT_FOUND -> {
-                    binding.shopRecyclerview.visibility = View.GONE
-                    binding.shopMessage.text = getString(R.string.shoplist_message_empty)
-                    binding.shopMessage.visibility = View.VISIBLE
-                    binding.shoplistAddAllToPantryButton.isEnabled = false
-                    binding.shoplistQuantityIngredients.text = makeSpanText(
-                        getString(R.string.shoplist_ingredients_count, "0 ingredientes"),
-                        "0 ingredientes",
-                        ContextCompat.getColor(requireContext(), R.color.secondary)
-                    )
-                }
-                null -> {
-                    binding.shopMessage.visibility = View.GONE
-                }
+        viewModel.searchProductResult.observe(viewLifecycleOwner) { result ->
+            result?.let {
+                binding.shoplistSearchResultList.visibility = View.VISIBLE
+                searchAdapter.updateState(it)
             }
         }
 
-        viewModel.message.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                if (it == UiConstants.OK) {
-                    Toast.makeText(requireContext(), "Todos os itens foram adicionados à despensa!", Toast.LENGTH_SHORT).show()
-                } else if (it == UiConstants.FAIL) {
-                    Toast.makeText(requireContext(), "Erro ao adicionar itens à despensa", Toast.LENGTH_SHORT).show()
-                }
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            binding.shoplistProgressbar.visibility = View.GONE
+            feedback?.let {
+                handleFeedback(it)
+            }
+        }
+    }
+
+    private fun handleShopListResult(shopItems: List<ShopItemPartialDTO>) {
+        shopListAdapter.updateState(shopItems)
+        val itemsInShopListText = shopItems.size.toString() + " ingredientes"
+        binding.shoplistQuantityIngredients.text = makeSpanText(
+            getString(R.string.shoplist_ingredients_count, itemsInShopListText),
+            itemsInShopListText,
+            ContextCompat.getColor(requireContext(), R.color.secondary)
+        )
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        when(feedback.feedbackId) {
+            FeedbackId.PRODUCT_SEARCH -> {
+                handleSearchFeedback(feedback)
+            }
+            FeedbackId.ADD_ALL_TO_PANTRY -> {
+                handleAddAllToPantryFeedback(feedback)
+            }
+            FeedbackId.SHOPLIST -> {
+                handleShopListFeedback(feedback)
+            }
+            FeedbackId.ADD_TO_SHOPLIST -> {
+                handleAddItemFeedback(feedback)
+            }
+        }
+    }
+
+    private fun handleAddItemFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+    }
+
+    private fun handleShopListFeedback(feedback: Feedback) {
+        binding.shoplistMessage.visibility = View.VISIBLE
+        binding.shoplistMessage.text = feedback.message
+        binding.shoplistAddAllToPantryButton.isEnabled = false
+        binding.shoplistQuantityIngredients.text = makeSpanText(
+            getString(R.string.shoplist_ingredients_count, "0 ingredientes"),
+            "0 ingredientes",
+            ContextCompat.getColor(requireContext(), R.color.secondary)
+        )
+    }
+
+    private fun handleAddAllToPantryFeedback(feedback: Feedback) {
+        binding.shoplistMessage.visibility = View.VISIBLE
+        showToast(feedback.message)
+    }
+
+    private fun handleSearchFeedback(feedback: Feedback) {
+        when(feedback.code) {
+            FeedbackCode.NOT_FOUND -> {
+                binding.shoplistSearchResultList.visibility = View.GONE
+            }
+            FeedbackCode.UNHANDLED -> {
+                showToast(feedback.message)
             }
         }
     }
@@ -136,6 +199,34 @@ class ShopFragment : Fragment() {
     private fun setupUiInteractions() {
         binding.shoplistAddAllToPantryButton.setOnClickListener {
             viewModel.addAllItemsFromShopToPantry()
+        }
+        binding.shopPurchaseHistoryButton.setOnClickListener {
+            navigateToShopHistory()
+        }
+    }
+
+    private fun setupSearchBar() {
+        binding.shoplistSearchbarInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.searchProducts(s.toString())
+            }
+        })
+        binding.shoplistSearchbarInput.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.shoplistSearchResultList.visibility = View.GONE
+                    binding.shoplistBlur.visibility = View.GONE
+                    binding.shoplistSearchbarInput.text = null
+                    searchAdapter.clear()
+                }, 50)
+            } else {
+                binding.shoplistSearchResultList.visibility = View.VISIBLE
+                binding.shoplistBlur.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -149,5 +240,7 @@ class ShopFragment : Fragment() {
         val action = ShopFragmentDirections.shoplistToShopHistory()
         findNavController().navigate(action)
     }
+
+
 }
 
