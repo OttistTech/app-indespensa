@@ -164,5 +164,7 @@
     <string name="cta_leave_premium">Deixar premium</string>
     <string name="page_dashboard_title">DashBoard</string>
     <string name="indespensa_admin_title">Administrador Indespensa</string>
+    <string name="search_product_shoplist">Produtos para adicionar</string>
+    <string name="cta_confirm">Confirmar</string>
 
 </resources>

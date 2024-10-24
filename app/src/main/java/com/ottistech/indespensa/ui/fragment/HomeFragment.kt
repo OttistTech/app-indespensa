@@ -17,7 +17,7 @@ import com.ottistech.indespensa.databinding.FragmentHomeBinding
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.helpers.formatAsString
 import com.ottistech.indespensa.ui.helpers.showToast
-import com.ottistech.indespensa.ui.model.feedback.Error
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.CloseValidityAdapter
@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
 
     private fun handleCloseValidityItemsFeedback(feedback: Feedback) {
         binding.homeCloseValidity.visibility = View.GONE
-        if(feedback.code == Error.UNHANDLED) {
+        if(feedback.code == FeedbackCode.UNHANDLED) {
             showToast(feedback.message)
         }
     }

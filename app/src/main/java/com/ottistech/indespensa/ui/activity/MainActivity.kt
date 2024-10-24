@@ -1,7 +1,9 @@
 package com.ottistech.indespensa.ui.activity
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -10,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.ActivityMainBinding
 import com.ottistech.indespensa.shared.AppAccountType
+import com.ottistech.indespensa.ui.helpers.clearInputFocus
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 
 class MainActivity : AppCompatActivity() {
@@ -87,5 +90,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeBottomNavigationBarVisibility(visibility: Int) {
         binding.mainBottomNavigation.visibility = visibility
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        clearInputFocus(
+            event,
+            currentFocus,
+            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        )
+        return super.dispatchTouchEvent(event)
     }
 }
