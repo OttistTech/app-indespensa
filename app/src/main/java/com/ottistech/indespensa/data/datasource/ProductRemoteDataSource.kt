@@ -72,4 +72,33 @@ class ProductRemoteDataSource {
             return ResultWrapper.NetworkError
         }
     }
+
+    suspend fun findById(productId: Long) : ResultWrapper<ProductDTO> {
+        try {
+            Log.d(TAG, "[findById] Trying to find product by id")
+            val response = service.findById(productId)
+            return if(response.isSuccessful) {
+                Log.d(TAG, "[findById] Product found successfully")
+                ResultWrapper.Success(
+                    response.body() as ProductDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.e(TAG, "[findById] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[findById] A not mapped error occurred")
+                        ResultWrapper.Error(null, "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[findById] Failed while looking for product by id", e)
+            return ResultWrapper.NetworkError
+        }
+    }
 }

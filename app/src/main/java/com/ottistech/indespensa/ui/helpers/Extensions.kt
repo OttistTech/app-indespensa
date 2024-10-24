@@ -43,6 +43,7 @@ fun Fragment.showToast(message: String) {
 fun ImageView.loadImage(url: String?) {
     val alternativeImage = R.drawable.alternative_image
     load(url) {
+        crossfade(true)
         placeholder(alternativeImage)
         fallback(alternativeImage)
         error(alternativeImage)

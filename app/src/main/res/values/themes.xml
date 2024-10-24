@@ -142,4 +142,11 @@
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:indeterminateTint">@color/secondary</item>
     </style>
+
+    <style name="IndespensaBlur">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:background">@color/blur</item>
+    </style>
 </resources>

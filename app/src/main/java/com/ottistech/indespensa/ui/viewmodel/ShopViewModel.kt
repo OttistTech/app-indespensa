@@ -19,10 +19,9 @@ import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import kotlinx.coroutines.launch
 
 class ShopViewModel(
-    private val repository: ShopRepository,
+    private val shopRepository: ShopRepository,
     private val pantryRepository: PantryRepository,
-    private val productRepository: ProductRepository,
-    private val shopRepository: ShopRepository
+    private val productRepository: ProductRepository
 ) : ViewModel() {
 
     private var searchHandler: Handler? = Handler(Looper.getMainLooper())
@@ -42,7 +41,7 @@ class ShopViewModel(
     fun fetchShop() {
         viewModelScope.launch {
             try {
-                val shopItems = repository.listItems()
+                val shopItems = shopRepository.listItems()
                 _shopState.value = shopItems
             } catch(e: ResourceNotFoundException) {
                 _feedback.value = Feedback(
@@ -56,7 +55,7 @@ class ShopViewModel(
 
     fun syncChanges() {
         viewModelScope.launch {
-            repository.updateItemsAmount(*shopChanges.toTypedArray())
+            shopRepository.updateItemsAmount(*shopChanges.toTypedArray())
         }
     }
 

@@ -46,6 +46,7 @@ class CloseValidityAdapter(
         }
 
         fun bind(pantryItem: PantryItemCloseValidityDTO) {
+            this.pantryItem = pantryItem
             with(binding) {
                 cardCloseValidityProduct.text = pantryItem.productName
                 cardCloseValidityAmount.renderAmount(pantryItem.amount, pantryItem.unit)

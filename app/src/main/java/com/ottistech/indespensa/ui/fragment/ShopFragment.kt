@@ -46,7 +46,6 @@ class ShopFragment : Fragment() {
             ShopRepository(requireContext()),
             PantryRepository(requireContext()),
             ProductRepository(),
-            ShopRepository(requireContext())
         )
         confirmationDialogCreator = ConfirmationDialogCreator(requireContext())
         return binding.root

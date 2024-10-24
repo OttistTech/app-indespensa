@@ -56,4 +56,26 @@ class ProductRepository {
         }
     }
 
+    suspend fun findById(productId: Long) : ProductDTO {
+        Log.d(TAG, "[findById] trying to find product by id")
+        val result : ResultWrapper<ProductDTO> = remoteDataSource.findById(productId)
+        return when(result) {
+            is ResultWrapper.Success -> {
+                val productFound = result.value
+                Log.d(TAG, "[findById] Found product successfully: $productFound")
+                productFound
+            }
+            is ResultWrapper.Error -> {
+                Log.e(TAG, "[findById] Error while looking for product by id: $result")
+                when(result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        throw ResourceNotFoundException(result.error)
+                    }
+                    else -> throw Exception(result.error)
+                }
+            }
+            else -> throw Exception("Could not fetch product")
+        }
+    }
+
 }

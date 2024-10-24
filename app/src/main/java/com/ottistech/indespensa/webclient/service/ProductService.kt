@@ -19,4 +19,9 @@ interface ProductService {
         @Query("pattern") query: String
     ) : Response<List<ProductSearchResponseDTO>>
 
+    @GET("products/{product_id}/details")
+    suspend fun findById(
+        @Path("product_id") productId: Long
+    ) : Response<ProductDTO>
+
 }
