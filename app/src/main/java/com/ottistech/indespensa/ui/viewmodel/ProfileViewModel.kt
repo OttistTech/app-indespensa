@@ -7,7 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.DashboardRepository
 import com.ottistech.indespensa.data.repository.RecipeRepository
+import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppConstants
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val dashboardRepository: DashboardRepository,
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _carouselItems = MutableLiveData<List<String>>()
@@ -40,11 +45,14 @@ class ProfileViewModel(
     private val _isLoading = MutableLiveData(false)
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
-    private val _feedback = MutableLiveData<String?>()
-    val feedback: MutableLiveData<String?> = _feedback
+    private val _feedback = MutableLiveData<Feedback?>()
+    val feedback: MutableLiveData<Feedback?> = _feedback
 
     private var page = 0
     private var isLastPageLoaded = false
+
+    private val _isPremium = MutableLiveData<Boolean>()
+    val isPremium: LiveData<Boolean> = _isPremium
 
     init {
         _carouselItems.value = AppConstants.PREMIUM_CAROUSEL_MESSAGES
@@ -81,8 +89,8 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 val response = recipeRepository.list(
-                    pageNumber=page,
-                    createdByYou=true
+                    pageNumber = page,
+                    createdByYou = true
                 )
 
                 _recipes.value = response.content
@@ -90,24 +98,56 @@ class ProfileViewModel(
 
                 _isLoading.value = false
                 _feedback.value = null
-            } catch(e: ResourceNotFoundException) {
+            } catch (e: ResourceNotFoundException) {
                 _isLoading.value = false
 
-                if(page == 0) {
+                if (page == 0) {
                     _recipes.value = null
-                    _feedback.value = "Parece que você não criou nenhuma receita"
+                    _feedback.value = Feedback(
+                        feedbackId = FeedbackId.RECIPES_LIST,
+                        code = FeedbackCode.NOT_FOUND,
+                        message = "Parece que você não criou nenhuma receita"
+                    )
                 }
+
                 isLastPageLoaded = true
             } catch (e: Exception) {
                 _isLoading.value = false
                 _recipes.value = null
-                _feedback.value = "Não foi possível buscar as receitas criadas por você!"
+                _feedback.value = Feedback(
+                    feedbackId = FeedbackId.RECIPES_LIST,
+                    code = FeedbackCode.UNHANDLED,
+                    message = "Não foi possível buscar as receitas criadas por você!"
+                )
+            }
+        }
+    }
+
+    fun fetchSwitchPremium(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                if (userRepository.updateUserBecomePremium()) {
+                    _isPremium.value = true
+                    _feedback.value = Feedback(
+                        feedbackId = FeedbackId.SWITCH_PREMIUM,
+                        code = FeedbackCode.SUCCESS,
+                        message = "Você cancelou seu plano Premium"
+                    )
+                    onSuccess("Você cancelou seu plano premium")
+                }
+            } catch (e: Exception) {
+                _feedback.value = Feedback(
+                    feedbackId = FeedbackId.SWITCH_PREMIUM,
+                    code = FeedbackCode.UNHANDLED,
+                    message = "Não foi possível cancelar o plano"
+                )
+                onError("Algo aconteceu. Tente novamente mais tarde!")
             }
         }
     }
 
     fun loadNextPage() {
-        if(!isLastPageLoaded) {
+        if (!isLastPageLoaded) {
             page += 1
             fetchRecipes()
         }

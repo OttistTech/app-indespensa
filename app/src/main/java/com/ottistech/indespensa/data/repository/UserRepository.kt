@@ -226,14 +226,22 @@ class UserRepository (
 
         return when (result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[updateUserBecomePremium] User become premium successfully")
-                localDataSource.saveUser(getUserCredentials().copy(
-                    isPremium = true
-                ))
+                Log.d(TAG, "[updateUserBecomePremium] User switched to premium successfully")
+
+                if (getUserCredentials().isPremium) {
+                    localDataSource.saveUser(getUserCredentials().copy(
+                        isPremium = false
+                    ))
+                } else {
+                    localDataSource.saveUser(getUserCredentials().copy(
+                        isPremium = true
+                    ))
+                }
+
                 true
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[updateUserBecomePremium] Error become premium user: ${result.error}, code: ${result.code}")
+                Log.e(TAG, "[updateUserBecomePremium] Error switching user plan: ${result.error}, code: ${result.code}")
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)

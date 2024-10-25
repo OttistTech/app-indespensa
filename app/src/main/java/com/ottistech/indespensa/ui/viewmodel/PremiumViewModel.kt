@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ottistech.indespensa.data.exception.ResourceGoneException
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppConstants
 import kotlinx.coroutines.Dispatchers
@@ -57,8 +56,8 @@ class PremiumViewModel(
                     _isPremium.value = true
                     onSuccess()
                 }
-            } catch (e: ResourceGoneException) {
-                onError("Você já é um usuário Premium!")
+            } catch (e: Exception) {
+                onError("Algo aconteceu. Tente novamente mais tarde!")
             }
         }
     }

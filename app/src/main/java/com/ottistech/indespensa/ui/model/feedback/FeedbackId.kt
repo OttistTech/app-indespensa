@@ -10,4 +10,5 @@ object FeedbackId {
     const val PRODUCT_SEARCH = "PRODUCT SEARCH"
     const val RECIPES_LIST = "RECIPES LIST"
     const val SHOPLIST = "SHOPLIST"
+    const val SWITCH_PREMIUM = "SWITCH PREMIUM"
 }

@@ -52,8 +52,11 @@
             android:id="@+id/action_profile_to_premium"
             app:destination="@id/premium_dest" />
         <action
-            android:id="@+id/profile_to_recipe_details"
+            android:id="@+id/action_profile_to_recipe_details"
             app:destination="@id/recipe_details_dest" />
+        <action
+            android:id="@+id/action_profile_to_home"
+            app:destination="@id/nav_home"/>
     </fragment>
 
     <fragment
