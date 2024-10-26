@@ -73,6 +73,9 @@ class ProfileFragment : Fragment() {
                     }
                 )
             }
+        } else {
+            binding.profilePremiumInfo.visibility = View.VISIBLE
+            binding.profileCancelPremium.visibility = View.GONE
         }
 
     }
