@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
                 navController.setGraph(R.navigation.main_enterprise_navigation)
             }
             AppAccountType.ADMIN -> {
-                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_personal)
-                navController.setGraph(R.navigation.main_personal_navigation)
+                binding.mainBottomNavigation.inflateMenu(R.menu.bottom_nav_menu_admin)
+                navController.setGraph(R.navigation.main_admin_navigation)
             }
         }
         binding.mainBottomNavigation.setupWithNavController(navController)
