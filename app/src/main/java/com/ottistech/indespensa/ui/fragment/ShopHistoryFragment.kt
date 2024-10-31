@@ -25,11 +25,13 @@ class ShopHistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentShopHistoryBinding.inflate(inflater, container, false)
         adapter = setupAdapter()
+        binding = FragmentShopHistoryBinding.inflate(inflater, container, false)
         viewModel = ShopHistoryViewModel(
             ShopRepository(requireContext())
         )
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -42,8 +44,6 @@ class ShopHistoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.shopHistoryContent.visibility = View.GONE
-        binding.shopHistoryProgressbar.visibility = View.VISIBLE
         viewModel.fetchHistory()
     }
 
@@ -61,19 +61,16 @@ class ShopHistoryFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.history.observe(viewLifecycleOwner) { history ->
-            binding.shopHistoryProgressbar.visibility = View.GONE
             if(history != null) {
                 binding.shopHistoryPurchases.text = getString(R.string.purchases_number, history.size)
                 binding.shopHistoryIngredients.text = getString(R.string.ingredients_number, history.sumOf { it.dailyAmount })
                 adapter.updateState(
                     prepareDataForAdapter(history)
                 )
-                binding.shopHistoryContent.visibility = View.VISIBLE
             }
         }
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
-            binding.shopHistoryProgressbar.visibility = View.GONE
             when(error) {
                 UiConstants.ERROR_NOT_FOUND -> {
                     binding.shopHistoryList.visibility = View.GONE

@@ -6,12 +6,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="8dp"
     android:background="@color/transparent">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/card_item_background">
-
         <ImageView
             android:id="@+id/card_pantry_item_image"
             android:layout_width="56dp"
@@ -20,8 +18,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/placeholder_image" />
-
+            tools:src="@drawable/image_placeholder" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,8 +26,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/card_pantry_item_image"
-            android:layout_marginStart="12dp">
-
+            android:layout_marginStart="@dimen/margin_3">
             <TextView
                 android:id="@+id/card_pantry_item_name"
                 android:layout_width="wrap_content"
@@ -40,13 +36,11 @@
                 android:maxLines="1"
                 android:theme="@style/IndespensaHeading4"
                 tools:text="Nome do produto" />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp">
-
+                android:layout_marginTop="@dimen/margin_2">
                 <TextView
                     android:id="@+id/card_pantry_item_amount"
                     android:layout_width="24dp"
@@ -56,7 +50,6 @@
                     android:textStyle="normal"
                     android:theme="@style/IndespensaHeading5"
                     tools:text="12x"/>
-
                 <TextView
                     android:id="@+id/card_pantry_item_validity_date"
                     android:layout_width="72dp"
@@ -79,12 +72,11 @@
             android:background="@drawable/button_secondary_background"
             app:backgroundTint="@null"
             android:textColor="@color/secondary"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_regular"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/card_pantry_remove"
-            android:layout_marginEnd="8dp"/>
-
+            android:layout_marginEnd="@dimen/margin_2"/>
         <Button
             android:id="@+id/card_pantry_remove"
             android:layout_width="36dp"
@@ -93,14 +85,11 @@
             android:text="@string/minus"
             android:textStyle="bold"
             android:textColor="@color/secondary"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_title_1"
             android:background="@drawable/button_secondary_background"
             app:backgroundTint="@null"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

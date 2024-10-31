@@ -1,6 +1,5 @@
 package com.ottistech.indespensa.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,23 +14,25 @@ class ShopHistoryViewModel(
     private val repository: ShopRepository
 ) : ViewModel() {
 
-    private val TAG = "SHOP HISTORY VIEWMODEL"
-
     private val _history = MutableLiveData<List<PurchaseDTO>?>()
     val history: LiveData<List<PurchaseDTO>?> = _history
+
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
 
     private val _error = MutableLiveData<Int?>()
     val error: LiveData<Int?> = _error
 
     fun fetchHistory() {
-        Log.d(TAG, "[fetchHistory] Requesting history")
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 _history.value = repository.getHistory()
                 _error.value = null
             } catch(e: ResourceNotFoundException) {
                 _error.value = UiConstants.ERROR_NOT_FOUND
             }
+            _isLoading.value = false
         }
     }
 }

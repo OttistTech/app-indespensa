@@ -6,25 +6,22 @@
     android:layout_height="wrap_content"
     android:fillViewport="true"
     app:cardCornerRadius="16dp">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dialog_ingredient_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingVertical="8dp"
         android:background="@color/white">
-
         <TextView
             android:id="@+id/dialog_ingredient_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/padding_4"
             android:text="@string/recipe_add_ingredient"
             android:theme="@style/IndespensaHeading2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:id="@+id/dialog_ingredient_search"
             android:layout_width="0dp"
@@ -33,13 +30,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dialog_ingredient_title"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginHorizontal="@dimen/margin_4">
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dialog_ingredient_input_product_search_container"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="@dimen/field_height"
                 android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeWidth="2dp"
+                app:boxStrokeWidth="@dimen/border_bold"
                 app:boxStrokeErrorColor="@color/red"
                 app:errorTextColor="@color/pastelOrange"
                 app:errorIconDrawable="@null"
@@ -50,9 +47,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:paddingBottom="12dp"
+                    android:paddingBottom="@dimen/padding_3"
                     android:hint="@string/search_product"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/text_regular"
                     android:inputType="text"/>
             </com.google.android.material.textfield.TextInputLayout>
             <TextView
@@ -62,7 +59,6 @@
                 android:visibility="gone"
                 android:theme="@style/IndespensaFormErrorMessage"/>
         </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dialog_ingredient_products_list"
             android:layout_width="0dp"
@@ -72,18 +68,16 @@
             app:layout_constraintStart_toStartOf="@id/dialog_ingredient_search"
             app:layout_constraintEnd_toEndOf="@id/dialog_ingredient_search"
             app:layout_constraintTop_toBottomOf="@id/dialog_ingredient_search"/>
-
         <LinearLayout
             android:id="@+id/dialog_ingredient_form_amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/margin_1"
             android:baselineAligned="false"
             app:layout_constraintStart_toStartOf="@id/dialog_ingredient_search"
             app:layout_constraintEnd_toEndOf="@id/dialog_ingredient_search"
             app:layout_constraintTop_toBottomOf="@id/dialog_ingredient_products_list">
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,9 +86,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dialog_ingredient_input_amount_container"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/field_height"
                     android:theme="@style/IndespensaTextInputLayout"
-                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidth="@dimen/border_bold"
                     app:boxStrokeErrorColor="@color/red"
                     app:errorTextColor="@color/pastelOrange"
                     app:errorIconDrawable="@null">
@@ -103,9 +97,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:paddingBottom="12dp"
+                        android:paddingBottom="@dimen/padding_3"
                         android:hint="@string/form_hint_amount"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_regular"
                         android:inputType="numberDecimal"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
@@ -120,19 +114,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/margin_2"
                 android:orientation="vertical">
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/dialog_ingredient_input_unit_select_container"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="@dimen/field_height"
                     android:hint="@string/form_hint_unit"
                     android:theme="@style/IndespensaTextInputLayoutDropdown"
-                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeWidth="@dimen/border_bold"
                     app:boxStrokeErrorColor="@color/red"
                     app:errorTextColor="@color/pastelOrange"
                     app:errorIconDrawable="@null">
-
                     <AutoCompleteTextView
                         android:id="@+id/dialog_ingredient_input_unit_select"
                         android:layout_width="match_parent"
@@ -142,7 +135,7 @@
                         android:dropDownHeight="148dp"
                         android:fontFamily="@font/montserrat_medium"
                         android:inputType="none"
-                        android:paddingBottom="12dp"
+                        android:paddingBottom="@dimen/padding_3"
                         tools:ignore="LabelFor" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
@@ -157,13 +150,12 @@
             android:id="@+id/dialog_ingredient_form_checkbox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin_2"
             android:orientation="horizontal"
             tools:ignore="ExtraText"
             app:layout_constraintStart_toStartOf="@id/dialog_ingredient_form_amount"
             app:layout_constraintEnd_toEndOf="@id/dialog_ingredient_form_amount"
             app:layout_constraintTop_toBottomOf="@id/dialog_ingredient_form_amount">
-
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/dialog_ingredient_required_checkbox"
                 android:layout_width="32dp"
@@ -171,7 +163,6 @@
                 app:boxStrokeErrorColor="@color/red"
                 app:buttonTint="@color/primary"
                 app:errorIconDrawable="@null" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -182,20 +173,19 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin_2"
             android:orientation="horizontal"
             android:gravity="end"
             tools:ignore="ExtraText"
             app:layout_constraintStart_toStartOf="@id/dialog_ingredient_form_checkbox"
             app:layout_constraintEnd_toEndOf="@id/dialog_ingredient_form_checkbox"
             app:layout_constraintTop_toBottomOf="@id/dialog_ingredient_form_checkbox">
-
             <Button
                 android:id="@+id/dialog_ingredient_cancel_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="0dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/margin_4"
                 android:background="@drawable/button_terciary_background"
                 android:backgroundTint="@color/transparent"
                 android:fontFamily="@font/montserrat"

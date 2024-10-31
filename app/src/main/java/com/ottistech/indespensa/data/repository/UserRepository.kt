@@ -35,11 +35,10 @@ class UserRepository (
         return result
     }
 
-    suspend fun signupUser(user: UserCreateDTO) : Boolean {
+    suspend fun signupUser(user: UserCreateDTO) {
         Log.d(TAG, "[signupUser] Trying to sign user up with $user")
         val result : ResultWrapper<UserCredentialsDTO> = remoteDataSource.create(user)
-
-        return when(result) {
+        when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[signupUser] Signed up user successfully: ${result.value}")
                 firebaseDataSource.saveUser(
@@ -47,7 +46,6 @@ class UserRepository (
                     password = user.password
                 )
                 localDataSource.saveUser(result.value)
-                true
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[signupUser] Error while signing up user: $result")
@@ -55,21 +53,22 @@ class UserRepository (
                     HttpURLConnection.HTTP_CONFLICT -> {
                         throw FieldConflictException(result.error)
                     }
-                    else -> false
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        throw BadRequestException(result.error)
+                    }
                 }
             }
             else -> {
                 Log.e(TAG, "[signupUser] Unexpected result: $result")
-                false
+                throw Exception("An unexpected exception occurred")
             }
         }
     }
 
-    suspend fun loginUser(user: UserLoginDTO) : Boolean {
+    suspend fun loginUser(user: UserLoginDTO) {
         Log.d(TAG, "[loginUser] Trying to log user in with credentials $user")
         val result : ResultWrapper<UserCredentialsDTO> = remoteDataSource.loginUser(user)
-
-        return when(result) {
+        when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[loginUser] Logging user successfully: ${result.value}")
                 firebaseDataSource.loginUser(
@@ -77,7 +76,6 @@ class UserRepository (
                     password = user.password
                 )
                 localDataSource.saveUser(result.value)
-                true
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[loginUser] Error while logging user: ${result.error}, code: ${result.code}")
@@ -91,12 +89,12 @@ class UserRepository (
                     HttpURLConnection.HTTP_GONE -> {
                         throw ResourceGoneException(result.error)
                     }
-                    else -> false
+                    else -> throw Exception("Couldn't log user in")
                 }
             }
             else -> {
                 Log.e(TAG, "[loginUser] Unexpected result: $result")
-                false
+                throw Exception("An unexpected error occurred")
             }
         }
     }

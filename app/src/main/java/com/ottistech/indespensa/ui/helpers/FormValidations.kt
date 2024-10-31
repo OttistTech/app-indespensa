@@ -10,19 +10,11 @@ fun validIsEmail(value: String?) : Boolean {
     return value?.let { Patterns.EMAIL_ADDRESS.matcher(it).matches() } ?: false
 }
 
-fun validPassword(value: String?) : Boolean {
-    return value?.length!! >= 8
-}
-
 fun validConfirmation(value: String?, matchWord: String?) : Boolean {
     if(!matchWord.isNullOrBlank() || !value.isNullOrBlank()) {
         return value.toString() == matchWord
     }
     return false
-}
-
-fun validCep(value: String?) : Boolean {
-    return value?.length!! == 8
 }
 
 fun validMaxLength(value: String?, maxLength: Int) : Boolean {
@@ -35,7 +27,7 @@ fun validMinLength(value: String?, minLength: Int) : Boolean {
 
 fun validMaxValue(value: String?, maxValue: Int) : Boolean {
     return if(validNotNull(value)) {
-        value.toString().toInt() <= maxValue
+        value.toString().toDouble() <= maxValue
     } else {
         false
     }
@@ -43,7 +35,7 @@ fun validMaxValue(value: String?, maxValue: Int) : Boolean {
 
 fun validMinValue(value: String?, minValue: Int) : Boolean {
     return if(validNotNull(value)) {
-        value.toString().toInt() >= minValue
+        value.toString().toDouble() >= minValue
     } else {
         false
     }

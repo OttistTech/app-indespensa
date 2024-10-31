@@ -74,18 +74,16 @@ class ShopItemDetailsViewModel(
 
     fun addToPantry(validityDate: Date) {
         Log.d(TAG, "[addToPantry] Requesting for adding item to pantry")
-        val productId: Long? = _itemDetails.value?.productId
-
-        if(productId != null) {
-            viewModelScope.launch {
-                _itemDetails.value?.let { item ->
-                    val result = pantryRepository.addItem(item.itemId, validityDate)
-
-                    if(result != null) {
-                        _message.value = UiConstants.OK
-                    } else {
-                        _message.value = UiConstants.FAIL
-                    }
+        viewModelScope.launch {
+            Log.d("ITEMMMMM", _itemDetails.value.toString())
+            _itemDetails.value?.let { item ->
+                Log.d("ITEMMMMM", "here")
+                syncChanges()
+                val result = pantryRepository.addItem(item.itemId, validityDate)
+                if(result != null) {
+                    _message.value = UiConstants.OK
+                } else {
+                    _message.value = UiConstants.FAIL
                 }
             }
         }

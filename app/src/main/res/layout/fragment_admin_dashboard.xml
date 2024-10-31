@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/white">
     <TextView
         android:id="@+id/admin_dashboard_title"
         android:layout_width="wrap_content"
@@ -15,7 +14,6 @@
         android:layout_marginStart="@dimen/margin_4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
-
     <WebView
         android:id="@+id/admin_dashboard_webview"
         android:layout_width="0dp"
@@ -26,16 +24,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
     <ProgressBar
         android:id="@+id/admin_dashboard_progressbar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/progressbar_large"
+        android:layout_height="@dimen/progressbar_large"
         app:layout_constraintTop_toTopOf="@id/admin_dashboard_webview"
         app:layout_constraintBottom_toBottomOf="@id/admin_dashboard_webview"
         app:layout_constraintStart_toStartOf="@id/admin_dashboard_webview"
         app:layout_constraintEnd_toEndOf="@id/admin_dashboard_webview"
         android:indeterminateTint="@color/secondary"
         android:indeterminateBehavior="repeat" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

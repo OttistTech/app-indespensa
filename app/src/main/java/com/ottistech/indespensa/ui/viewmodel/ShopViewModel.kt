@@ -60,8 +60,13 @@ class ShopViewModel(
     }
 
     fun registerItemChange(itemId: Long, amount: Int) {
-        val change = ProductItemUpdateAmountDTO(itemId, amount)
-        shopChanges.add(change)
+        val existingItemIndex = shopChanges.indexOfFirst { it.itemId == itemId }
+        if (existingItemIndex != -1) {
+            shopChanges[existingItemIndex].amount = amount
+        } else {
+            val change = ProductItemUpdateAmountDTO(itemId, amount)
+            shopChanges.add(change)
+        }
     }
 
     fun addAllItemsFromShopToPantry() {

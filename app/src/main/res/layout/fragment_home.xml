@@ -15,7 +15,6 @@
             android:layout_height="match_parent"
             tools:context=".ui.fragment.HomeFragment"
             android:backgroundTint="@color/white">
-
             <TextView
                 android:id="@+id/home_title"
                 android:layout_width="wrap_content"
@@ -198,25 +197,15 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-
-
                 <Button
                     android:id="@+id/home_access_pantry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_2"
-                    android:background="@drawable/button_primary_background"
-                    app:backgroundTint="@null"
+                    style="@style/IndespensaButton.primary"
                     android:text="@string/home_access_pantry"
-                    android:fontFamily="@font/montserrat"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
                     app:layout_constraintTop_toBottomOf="@id/home_dashboard"
                     app:layout_constraintEnd_toEndOf="@id/home_dashboard"
-                    app:layout_constraintStart_toStartOf="@id/home_dashboard"
-                    android:enabled="true"/>
-
+                    app:layout_constraintStart_toStartOf="@id/home_dashboard"/>
                 <LinearLayout
                     android:id="@+id/home_close_validity"
                     android:layout_width="match_parent"
@@ -262,9 +251,9 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/home_recipe_search_container"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="@dimen/field_height"
                         android:theme="@style/IndespensaTextInputLayout"
-                        app:boxStrokeWidth="2dp"
+                        app:boxStrokeWidth="@dimen/border_bold"
                         app:endIconMode="custom"
                         android:focusable="false"
                         android:clickable="true"
@@ -275,7 +264,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:paddingBottom="12dp"
+                            android:paddingBottom="@dimen/padding_3"
                             android:focusable="false"
                             android:clickable="true"
                             android:hint="@string/search_recipe"

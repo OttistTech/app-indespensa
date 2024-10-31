@@ -16,7 +16,6 @@ import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.validMaxLength
-import com.ottistech.indespensa.ui.helpers.validMinLength
 import com.ottistech.indespensa.ui.helpers.validMinValue
 import com.ottistech.indespensa.ui.helpers.validNotNull
 import com.ottistech.indespensa.ui.model.feedback.Feedback
@@ -44,7 +43,10 @@ class PantryFormViewModel(
     val formState = MutableLiveData(PantryFormFieldsState())
     val formErrorState = MutableLiveData(PantryFormErrorState())
     val formActiveState = MutableLiveData(PantryFormActiveState())
+
     val isFormValid = MutableLiveData(true)
+    val isLoading = MutableLiveData(false)
+
 
     private val _categories = MutableLiveData<List<String>?>()
     val categories: LiveData<List<String>?> = _categories
@@ -57,13 +59,15 @@ class PantryFormViewModel(
             searchProducts(it)
         }
         formErrorState.observeForever {
-            validateForm()
+            validForm()
         }
     }
 
     fun fetchCategories() {
         viewModelScope.launch {
+            isLoading.value = true
             _categories.value = categoryRepository.listCategories()
+            isLoading.value = false
         }
     }
 
@@ -101,8 +105,11 @@ class PantryFormViewModel(
     }
 
     fun submit() {
+        validAllFields()
+        Log.d("AAAAA", formState.value.toString())
         if (isFormValid.value!!) {
             viewModelScope.launch {
+                isLoading.value = true
                 try {
                     pantryRepository.createItem(
                         formState.value!!.toPantryItemCreateDTO(),
@@ -120,6 +127,7 @@ class PantryFormViewModel(
                         message="Não foi possível concluir a ação!"
                     )
                 }
+                isLoading.value = false
             }
         }
     }
@@ -183,7 +191,7 @@ class PantryFormViewModel(
         }
     }
 
-    private fun validateForm() {
+    private fun validForm() {
         val errorState = formErrorState.value
         isFormValid.value = errorState?.let {
             it.productName == null &&
@@ -203,7 +211,6 @@ class PantryFormViewModel(
             if( !validNotNull(value) ) { "Nome é obrigatório!" }
             else { null }
         formErrorState.value = formErrorState.value!!.copy(productName=error)
-        Log.d("TEST", formErrorState.value.toString())
     }
 
     fun validFoodName() {
@@ -262,6 +269,18 @@ class PantryFormViewModel(
             if( !validNotNull(value) ) { "Data de validade é obrigatório!" }
             else { null }
         formErrorState.value = formErrorState.value!!.copy(validityDate=error)
+    }
+
+    private fun validAllFields() {
+        validProductName()
+        validFoodName()
+        validCategory()
+        validDescription()
+        validBrandName()
+        validAmount()
+        validUnit()
+        validValidityDate()
+        validForm()
     }
 
     fun setNewProductImageBitmap(bitmap: Bitmap) {

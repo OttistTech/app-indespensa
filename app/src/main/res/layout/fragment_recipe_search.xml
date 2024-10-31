@@ -10,31 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/recipe_search_searchbar_container"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/field_height"
             android:theme="@style/IndespensaTextInputLayout"
-            app:boxStrokeWidth="2dp"
-            app:boxStrokeErrorColor="@color/red"
-            app:errorTextColor="@color/pastelOrange"
-            app:errorIconDrawable="@null"
+            app:boxStrokeWidth="@dimen/border_bold"
             app:endIconMode="custom"
             app:endIconDrawable="@drawable/ic_search"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="16dp">
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginHorizontal="@dimen/margin_4">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/recipe_search_searchbar_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:paddingBottom="12dp"
+                android:paddingBottom="@dimen/padding_3"
                 android:hint="@string/search_recipe"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_regular"
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,7 +45,6 @@
             android:layout_marginTop="@dimen/margin_3"
             tools:listitem="@layout/tag_filter"
             tools:itemCount="1"/>
-
         <Button
             android:id="@+id/recipe_search_open_filters_button"
             android:layout_width="wrap_content"
@@ -62,7 +57,6 @@
             android:background="@color/transparent"
             android:text="@string/search_all_filters"
             android:textColor="@color/secondary"/>
-
         <Button
             android:id="@+id/recipe_search_clear_filters_button"
             android:layout_width="wrap_content"
@@ -75,7 +69,6 @@
             android:background="@color/transparent"
             android:text="@string/search_clear_filters"
             android:textColor="@color/secondary"/>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipe_search_recipe_list"
             android:layout_width="0dp"
@@ -87,7 +80,6 @@
             app:layout_constraintEnd_toEndOf="@id/recipe_search_clear_filters_button"
             tools:listitem="@layout/card_recipe_item"
             tools:itemCount="5"/>
-
         <TextView
             android:id="@+id/recipe_search_message"
             android:layout_width="0dp"
@@ -103,17 +95,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="@dimen/margin_6"
             android:layout_marginHorizontal="@dimen/margin_4"/>
-
         <ProgressBar
             android:id="@+id/recipe_search_progressbar"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:indeterminateBehavior="repeat"
-            android:indeterminateTint="@color/secondary"
+            android:layout_width="@dimen/progressbar_small"
+            android:layout_height="@dimen/progressbar_small"
+            android:theme="@style/IndespensaProgressbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipe_search_recipe_list"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="@dimen/margin_2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

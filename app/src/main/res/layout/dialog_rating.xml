@@ -5,44 +5,37 @@
     android:layout_height="wrap_content"
     android:fillViewport="true"
     app:cardCornerRadius="8dp">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FBFBFB"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
-
+        android:background="@color/white"
+        android:paddingStart="@dimen/padding_8"
+        android:paddingEnd="@dimen/padding_8">
         <TextView
             android:id="@+id/dialog_rating_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/montserrat_semibold"
+            android:theme="@style/IndespensaHeading2"
+            android:layout_marginTop="@dimen/margin_8"
             android:text="@string/dialog_rating_title"
-            android:textColor="@color/black"
-            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/dialog_rating_normal_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat"
+            android:theme="@style/IndespensaText"
+            android:layout_marginTop="@dimen/margin_4"
             android:text="@string/dialog_rating_feedback"
-            android:textColor="#8B8A8A"
             app:layout_constraintEnd_toEndOf="@+id/dialog_rating_title"
             app:layout_constraintStart_toStartOf="@+id/dialog_rating_title"
             app:layout_constraintTop_toBottomOf="@+id/dialog_rating_title" />
-
         <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/dialog_rating_bar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/margin_3"
             android:numStars="5"
             android:progressTint="#F59132"
             android:progress="1"
@@ -51,13 +44,12 @@
             app:layout_constraintEnd_toEndOf="@+id/dialog_rating_normal_text"
             app:layout_constraintStart_toStartOf="@+id/dialog_rating_normal_text"
             app:layout_constraintTop_toBottomOf="@id/dialog_rating_normal_text" />
-
         <Button
             android:id="@+id/dialog_rating_button_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
             android:background="@drawable/button_terciary_background"
             android:enabled="true"
             android:fontFamily="@font/montserrat"
@@ -71,6 +63,5 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dialog_rating_bar" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

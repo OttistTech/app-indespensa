@@ -38,7 +38,8 @@ class ProfileFragment : Fragment() {
             RecipeRepository(requireContext()),
             UserRepository(requireContext())
         )
-
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -81,7 +82,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        with(binding.profileRecyclerView) {
+        with(binding.profileYourRecipesList) {
             adapter = recipeAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
@@ -120,13 +121,14 @@ class ProfileFragment : Fragment() {
 
         viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
             recipes?.let {
+                binding.profileYourRecipesList.visibility = View.VISIBLE
                 recipeAdapter.addItems(it)
             }
         }
 
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
             binding.apply {
-                binding.profileRecyclerView.visibility = if (feedback?.code == FeedbackCode.NOT_FOUND) {
+                binding.profileYourRecipesList.visibility = if (feedback?.code == FeedbackCode.NOT_FOUND) {
                     View.GONE
                 } else {
                     View.VISIBLE
@@ -134,7 +136,7 @@ class ProfileFragment : Fragment() {
 
                 profileMessage.apply {
                     if (feedback?.feedbackId == FeedbackId.RECIPES_LIST) {
-                        if (!viewModel.isLoading.value!! && viewModel.recipes.value.isNullOrEmpty()) {
+                        if (!viewModel.isRecipesLoading.value!! && viewModel.recipes.value.isNullOrEmpty()) {
                             text = feedback.message
                             visibility = View.VISIBLE
                         }
@@ -143,15 +145,6 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.profileProgressbar.visibility =
-                if(isLoading) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
         }
 
         viewModel.carouselItems.observe(viewLifecycleOwner) { carouselItems ->
@@ -169,9 +162,9 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupLoadOnScroll() {
-        binding.profileRecyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-            if (!binding.profileRecyclerView.canScrollVertically(1) && scrollY > oldScrollY) {
-                if (!viewModel.isLoading.value!!) {
+        binding.profileYourRecipesList.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (!binding.profileYourRecipesList.canScrollVertically(1) && scrollY > oldScrollY) {
+                if (!viewModel.isRecipesLoading.value!!) {
                     viewModel.loadNextPage()
                 }
             }

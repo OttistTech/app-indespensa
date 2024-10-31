@@ -30,7 +30,7 @@ interface PantryService {
     @PATCH("pantry/update-items-amount")
     suspend fun updateItemsAmount(
         @Body pantryItems: List<ProductItemUpdateAmountDTO>
-    ) : Response<List<ProductItemUpdateAmountDTO>>
+    ) : Response<Void>
 
     @GET("pantry/{pantry_item_id}/details")
     suspend fun getItemDetails(

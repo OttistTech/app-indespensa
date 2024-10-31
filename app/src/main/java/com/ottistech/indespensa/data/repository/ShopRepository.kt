@@ -84,10 +84,10 @@ class ShopRepository(
     suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
         if(items.isNotEmpty()) {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-            val result : ResultWrapper<List<ProductItemUpdateAmountDTO>> = remoteDataSource.updateItemsAmount(items.asList())
+            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList())
             when(result) {
                 is ResultWrapper.Success -> {
-                    Log.d(TAG, "[updateItemsAmount] Updated successfully ${result.value.size} items")
+                    Log.d(TAG, "[updateItemsAmount] Updated successfully items")
                 }
                 is ResultWrapper.Error -> {
                     Log.e(TAG, "[updateItemsAmount] Error while while updating items amount: $result")

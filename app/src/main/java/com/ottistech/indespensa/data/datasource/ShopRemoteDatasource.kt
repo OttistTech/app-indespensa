@@ -78,15 +78,13 @@ class ShopRemoteDatasource {
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<List<ProductItemUpdateAmountDTO>> {
-        try {
+    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<Boolean> {
+        return try {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
             val response = service.updateItemsAmount(pantryItems)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[updateItemsAmount] Updated amount successfully for ${response.body()?.size}/${pantryItems.size} items")
-                ResultWrapper.Success(
-                    response.body() as List<ProductItemUpdateAmountDTO>
-                )
+            if(response.isSuccessful) {
+                Log.d(TAG, "[updateItemsAmount] Updated amount successfully")
+                ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
                 Log.e(TAG, "[updateItemsAmount] A not mapped error occurred")
@@ -94,7 +92,7 @@ class ShopRemoteDatasource {
             }
         } catch (e: Exception) {
             Log.e(TAG, "[updateItemsAmount] Failed while updating items amount", e)
-            return ResultWrapper.NetworkError
+            ResultWrapper.NetworkError
         }
     }
 
