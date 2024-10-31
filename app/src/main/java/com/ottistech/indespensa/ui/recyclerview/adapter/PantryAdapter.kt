@@ -1,7 +1,9 @@
 package com.ottistech.indespensa.ui.recyclerview.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.databinding.CardPantryItemBinding
@@ -9,6 +11,7 @@ import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.renderAmount
 import com.ottistech.indespensa.ui.helpers.renderValidityDate
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
+import kotlin.math.log
 
 class PantryAdapter(
     private val context: Context,
@@ -67,6 +70,8 @@ class PantryAdapter(
             pantryItem.validityDate?.let {
                 binding.cardPantryItemValidityDate.renderValidityDate(it)
             }
+
+            if (pantryItem.wasOpened) binding.cardPantryWasOpened.visibility = View.VISIBLE
         }
     }
 

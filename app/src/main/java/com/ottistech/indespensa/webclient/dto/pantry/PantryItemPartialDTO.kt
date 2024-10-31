@@ -10,5 +10,6 @@ data class PantryItemPartialDTO (
     val productAmount: Double,
     val productUnit: String,
     var pantryAmount: Int,
-    val validityDate: Date?
+    val validityDate: Date?,
+    val wasOpened: Boolean
 )
