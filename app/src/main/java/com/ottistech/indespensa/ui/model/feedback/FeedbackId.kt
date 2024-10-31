@@ -1,6 +1,8 @@
 package com.ottistech.indespensa.ui.model.feedback
 
 object FeedbackId {
+    const val SIGNUP = "SIGNUP"
+    const val LOGIN = "LOGIN"
     const val ADD_ALL_TO_PANTRY = "ADD ALL TO PANTRY"
     const val ADD_TO_SHOPLIST = "ADD TO SHOPLIST"
     const val CLOSE_VALIDITY_ITEMS = "CLOSE VALIDITY ITEMS"

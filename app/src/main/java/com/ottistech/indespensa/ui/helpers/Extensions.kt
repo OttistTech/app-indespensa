@@ -41,7 +41,7 @@ fun Fragment.showToast(message: String) {
 
 // Function that loads content into a ImageView
 fun ImageView.loadImage(url: String?) {
-    val alternativeImage = R.drawable.alternative_image
+    val alternativeImage = R.drawable.image_alternative
     load(url) {
         crossfade(true)
         placeholder(alternativeImage)
@@ -53,8 +53,8 @@ fun ImageView.loadImage(url: String?) {
 // Overloaded function to load a drawable resource
 fun ImageView.loadImage(resId: Int) {
     load(resId) {
-        placeholder(R.drawable.alternative_image)
-        error(R.drawable.alternative_image)
+        placeholder(R.drawable.image_alternative)
+        error(R.drawable.image_alternative)
     }
 }
 

@@ -8,6 +8,8 @@
     <dimen name="padding_4">16dp</dimen>
     <dimen name="padding_5">20dp</dimen>
     <dimen name="padding_6">24dp</dimen>
+    <dimen name="padding_7">28dp</dimen>
+    <dimen name="padding_8">32dp</dimen>
 
     <dimen name="margin_1">4dp</dimen>
     <dimen name="margin_2">8dp</dimen>
@@ -28,4 +30,24 @@
     <dimen name="letter_spacing_all_caps">0.01</dimen>
 
     <dimen name="progressbar_large">100dp</dimen>
+    <dimen name="progressbar_small">56dp</dimen>
+
+    <dimen name="field_height">56dp</dimen>
+    <dimen name="textarea_height">96dp</dimen>
+
+    <dimen name="checkbox_size">32dp</dimen>
+
+    <dimen name="image_size_big">272dp</dimen>
+
+    <dimen name="navbar_height">64dp</dimen>
+    <dimen name="navbar_icon_size">32dp</dimen>
+
+    <dimen name="logo_height_large">146dp</dimen>
+    <dimen name="logo_width_large">124dp</dimen>
+    <dimen name="logo_height_medium">32dp</dimen>
+    <dimen name="logo_width_medium">32dp</dimen>
+    <dimen name="logo_height_small">32dp</dimen>
+    <dimen name="logo_width_small">32dp</dimen>
+
+    <dimen name="dots_size">8dp</dimen>
 </resources>

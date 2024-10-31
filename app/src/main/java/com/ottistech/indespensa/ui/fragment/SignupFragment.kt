@@ -2,171 +2,157 @@ package com.ottistech.indespensa.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
-import com.ottistech.indespensa.data.exception.FieldConflictException
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentSignupBinding
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.ui.helpers.DatePickerCreator
-import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
-import kotlinx.coroutines.launch
+import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.viewmodel.SignupViewModel
 
 class SignupFragment : Fragment() {
 
-    private val TAG = "SIGNUP FRAGMENT"
-    private lateinit var binding : FragmentSignupBinding
-    private val args : SignupFragmentArgs by navArgs<SignupFragmentArgs>()
-    private lateinit var validator : FieldValidations
-    private lateinit var datePicker : MaterialDatePicker<Long>
-    private lateinit var visibilitySwitcher : FieldVisibilitySwitcher
+    private val args: SignupFragmentArgs by navArgs<SignupFragmentArgs>()
+
+    private lateinit var binding: FragmentSignupBinding
+    private lateinit var viewModel: SignupViewModel
+
+    private lateinit var datePicker: MaterialDatePicker<Long>
+    private lateinit var visibilitySwitcher: FieldVisibilitySwitcher
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        validator = FieldValidations(requireContext())
         visibilitySwitcher = FieldVisibilitySwitcher(requireContext())
-        binding = FragmentSignupBinding.inflate(inflater, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_signup, container, false)
+        viewModel = SignupViewModel(
+            args.signupType,
+            UserRepository(requireContext())
+        )
+        binding.model = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        when(args.signupType) {
-            AppAccountType.PERSONAL -> {
-                binding.signupFormInputEnterpriseTypeContainer.visibility = View.GONE
-
-                val datePickerCreator = DatePickerCreator()
-                datePicker = datePickerCreator.createDatePicker(binding.signupFormInputBirthdate, getString(R.string.form_hint_birthdate), true)
-                binding.signupFormInputBirthdate.setOnClickListener {
-                    datePicker.show(parentFragmentManager, "DATE PICKER")
-                }
-            }
-            AppAccountType.BUSINESS -> {
-               binding.signupFormInputBirthdateContainer.visibility = View.GONE
-            }
-            AppAccountType.ADMIN -> {
-                binding.signupFormInputEnterpriseTypeContainer.visibility = View.GONE
-
-                val datePickerCreator = DatePickerCreator()
-                datePicker = datePickerCreator.createDatePicker(binding.signupFormInputBirthdate, getString(R.string.form_hint_birthdate), true)
-                binding.signupFormInputBirthdate.setOnClickListener {
-                    datePicker.show(parentFragmentManager, "DATE PICKER")
-                }
-            }
-        }
+        handleFormAccountType()
+        setupStatesSelect()
+        setupTermsLink()
+        setupObservers()
+        setupValidationListeners()
 
         var passwordVisibility = false
-        binding.signupFormInputPasswordContainer.setEndIconOnClickListener {
-            passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
-                binding.signupFormInputPassword, binding.signupFormInputPasswordContainer)
+        binding.signupPasswordLayout.setEndIconOnClickListener {
+            passwordVisibility = visibilitySwitcher.switch(passwordVisibility, binding.signupPasswordField, binding.signupPasswordLayout)
         }
 
         var passwordConfirmationVisibility = false
-        binding.signupFormInputPasswordConfirmationContainer.setEndIconOnClickListener {
-            passwordConfirmationVisibility = visibilitySwitcher.switch(passwordConfirmationVisibility,
-                binding.signupFormInputPasswordConfirmation, binding.signupFormInputPasswordConfirmationContainer)
+        binding.signupPasswordConfirmationLayout.setEndIconOnClickListener {
+            passwordConfirmationVisibility = visibilitySwitcher.switch(passwordConfirmationVisibility, binding.signupPasswordConfirmationField, binding.signupPasswordConfirmationLayout)
         }
+    }
 
-        val brazilStatesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.BRAZIL_STATES)
-        binding.signupFormInputStateSelect.setAdapter(brazilStatesAdapter)
-
-        binding.signupFormAppTermsLink.setOnClickListener {
+    private fun setupTermsLink() {
+        binding.signupTermsLink.setOnClickListener {
             navigateToTermsAndConditions()
         }
+    }
 
-        binding.signupFormButton.setOnClickListener {
-            if(validForm()) {
-                val newUser = generateFormUser()
-                lifecycleScope.launch {
-                    Log.d(TAG, "Trying to Signup. Called UserRepository.signupUser wit $newUser")
-                    try {
-                        val result = UserRepository(requireContext()).signupUser(newUser)
-                        if(result) {
-                            navigateToHome()
-                        }
-                    } catch (e: FieldConflictException) {
-                        validator.setFieldError(
-                            binding.signupFormInputEmailContainer, binding.signupFormInputEmailError,
-                            getString(R.string.form_error_conflict, "E-mail")
-                        )
-                    }
+    private fun setupStatesSelect() {
+        val brazilStatesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.BRAZIL_STATES)
+        binding.signupStatesSelectField.setAdapter(brazilStatesAdapter)
+    }
+
+    private fun handleFormAccountType() {
+        when(args.signupType) {
+            AppAccountType.PERSONAL -> {
+                binding.signupEnterpriseTypeLayout.visibility = View.GONE
+                val datePickerCreator = DatePickerCreator()
+                datePicker = datePickerCreator.createDatePicker(binding.signupBirthdateField, getString(R.string.form_hint_birthdate), true)
+                binding.signupBirthdateField.setOnClickListener {
+                    datePicker.show(parentFragmentManager, "DATE PICKER")
                 }
+            }
+
+            AppAccountType.BUSINESS -> {
+                binding.signupBirthdateLayout.visibility = View.GONE
+            }
+
+            else -> throw Exception("Not allowed account type")
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
         }
     }
 
-    private fun generateFormUser(): UserCreateDTO {
-        return UserCreateDTO(
-            type = args.signupType,
-            name = binding.signupFormInputName.text.toString(),
-            enterpriseType = binding.signupFormInputEnterpriseType.text.toString(),
-            birthDate = binding.signupFormInputBirthdate.text.toString().toDate(),
-            email = binding.signupFormInputEmail.text.toString(),
-            password = binding.signupFormInputPassword.text.toString(),
-            cep = binding.signupFormInputCep.text.toString(),
-            addressNumber = binding.signupFormInputAddressNumber.text.toString().toInt(),
-            street = binding.signupFormInputStreet.text.toString(),
-            city = binding.signupFormInputCity.text.toString(),
-            state = binding.signupFormInputStateSelect.text.toString(),
-        )
+    private fun handleFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+        if(feedback.code == FeedbackCode.SUCCESS) {
+            navigateToHome()
+        }
     }
 
-    private fun validForm() : Boolean {
-        // name
-        val isNameValid = validator.validMinLength(binding.signupFormInputName, binding.signupFormInputNameContainer, binding.signupFormInputNameError, 4)
-        // enterprise type
-        val isEnterpriseTypeValid = if(binding.signupFormInputEnterpriseTypeContainer.visibility == View.VISIBLE) {
-            validator.validNotNull(binding.signupFormInputEnterpriseType, binding.signupFormInputEnterpriseTypeContainer, binding.signupFormInputEnterpriseTypeError)
-        } else {
-            true
+    private fun setupValidationListeners() {
+        binding.signupNameField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validName() }
         }
-        // email
-        val isEmailValid = validator.validIsEmail(binding.signupFormInputEmail, binding.signupFormInputEmailContainer, binding.signupFormInputEmailError)
-        // birthDate
-        val isBirthDateValid = if(binding.signupFormInputBirthdateContainer.visibility == View.VISIBLE) {
-            validator.validNotNull(binding.signupFormInputBirthdate, binding.signupFormInputBirthdateContainer, binding.signupFormInputBirthdateError)
-        } else {
-            true
+        binding.signupEnterpriseTypeField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validEnterpriseType() }
         }
-        // password
-        val isPasswordValid = validator.validPassword(binding.signupFormInputPassword, binding.signupFormInputPasswordContainer, binding.signupFormInputPasswordError)
-        // password confirmation
-        val isPasswordConfirmationValid = validator.validConfirmation(binding.signupFormInputPasswordConfirmation, binding.signupFormInputPasswordConfirmationContainer, binding.signupFormInputPasswordConfirmationError, binding.signupFormInputPassword.text.toString())
-        // cep
-        val isCepValid = validator.validCep(binding.signupFormInputCep, binding.signupFormInputCepContainer, binding.signupFormInputCepError)
-        // address number
-        val isAddressNumberValid = validator.validMaxLength(binding.signupFormInputAddressNumber, binding.signupFormInputAddressNumberContainer, binding.signupFormInputAddressNumberError, 4) &&
-            validator.validNotNull(binding.signupFormInputAddressNumber, binding.signupFormInputAddressNumberContainer, binding.signupFormInputAddressNumberError)
-        // street
-        val isStreetValid = validator.validNotNull(binding.signupFormInputStreet, binding.signupFormInputStreetContainer, binding.signupFormInputStreetError)
-        // city
-        val isCityValid = validator.validNotNull(binding.signupFormInputCity, binding.signupFormInputCityContainer, binding.signupFormInputCityError)
-        // state
-        val isStateValid = validator.validNotNull(binding.signupFormInputStateSelect, binding.signupFormInputStateSelectContainer, binding.signupFormInputStateSelectError)
-        // terms
-        val isTermsValid = validator.validCheckBox(binding.signupFormAppTermsCheckbox, binding.signupFormAppTermsCheckboxText)
-
-        return isNameValid && isEnterpriseTypeValid && isEmailValid && isBirthDateValid &&
-                isPasswordValid && isPasswordConfirmationValid && isCepValid && isAddressNumberValid &&
-                isCityValid && isStreetValid && isStateValid && isTermsValid
+        binding.signupEmailField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validEmail() }
+        }
+        binding.signupBirthdateField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validBirthdate() }
+        }
+        binding.signupPasswordField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validPassword() }
+        }
+        binding.signupPasswordConfirmationLayout.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validPasswordConfirmation() }
+        }
+        binding.signupCepField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validCep() }
+        }
+        binding.signupAddressNumberField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validAddressNumber() }
+        }
+        binding.signupStreetField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validStreet() }
+        }
+        binding.signupCityField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validCity() }
+        }
+        binding.signupStatesSelectField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validState() }
+        }
+        binding.signupTermsCheckbox.setOnCheckedChangeListener { _, _ ->
+            viewModel.validTermsCheck()
+        }
     }
 
     private fun navigateToTermsAndConditions() {

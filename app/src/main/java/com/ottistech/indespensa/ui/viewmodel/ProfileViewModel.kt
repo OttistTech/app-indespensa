@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,13 +36,15 @@ class ProfileViewModel(
     val error: LiveData<String> = _error
 
     private val _recipes = MutableLiveData<List<RecipePartialDTO>?>()
-    val recipes: MutableLiveData<List<RecipePartialDTO>?> = _recipes
+    val recipes: LiveData<List<RecipePartialDTO>?> = _recipes
 
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: MutableLiveData<Boolean> = _isLoading
+    private val _isRecipesLoading = MutableLiveData(false)
+    val isRecipesLoading: LiveData<Boolean> = _isRecipesLoading
+    private val _isContentLoading = MutableLiveData(false)
+    val isContentLoading: LiveData<Boolean> = _isContentLoading
 
     private val _feedback = MutableLiveData<String?>()
-    val feedback: MutableLiveData<String?> = _feedback
+    val feedback: LiveData<String?> = _feedback
 
     private var page = 0
     private var isLastPageLoaded = false
@@ -67,18 +70,22 @@ class ProfileViewModel(
 
     fun fetchProfileData() {
         viewModelScope.launch {
+            _isContentLoading.value = true
+            Log.d("Load", isContentLoading.value.toString())
             try {
                 val result = dashboardRepository.getProfileData()
                 _profileData.value = result
             } catch (e: ResourceNotFoundException) {
                 _error.value = "Failed to get dash profile info"
             }
+            _isContentLoading.value = false
+            Log.d("Load", isContentLoading.value.toString())
         }
     }
 
     fun fetchRecipes() {
-        _isLoading.value = true
         viewModelScope.launch {
+            _isRecipesLoading.value = true
             try {
                 val response = recipeRepository.list(
                     pageNumber=page,
@@ -88,10 +95,8 @@ class ProfileViewModel(
                 _recipes.value = response.content
                 isLastPageLoaded = response.last
 
-                _isLoading.value = false
                 _feedback.value = null
             } catch(e: ResourceNotFoundException) {
-                _isLoading.value = false
 
                 if(page == 0) {
                     _recipes.value = null
@@ -99,10 +104,10 @@ class ProfileViewModel(
                 }
                 isLastPageLoaded = true
             } catch (e: Exception) {
-                _isLoading.value = false
                 _recipes.value = null
                 _feedback.value = "Não foi possível buscar as receitas criadas por você!"
             }
+            _isRecipesLoading.value = false
         }
     }
 

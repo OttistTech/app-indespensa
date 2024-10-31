@@ -138,6 +138,16 @@
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <style name="IndespensaButton.green" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_border_green_background</item>
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="IndespensaButton.red" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_border_red_background</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
     <style name="IndespensaProgressbar" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:indeterminateTint">@color/secondary</item>

@@ -48,7 +48,12 @@ class PantryViewModel(
 
     fun registerItemChange(itemId: Long, amount: Int) {
         Log.d(TAG, "[registerItemChange] Pantry item $itemId amount was changed to $amount")
-        val change = ProductItemUpdateAmountDTO(itemId, amount)
-        pantryChanges.add(change)
+        val existingItemIndex = pantryChanges.indexOfFirst { it.itemId == itemId }
+        if (existingItemIndex != -1) {
+            pantryChanges[existingItemIndex].amount = amount
+        } else {
+            val change = ProductItemUpdateAmountDTO(itemId, amount)
+            pantryChanges.add(change)
+        }
     }
 }

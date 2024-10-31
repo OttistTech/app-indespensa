@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pantry_fab"
         android:layout_width="wrap_content"
@@ -18,19 +16,16 @@
         app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp" />
-
+        android:layout_marginBottom="@dimen/margin_5"
+        android:layout_marginEnd="@dimen/margin_5" />
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:fillViewport="true">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="600dp"
-            android:layout_marginHorizontal="16dp">
-
+            android:layout_marginHorizontal="@dimen/margin_4">
             <ImageView
                 android:id="@+id/pantry_logo"
                 android:layout_width="wrap_content"
@@ -39,8 +34,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="32dp" />
-
+                android:layout_marginTop="@dimen/margin_8" />
             <TextView
                 android:id="@+id/pantry_text"
                 android:layout_width="0dp"
@@ -48,12 +42,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/pantry_logo"
-                android:layout_marginTop="24dp"
-                android:layout_marginHorizontal="16dp"
-                tools:text="Olá, nome, esse é o estado atual da sua despensa"
-                android:theme="@style/IndespensaHeading3"
-                android:textAlignment="center" />
-
+                android:layout_marginTop="@dimen/margin_6"
+                android:layout_marginHorizontal="@dimen/margin_4"
+                style="@style/IndespensaHeading3"
+                android:textAlignment="center"
+                tools:text="Olá, nome, esse é o estado atual da sua despensa" />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pantry_items_list"
                 android:layout_width="match_parent"
@@ -61,20 +54,18 @@
                 app:layout_constraintTop_toBottomOf="@id/pantry_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/margin_6"
                 tools:listitem="@layout/card_pantry_item" />
-
             <ProgressBar
                 android:id="@+id/pantry_progressbar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/progressbar_large"
+                android:layout_height="@dimen/progressbar_large"
                 android:indeterminateBehavior="repeat"
                 android:indeterminateTint="@color/secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pantry_text"
                 app:layout_constraintBottom_toBottomOf="parent" />
-
             <TextView
                 android:id="@+id/pantry_message"
                 android:layout_width="0dp"
@@ -88,8 +79,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/pantry_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginHorizontal="16dp"/>
-
+                android:layout_marginHorizontal="@dimen/margin_4"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
