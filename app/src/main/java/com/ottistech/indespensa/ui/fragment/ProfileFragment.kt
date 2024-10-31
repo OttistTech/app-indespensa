@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.DashboardRepository
 import com.ottistech.indespensa.data.repository.RecipeRepository
+import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentProfileBinding
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.RecipeAdapter
 import com.ottistech.indespensa.ui.recyclerview.adapter.TextCarouselAdapter
 import com.ottistech.indespensa.ui.viewmodel.ProfileViewModel
@@ -24,13 +28,15 @@ class ProfileFragment : Fragment() {
     private lateinit var recipeAdapter : RecipeAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         viewModel = ProfileViewModel(
             DashboardRepository(requireContext()),
-            RecipeRepository(requireContext())
+            RecipeRepository(requireContext()),
+            UserRepository(requireContext())
         )
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -56,7 +62,23 @@ class ProfileFragment : Fragment() {
         if (requireContext().getCurrentUser().isPremium) {
             binding.profilePremiumInfo.visibility = View.GONE
             binding.profileCancelPremium.visibility = View.VISIBLE
+
+            binding.profileCancelPremium.setOnClickListener {
+                viewModel.fetchSwitchPremium(
+                    onSuccess = { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        navigateToHome()
+                    },
+                    onError = { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+        } else {
+            binding.profilePremiumInfo.visibility = View.VISIBLE
+            binding.profileCancelPremium.visibility = View.GONE
         }
+
     }
 
     private fun setupRecyclerView() {
@@ -105,13 +127,23 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
-            feedback?.let {
-                binding.profileYourRecipesList.visibility = View.GONE
-                binding.profileMessage.visibility = View.VISIBLE
-                binding.profileMessage.text = it
-            } ?: run {
-                binding.profileYourRecipesList.visibility = View.VISIBLE
-                binding.profileMessage.visibility = View.GONE
+            binding.apply {
+                binding.profileYourRecipesList.visibility = if (feedback?.code == FeedbackCode.NOT_FOUND) {
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
+
+                profileMessage.apply {
+                    if (feedback?.feedbackId == FeedbackId.RECIPES_LIST) {
+                        if (!viewModel.isRecipesLoading.value!! && viewModel.recipes.value.isNullOrEmpty()) {
+                            text = feedback.message
+                            visibility = View.VISIBLE
+                        }
+                    } else {
+                        visibility = View.GONE
+                    }
+                }
             }
         }
 
@@ -140,7 +172,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun navigateToRecipeDetails(recipeId: Long) {
-        val action = ProfileFragmentDirections.profileToRecipeDetails(recipeId)
+        val action = ProfileFragmentDirections.actionProfileToRecipeDetails(recipeId)
         findNavController().navigate(action)
     }
 
@@ -151,6 +183,11 @@ class ProfileFragment : Fragment() {
 
     private fun navigateToSettings() {
         val action = ProfileFragmentDirections.actionProfileToUpdateProfile()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToHome() {
+        val action = ProfileFragmentDirections.actionProfileToHome()
         findNavController().navigate(action)
     }
 
