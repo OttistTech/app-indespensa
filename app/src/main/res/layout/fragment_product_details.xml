@@ -137,6 +137,22 @@
                     style="@style/IndespensaText"
                     tools:text="06/11/2007"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/product_details_was_opened_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/margin_1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaHeading4"
+                    android:textColor="@color/secondary"
+                    android:text="Existe uma unidade aberta desse produto"/>
+
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/product_details_amount_buttons"
