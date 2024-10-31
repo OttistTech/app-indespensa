@@ -25,6 +25,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/margin_4"
                 android:layout_marginStart="@dimen/margin_4"/>
+
             <LinearLayout
                 android:id="@+id/home_content"
                 android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                         android:layout_width="62dp"
                         android:layout_height="73dp"
                         android:scaleType="centerCrop"
-                        tools:src="@drawable/logo_small_sad"
+                        tools:src="@drawable/logo_sad"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
