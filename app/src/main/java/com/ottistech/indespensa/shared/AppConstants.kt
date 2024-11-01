@@ -1,5 +1,7 @@
 package com.ottistech.indespensa.shared
 
+import com.ottistech.indespensa.R
+import com.ottistech.indespensa.ui.CarrouselPage
 import com.ottistech.indespensa.ui.model.Filter
 import com.ottistech.indespensa.ui.model.FilterType
 
@@ -20,6 +22,28 @@ object AppConstants {
         "Indicação de receitas para todos os perfis",
         "Otimize seu tempo e esforço na cozinha",
         "Economize dinheiro sem desperdício"
+    )
+
+    val START_CAROUSEL_GIFS : List<CarrouselPage> = listOf(
+        CarrouselPage(
+                R.raw.animation_login,
+            "Organização para pequenas empresas",
+
+        ),
+        CarrouselPage(
+                R.raw.animation_foods,
+            "Indicação de receitas para todos os perfis",
+
+        ),
+        CarrouselPage(
+            R.raw.animation_cooking,
+            "Otimize seu tempo e esforço na cozinha",
+
+        ),
+        CarrouselPage(
+            R.raw.animation_chief,
+            "Economize dinheiro sem desperdício",
+        )
     )
 
     val TERMS_AND_CONDITIONS_URL : String = "https://terms-and-conditions-webpage.onrender.com"

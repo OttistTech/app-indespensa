@@ -89,6 +89,9 @@ dependencies {
     // ENCRYPTED PREFERENCES
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
 
+    // Lottie para renderizar animações no formato JSON do Adobe After Effects
+    implementation("com.airbnb.android:lottie:6.3.0")
+
 
     testImplementation("junit:junit:4.13.2")
 

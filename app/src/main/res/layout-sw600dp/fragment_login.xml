@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable name="model" type="com.ottistech.indespensa.ui.viewmodel.LoginViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_6"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="64dp"
+                    android:src="@drawable/logo_and_slogan" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_email_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.email}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_email"
+                        android:inputType="textEmailAddress"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/login_password_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:endIconDrawable="@drawable/ic_visibility_on"
+                    app:endIconMode="custom"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/login_password_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.password}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_password"
+                        android:inputType="textPassword"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/login_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:textSize="@dimen/text_small"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_4"
+                    android:textAlignment="center" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaButton.primary"
+                    android:textSize="@dimen/text_title_1"
+                    android:onClick="@{() -> model.submit()}"
+                    android:enabled="@{!model.isLoading}"
+                    android:text="@string/lading_cta_login"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:orientation="horizontal"
+                    tools:ignore="ExtraText">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/IndespensaText"
+                        android:textSize="@dimen/text_title_2"
+                        android:text="@string/form_login_no_account" />
+                    <TextView
+                        android:id="@+id/login_signup_button"
+                        android:layout_width="wrap_content"
+                        style="@style/IndespensaHeading4"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/secondary"
+                        android:layout_marginStart="@dimen/margin_1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:textSize="@dimen/text_title_2"
+                        android:text="@string/form_login_signup_link" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

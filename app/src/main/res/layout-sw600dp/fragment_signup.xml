@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="model"
+            type="com.ottistech.indespensa.ui.viewmodel.SignupViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_6"
+                android:layout_marginVertical="@dimen/margin_8"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/logo_medium" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:error="@{model.formErrorState.name}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_name_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_name"
+                        android:inputType="text"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.name}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.name}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.name != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/signup_enterprise_type_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.enterpriseType}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_enterprise_type_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_enterprise_type"
+                        android:inputType="text"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.enterpriseType}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.enterpriseType}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.enterpriseType != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.email}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_email_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_email"
+                        android:inputType="textEmailAddress"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.email}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.email}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.email != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/signup_birthdate_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.birthdate}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:endIconDrawable="@drawable/ic_calendar"
+                    app:endIconMode="custom"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_birthdate_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:hint="@string/form_hint_birthdate"
+                        android:inputType="date"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.birthdate}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.birthdate}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.birthdate != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/signup_password_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.password}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:endIconDrawable="@drawable/ic_visibility_on"
+                    app:endIconMode="custom"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_password_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_password"
+                        android:inputType="textPassword"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.password}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.password}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.password != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/signup_password_confirmation_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.passwordConfirmation}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:endIconDrawable="@drawable/ic_visibility_on"
+                    app:endIconMode="custom"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_password_confirmation_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_confirm_password"
+                        android:inputType="textPassword"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.passwordConfirmation}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.passwordConfirmation}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.passwordConfirmation != null ? View.VISIBLE : View.GONE}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.cep}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/signup_cep_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_cep"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:text="@={model.formState.cep}"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.formErrorState.cep}"
+                            android:theme="@style/IndespensaFormErrorMessage"
+                            android:visibility="@{model.formErrorState.cep != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_2"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.addressNumber}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/signup_address_number_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_address_number"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:text="@={model.formState.addressNumber}"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.formErrorState.addressNumber}"
+                            android:theme="@style/IndespensaFormErrorMessage"
+                            android:visibility="@{model.formErrorState.addressNumber != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:error="@{model.formErrorState.street}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/signup_street_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_street"
+                        android:inputType="text"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:text="@={model.formState.street}"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.street}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.street != null ? View.VISIBLE : View.GONE}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.city}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/signup_city_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_city"
+                                android:inputType="text"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:text="@={model.formState.city}"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.formErrorState.city}"
+                            android:theme="@style/IndespensaFormErrorMessage"
+                            android:visibility="@{model.formErrorState.city != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_2"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.state}"
+                            android:hint="@string/form_hint_state"
+                            android:theme="@style/IndespensaTextInputLayoutDropdown"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/signup_states_select_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:dropDownAnchor="@id/signup_states_select_field"
+                                android:dropDownHeight="148dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:inputType="none"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:text="@={model.formState.state}"
+                                tools:ignore="LabelFor" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{model.formErrorState.state}"
+                            android:theme="@style/IndespensaFormErrorMessage"
+                            android:visibility="@{model.formErrorState.state != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:orientation="horizontal"
+                    tools:ignore="ExtraText">
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/signup_terms_checkbox"
+                        android:layout_width="@dimen/checkbox_size"
+                        android:layout_height="wrap_content"
+                        android:checked="@={model.formState.termsCheck}"
+                        app:boxStrokeErrorColor="@color/red"
+                        app:buttonTint="@color/primary"
+                        app:errorIconDrawable="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_app_terms_start_text"
+                        android:theme="@style/IndespensaText" />
+
+                    <TextView
+                        android:id="@+id/signup_terms_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="@string/form_app_terms_link"
+                        android:textColor="@color/secondary"
+                        android:theme="@style/IndespensaText" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{model.formErrorState.termsCheck}"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="@{model.formErrorState.termsCheck != null ? View.VISIBLE : View.GONE}" />
+
+                <Button
+                    android:id="@+id/signup_submit_button"
+                    style="@style/IndespensaButton.primary"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{model.isFormValid &amp;&amp; !model.isLoading}"
+                    android:onClick="@{() -> model.submit()}"
+                    android:text="@string/lading_cta_signup" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
