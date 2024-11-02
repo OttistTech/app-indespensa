@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="@dimen/margin_3"
         android:text="@string/app_slogan"
         android:textAlignment="center"
         android:theme="@style/IndespensaHeading1"
@@ -45,6 +45,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/landing_view_pager"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_2"
             android:layout_height="wrap_content" />
 
         <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
