@@ -11,6 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.ActivityMainBinding
+import com.ottistech.indespensa.notification.schedulePantryItemValidityCheck
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.helpers.clearInputFocus
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        schedulePantryItemValidityCheck(this)
     }
 
     private fun changeBottomNavigationBarVisibility(visibility: Int) {
