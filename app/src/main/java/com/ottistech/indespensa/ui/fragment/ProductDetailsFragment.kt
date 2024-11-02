@@ -117,6 +117,8 @@ class ProductDetailsFragment : Fragment() {
                 } else {
                     productDetailsValidityDateContainer.visibility = View.GONE
                 }
+
+                if (itemDetails.wasOpened) productDetailsWasOpenedContainer.visibility = View.VISIBLE
             }
         }
         showContent()

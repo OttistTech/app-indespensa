@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     style="@style/IndespensaFormErrorMessage"
                     android:text="@{model.formErrorState.email}"
-                            android:visibility="@{model.formErrorState.email != null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{model.formErrorState.email != null ? View.VISIBLE : View.GONE}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/update_profile_password_layout"
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     style="@style/IndespensaFormErrorMessage"
                     android:text="@{model.formErrorState.password}"
-                            android:visibility="@{model.formErrorState.password != null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{model.formErrorState.password != null ? View.VISIBLE : View.GONE}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,7 +253,7 @@
                     android:layout_height="wrap_content"
                     style="@style/IndespensaFormErrorMessage"
                     android:text="@{model.formErrorState.street}"
-                            android:visibility="@{model.formErrorState.street != null ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{model.formErrorState.street != null ? View.VISIBLE : View.GONE}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

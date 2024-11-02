@@ -114,6 +114,7 @@
     <string name="premium_slogan">Filtros de receita personalizados</string>
     <string name="close_validity">Próximos da validade</string>
     <string name="pantry">Sua despensa</string>
+    <string name="card_pantry_item_unit_opened">Un. aberta</string>
 
     <!--  Premium  -->
     <string name="payment_title">Estamos quase lá…</string>
@@ -168,5 +169,6 @@
     <string name="cta_confirm">Confirmar</string>
     <string name="premium_last_price">R$39,99</string>
     <string name="cta_pay">Ir para pagamento</string>
+
 
 </resources>
