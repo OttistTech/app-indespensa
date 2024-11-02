@@ -1,6 +1,16 @@
 package com.ottistech.indespensa.ui.model.feedback
 
 object FeedbackId {
+    const val SHOP_HISTORY = "SHOP HISTORY"
+    const val RECIPE_SEARCH = "RECIPE SEARCH"
+    const val GET_RECIPE_DETAILS = "RECIPE DETAILS"
+    const val PANTRY_LIST = "PANTRY LIST"
+    const val ADD_TO_PANTRY = "ADD TO PANTRY"
+    const val GET_ITEM_DETAILS = "GET ITEM DETAILS"
+    const val CREATE_RECIPE = "CREATE RECIPE"
+    const val DEACTIVATE_PROFILE = "DEACTIVATE PROFILE"
+    const val UPDATE_PROFILE = "UPDATE PROFILE"
+    const val GET_PROFILE_DATA = "GET PROFILE DATA"
     const val SIGNUP = "SIGNUP"
     const val LOGIN = "LOGIN"
     const val ADD_ALL_TO_PANTRY = "ADD ALL TO PANTRY"

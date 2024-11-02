@@ -113,12 +113,6 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            errorMessage?.let {
-                showToast(it)
-            }
-        }
-
         viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
             recipes?.let {
                 binding.profileYourRecipesList.visibility = View.VISIBLE

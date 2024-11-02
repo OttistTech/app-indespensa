@@ -1,7 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShopHistoryBinding
-import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.recyclerview.adapter.PurchaseHistoryAdapter
 import com.ottistech.indespensa.ui.viewmodel.ShopHistoryViewModel
 import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
@@ -70,24 +70,24 @@ class ShopHistoryFragment : Fragment() {
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            when(error) {
-                UiConstants.ERROR_NOT_FOUND -> {
-                    binding.shopHistoryList.visibility = View.GONE
-                    binding.shopHistoryMessage.text = getString(R.string.shop_history_message_empty)
-                    binding.shopHistoryMessage.visibility = View.VISIBLE
-                }
-                null -> {
-                    binding.shopHistoryMessage.visibility = View.GONE
-                }
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        if(feedback.code == FeedbackCode.NOT_FOUND) {
+            binding.shopHistoryList.visibility = View.GONE
+            binding.shopHistoryMessage.text = getString(R.string.shop_history_message_empty)
+            binding.shopHistoryMessage.visibility = View.VISIBLE
         }
     }
 
     private fun prepareDataForAdapter(data: List<PurchaseDTO>): List<Any> {
         val items = mutableListOf<Any>()
         for (purchase in data) {
-            Log.d("TAG", purchase.toString())
             items.add(PurchaseHistoryAdapter.PurchaseHeader(
                 purchase.purchaseDate,
                 purchase.dailyAmount

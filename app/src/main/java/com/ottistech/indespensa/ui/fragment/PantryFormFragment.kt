@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -23,7 +25,7 @@ import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.databinding.FragmentPantryFormBinding
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.helpers.DatePickerCreator
+import com.ottistech.indespensa.ui.dialog.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
@@ -173,8 +175,12 @@ class PantryFormFragment : Fragment() {
             feedback.feedbackId == FeedbackId.CREATE_PANTRY_ITEM &&
             feedback.code == FeedbackCode.SUCCESS
         ) {
-            findNavController().popBackStack(R.id.pantry_form_dest, true)
+            popupBackStack()
         }
+    }
+
+    private fun popupBackStack() {
+        findNavController().popBackStack(R.id.pantry_form_dest, true)
     }
 
     private fun setupSearchBar() {
@@ -215,8 +221,8 @@ class PantryFormFragment : Fragment() {
         binding.pantryFormInputUnitSelect.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) { viewModel.validUnit() }
         }
-        binding.pantryFormInputValidityDate.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) { viewModel.validValidityDate() }
+        binding.pantryFormInputValidityDate.addTextChangedListener {
+            viewModel.validValidityDate()
         }
     }
 }

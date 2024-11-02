@@ -1,416 +1,386 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ui.fragment.UpdateProfileFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.ottistech.indespensa.ui.viewmodel.UpdateProfileViewModel" />
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginVertical="32dp"
-            android:layout_marginTop="44dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="32dp"
-                android:src="@drawable/logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="@font/montserrat_semibold"
-                android:text="@string/update_profile_your_account"
-                android:textSize="28sp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/update_profile_form_input_name_container"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeErrorColor="@color/red"
-                app:boxStrokeWidth="2dp"
-                app:errorIconDrawable="@null"
-                app:errorTextColor="@color/pastelOrange">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/update_profile_form_input_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/form_hint_name"
-                    android:inputType="textEmailAddress"
-                    android:paddingBottom="12dp"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/update_profile_form_input_name_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/update_profile_form_input_enterprise_type_container"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeErrorColor="@color/red"
-                app:boxStrokeWidth="2dp"
-                app:errorIconDrawable="@null"
-                app:errorTextColor="@color/pastelOrange">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/update_profile_form_input_enterprise_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/form_hint_enterprise_type"
-                    android:inputType="text"
-                    android:paddingBottom="12dp"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/update_profile_form_input_enterprise_type_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/update_profile_form_input_email_container"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeErrorColor="@color/red"
-                app:boxStrokeWidth="2dp"
-                app:errorIconDrawable="@null"
-                app:errorTextColor="@color/pastelOrange">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/update_profile_form_input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/form_hint_email"
-                    android:inputType="textEmailAddress"
-                    android:paddingBottom="12dp"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/update_profile_form_input_email_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/update_profile_form_input_password_container"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeErrorColor="@color/red"
-                app:boxStrokeWidth="2dp"
-                app:endIconDrawable="@drawable/ic_visibility_on"
-                app:endIconMode="custom"
-                app:errorIconDrawable="@null"
-                app:errorTextColor="@color/pastelOrange">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/update_profile_form_input_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/form_hint_password"
-                    android:inputType="textPassword"
-                    android:paddingBottom="12dp"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/update_profile_form_input_password_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_6"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_4"
+                    android:src="@drawable/logo" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaHeading2"
+                    android:text="@string/update_profile_your_account"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_4" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/update_profile_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:error="@{model.formErrorState.name}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/update_profile_name_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.name}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_name"
+                        android:inputType="textEmailAddress"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.name}"
+                    android:visibility="@{model.formErrorState.name != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/update_profile_enterprise_type_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:error="@{model.formErrorState.enterpriseType}"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/update_profile_enterprise_type_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.enterpriseType}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_enterprise_type"
+                        android:inputType="text"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.enterpriseType}"
+                    android:visibility="@{model.formErrorState.enterpriseType != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/update_profile_email_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:error="@{model.formErrorState.email}"
+                    android:layout_marginTop="4dp"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/update_profile_email_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.email}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_email"
+                        android:inputType="textEmailAddress"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.email}"
+                    android:visibility="@{model.formErrorState.email != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/update_profile_password_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:error="@{model.formErrorState.password}"
+                    android:layout_marginTop="4dp"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:endIconDrawable="@drawable/ic_visibility_on"
+                    app:endIconMode="custom"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/update_profile_password_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={model.formState.password}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_password"
+                        android:inputType="textPassword"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.password}"
+                    android:visibility="@{model.formErrorState.password != null ? View.VISIBLE : View.GONE}" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="vertical">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/update_profile_form_input_cep_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/field_height"
-                        android:theme="@style/IndespensaTextInputLayout"
-                        app:boxStrokeErrorColor="@color/red"
-                        app:boxStrokeWidth="2dp"
-                        app:errorIconDrawable="@null"
-                        app:errorTextColor="@color/pastelOrange">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/update_profile_form_input_cep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:hint="@string/form_hint_cep"
-                            android:inputType="number"
-                            android:paddingBottom="12dp"
-                            android:textSize="16sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <TextView
-                        android:id="@+id/update_profile_form_input_cep_error"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:theme="@style/IndespensaFormErrorMessage"
-                        android:visibility="gone" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:orientation="vertical">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/update_profile_form_input_address_number_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/field_height"
-                        android:layout_marginStart="8dp"
-                        android:theme="@style/IndespensaTextInputLayout"
-                        app:boxStrokeErrorColor="@color/red"
-                        app:boxStrokeWidth="2dp"
-                        app:errorIconDrawable="@null"
-                        app:errorTextColor="@color/pastelOrange">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/update_profile_form_input_address_number"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:hint="@string/form_hint_address_number"
-                            android:inputType="number"
-                            android:paddingBottom="12dp"
-                            android:textSize="16sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <TextView
-                        android:id="@+id/update_profile_form_input_address_number_error"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:theme="@style/IndespensaFormErrorMessage"
-                        android:visibility="gone" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/update_profile_form_input_street_container"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="4dp"
-                android:theme="@style/IndespensaTextInputLayout"
-                app:boxStrokeErrorColor="@color/red"
-                app:boxStrokeWidth="2dp"
-                app:errorIconDrawable="@null"
-                app:errorTextColor="@color/pastelOrange">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/update_profile_form_input_street"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:hint="@string/form_hint_street"
-                    android:inputType="text"
-                    android:paddingBottom="12dp"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/update_profile_form_input_street_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="5">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/update_profile_form_input_city_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:theme="@style/IndespensaTextInputLayout"
-                        app:boxStrokeErrorColor="@color/red"
-                        app:boxStrokeWidth="2dp"
-                        app:errorIconDrawable="@null"
-                        app:errorTextColor="@color/pastelOrange">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/update_profile_form_input_city"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:hint="@string/form_hint_city"
-                            android:inputType="text"
-                            android:paddingBottom="12dp"
-                            android:textSize="16sp" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <TextView
-                        android:id="@+id/update_profile_form_input_city_error"
-                        android:layout_width="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:theme="@style/IndespensaFormErrorMessage"
-                        android:visibility="gone" />
+                        android:layout_weight="5"
+                        android:orientation="vertical">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/update_profile_cep_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.cep}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/update_profile_cep_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.cep}"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_cep"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.cep}"
+                            android:visibility="@{model.formErrorState.cep != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/update_profile_address_number_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.addressNumber}"
+                            android:layout_marginStart="8dp"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/update_profile_address_number_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.addressNumber}"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_address_number"
+                                android:inputType="number"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.addressNumber}"
+                            android:visibility="@{model.formErrorState.addressNumber != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="4"
-                    android:layout_marginStart="8dp">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/update_profile_form_input_state_select_container"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/update_profile_street_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/field_height"
+                    android:error="@{model.formErrorState.street}"
+                    android:layout_marginTop="4dp"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:errorIconDrawable="@null"
+                    app:errorTextColor="@color/pastelOrange">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/update_profile_street_field"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:hint="@string/form_hint_state"
-                        android:theme="@style/IndespensaTextInputLayoutDropdown"
-                        app:boxStrokeErrorColor="@color/red"
-                        app:boxStrokeWidth="2dp"
-                        app:errorIconDrawable="@null"
-                        app:errorTextColor="@color/pastelOrange">
-                        <AutoCompleteTextView
-                            android:id="@+id/update_profile_form_input_state_select"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:dropDownAnchor="@id/update_profile_form_input_state_select"
-                            android:dropDownHeight="148dp"
-                            android:fontFamily="@font/montserrat_medium"
-                            android:inputType="none"
-                            android:paddingBottom="12dp"
-                            tools:ignore="LabelFor" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                    <TextView
-                        android:id="@+id/update_profile_form_input_state_select_error"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/IndespensaFormErrorMessage"
-                        android:visibility="gone" />
-                </LinearLayout>
+                        android:text="@={model.formState.street}"
+                        android:layout_gravity="bottom"
+                        android:hint="@string/form_hint_street"
+                        android:inputType="text"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.street}"
+                    android:visibility="@{model.formErrorState.street != null ? View.VISIBLE : View.GONE}" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="5">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/update_profile_city_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.city}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/update_profile_city_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.city}"
+                                android:layout_gravity="bottom"
+                                android:hint="@string/form_hint_city"
+                                android:inputType="text"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:textSize="@dimen/text_regular" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.city}"
+                            android:visibility="@{model.formErrorState.city != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="4"
+                        android:layout_marginStart="8dp">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/update_profile_state_select_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.state}"
+                            android:hint="@string/form_hint_state"
+                            android:theme="@style/IndespensaTextInputLayoutDropdown"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:boxStrokeWidth="@dimen/border_bold"
+                            app:errorIconDrawable="@null"
+                            app:errorTextColor="@color/pastelOrange">
+                            <AutoCompleteTextView
+                                android:id="@+id/update_profile_state_select_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.state}"
+                                android:layout_gravity="bottom"
+                                android:dropDownAnchor="@id/update_profile_state_select_field"
+                                android:dropDownHeight="148dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:inputType="none"
+                                android:paddingBottom="@dimen/padding_3"
+                                tools:ignore="LabelFor" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.state}"
+                            android:visibility="@{model.formErrorState.state != null ? View.VISIBLE : View.GONE}" />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/update_profile_form_app_terms_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaHeading4"
+                    android:text="@string/update_profile_see_terms_and_conditions"
+                    android:textColor="@color/secondary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginTop="@dimen/margin_2" />
+                <TextView
+                    android:id="@+id/update_profile_unauthorized_notfound_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:textSize="14sp"
+                    android:theme="@style/IndespensaFormErrorMessage"
+                    android:visibility="gone" />
+                <Button
+                    android:id="@+id/update_profile_button_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaButton.primary"
+                    android:onClick="@{() -> model.update()}"
+                    android:enabled="@{model.isFormValid &amp;&amp; !model.isLoading}"
+                    android:text="@string/cta_save" />
+                <Button
+                    android:id="@+id/update_profile_button_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaButton.red"
+                    android:enabled="@{!model.isLoading}"
+                    android:text="@string/cta_exit" />
+                <Button
+                    android:id="@+id/update_profile_form_button_remove_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{!model.isLoading}"
+                    android:background="@drawable/button_terciary_background"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/cta_remove"
+                    android:textAllCaps="true"
+                    android:textColor="@color/red"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginBottom="@dimen/margin_8" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/update_profile_form_app_terms_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="@string/update_profile_see_terms_and_conditions"
-                android:textColor="@color/secondary" />
-
-            <TextView
-                android:id="@+id/update_profile_form_input_unauthorized_notfound_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
-                android:theme="@style/IndespensaFormErrorMessage"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/update_profile_form_button_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button_primary_background"
-                android:enabled="true"
-                android:fontFamily="@font/montserrat"
-                android:text="@string/cta_save"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/update_profile_form_button_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button_border_red_background"
-                android:enabled="true"
-                android:fontFamily="@font/montserrat"
-                android:text="@string/cta_exit"
-                android:textAllCaps="true"
-                android:textColor="@color/red"
-                android:textStyle="bold"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <Button
-                android:id="@+id/update_profile_form_button_remove_account"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="30dp"
-                android:background="@drawable/button_terciary_background"
-                android:enabled="true"
-                android:fontFamily="@font/montserrat"
-                android:text="@string/cta_remove"
-                android:textAllCaps="true"
-                android:textColor="@color/red"
-                android:textStyle="bold"
-                app:backgroundTint="@null"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -11,21 +11,20 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
-import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.databinding.DialogIngredientBinding
 import com.ottistech.indespensa.shared.AppConstants
-import com.ottistech.indespensa.ui.helpers.FieldValidations
+import com.ottistech.indespensa.ui.helpers.validNotNull
 import com.ottistech.indespensa.ui.recyclerview.adapter.ProductSearchAdapter
+import com.ottistech.indespensa.ui.viewmodel.state.IngredientFormErrorState
+import com.ottistech.indespensa.ui.viewmodel.state.IngredientFormFieldsState
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeIngredientDTO
 import kotlinx.coroutines.CoroutineScope
@@ -46,35 +45,29 @@ class IngredientDialogCreator(
     private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
     private lateinit var searchAdapter: ProductSearchAdapter
 
-    private var selectedProduct: ProductSearchResponseDTO? = null
-    private val validator = FieldValidations(context)
+    val formState = MutableLiveData(IngredientFormFieldsState())
+    val formErrorState = MutableLiveData(IngredientFormErrorState())
+    val isFormValid = MutableLiveData(true)
+
+    init {
+        formErrorState.observeForever {
+            validForm()
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     fun showDialog(
+        lifecycleOwner: LifecycleOwner,
         onConfirm: (ingredient: RecipeIngredientDTO) -> Unit
     ) {
-        binding = DialogIngredientBinding.inflate(LayoutInflater.from(context))
-        dialog = AlertDialog.Builder(context)
-            .setView(binding.root)
-            .create()
-
-        searchAdapter = ProductSearchAdapter(context) { product ->
-            selectedProduct = product
-            validator.removeFieldError(binding.dialogIngredientInputProductSearchContainer, binding.dialogIngredientInputProductSearchError)
-            binding.dialogIngredientInputProductSearch.setText(selectedProduct!!.productName)
-            binding.dialogIngredientProductsList.visibility = View.GONE
-            binding.dialogIngredientInputProductSearch.clearFocus()
-            clearCallbacks()
-        }
-
-        val unitiesAdapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, AppConstants.AMOUNT_UNITIES)
-        binding.dialogIngredientInputUnitSelect.setAdapter(unitiesAdapter)
-
-        setupRecyclerView(binding.dialogIngredientProductsList)
-        dialog.setCanceledOnTouchOutside(false)
-
+        setupDialog(lifecycleOwner)
+        setupValidationListeners()
+        setupProductAdapter()
+        setupUnitSelect()
+        setupRecyclerView()
+        setupCancelButton()
+        setupConcludeButton(onConfirm)
         setupSearchBar(
-            searchBar = binding.dialogIngredientInputProductSearch,
             onResult = { products ->
                 binding.dialogIngredientProductsList.visibility = View.VISIBLE
                 searchAdapter.updateState(products)
@@ -90,58 +83,67 @@ class IngredientDialogCreator(
             }
         )
 
+        dialog.show()
+    }
+
+    private fun setupConcludeButton(onConfirm: (ingredient: RecipeIngredientDTO) -> Unit) {
+        binding.dialogIngredientConcludeButton.setOnClickListener {
+            searchAdapter.clear()
+            clearCallbacks()
+            validAllFields()
+            if (isFormValid.value == true) {
+                onConfirm(formState.value!!.toRecipeIngredientDTO())
+                dialog.dismiss()
+            }
+        }
+    }
+
+    private fun setupCancelButton() {
         binding.dialogIngredientCancelButton.setOnClickListener {
             searchAdapter.clear()
             clearCallbacks()
             dialog.dismiss()
         }
+    }
 
-        binding.dialogIngredientConcludeButton.setOnClickListener {
-            searchAdapter.clear()
+    private fun setupUnitSelect() {
+        val unitiesAdapter =
+            ArrayAdapter(context, android.R.layout.simple_list_item_1, AppConstants.AMOUNT_UNITIES)
+        binding.dialogIngredientInputUnitSelect.setAdapter(unitiesAdapter)
+    }
+
+    private fun setupProductAdapter() {
+        searchAdapter = ProductSearchAdapter(context) { product ->
+            formState.value = formState.value!!.copy(selectedProduct = product)
+            formErrorState.value = formErrorState.value!!.copy(selectedProduct = null)
+            binding.dialogIngredientSearchField.setText(formState.value!!.selectedProduct!!.productName)
+            binding.dialogIngredientProductsList.visibility = View.GONE
+            binding.dialogIngredientSearchField.clearFocus()
             clearCallbacks()
-            if(validateForm()) {
-                val ingredient = generateFormIngredient()
-                onConfirm(ingredient)
-                dialog.dismiss()
-            }
         }
+    }
 
-        binding.dialogIngredientInputProductSearch.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                binding.dialogIngredientProductsList.visibility = View.GONE
-                selectedProduct?.let {
-                    binding.dialogIngredientInputProductSearch.setText(it.productName)
-                    binding.dialogIngredientInputProductSearch.clearFocus()
-                    clearCallbacks()
-                }
-            } else {
-                binding.dialogIngredientProductsList.visibility = View.VISIBLE
-            }
-        }
+    private fun setupDialog(lifecycleOwner: LifecycleOwner) {
+        formState.value = IngredientFormFieldsState()
+        formErrorState.value = IngredientFormErrorState()
 
-        binding.root.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                if (binding.dialogIngredientInputProductSearch.isFocused) {
-                    binding.dialogIngredientInputProductSearch.clearFocus()
+        binding = DialogIngredientBinding.inflate(LayoutInflater.from(context))
+        binding.lifecycleOwner = lifecycleOwner
+        binding.model = this
 
-                    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.windowToken, 0)
-                }
-            }
-            false
-        }
-
+        dialog = AlertDialog.Builder(context)
+            .setView(binding.root)
+            .create()
+        dialog.setCanceledOnTouchOutside(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.show()
     }
 
     private fun setupSearchBar(
-        searchBar: TextInputEditText,
         onResult: (response: List<ProductSearchResponseDTO>) -> Unit,
         onResultNotFound: () -> Unit,
         onFailure: (error: Exception) -> Unit,
     ) {
-        searchBar.addTextChangedListener(object : TextWatcher {
+        binding.dialogIngredientSearchField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -166,6 +168,18 @@ class IngredientDialogCreator(
                 searchHandler?.postDelayed(searchRunnable!!, 500)
             }
         })
+        binding.dialogIngredientSearchField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                binding.dialogIngredientProductsList.visibility = View.GONE
+                formState.value!!.selectedProduct?.let {
+                    binding.dialogIngredientSearchField.setText(it.productName)
+                    binding.dialogIngredientSearchField.clearFocus()
+                    clearCallbacks()
+                }
+            } else {
+                binding.dialogIngredientProductsList.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun clearCallbacks() {
@@ -174,32 +188,61 @@ class IngredientDialogCreator(
         }
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = searchAdapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+    private fun setupRecyclerView() {
+        binding.dialogIngredientProductsList.adapter = searchAdapter
+        binding.dialogIngredientProductsList.layoutManager = LinearLayoutManager(context)
     }
 
-    private fun validateForm() : Boolean {
-        val isAmountValid = validator.validNotNull(binding.dialogIngredientInputAmount, binding.dialogIngredientInputAmountContainer, binding.dialogIngredientInputAmountError)
-        val isUnitValid = validator.validNotNull(binding.dialogIngredientInputUnitSelect, binding.dialogIngredientInputUnitSelectContainer, binding.dialogIngredientInputUnitSelectError)
-        val isSelectedProductValid = if(selectedProduct != null) {
-            true
-        } else {
-            validator.setFieldError(binding.dialogIngredientInputProductSearchContainer, binding.dialogIngredientInputProductSearchError, context.getString(
-                R.string.form_error_not_null, "Produto"))
-            false
+    private fun validForm() {
+        val errorState = formErrorState.value
+        isFormValid.value = errorState?.let {
+            it.selectedProduct == null &&
+                    it.amount == null &&
+                    it.unit == null
+        } ?: true
+    }
+
+    fun validSelectedProduct() {
+        val value = formState.value!!.selectedProduct
+        val error =
+            if( value == null ) { "Selecione um produto!" }
+            else { null }
+        formErrorState.value = formErrorState.value!!.copy(selectedProduct=error)
+    }
+
+    fun validAmount() {
+        val value = formState.value!!.amount
+        val error =
+            if( !validNotNull(value) ) { "Peso/Volume é obrigatório!" }
+            else { null }
+        formErrorState.value = formErrorState.value!!.copy(amount=error)
+    }
+
+    fun validUnit() {
+        val value = formState.value!!.unit
+        val error =
+            if( !validNotNull(value) ) { "Unidade é obrigatório!" }
+            else { null }
+        formErrorState.value = formErrorState.value!!.copy(unit=error)
+    }
+
+    private fun validAllFields() {
+        validSelectedProduct()
+        validAmount()
+        validUnit()
+        validForm()
+    }
+
+    private fun setupValidationListeners() {
+        binding.dialogIngredientAmountField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validAmount()
+            }
         }
-
-        return isAmountValid && isUnitValid && isSelectedProductValid
-    }
-
-    private fun generateFormIngredient() : RecipeIngredientDTO {
-        return RecipeIngredientDTO(
-            foodId=selectedProduct!!.foodId,
-            foodName=selectedProduct!!.foodName,
-            amount=binding.dialogIngredientInputAmount.text.toString().toInt(),
-            unit= binding.dialogIngredientInputUnitSelect.text.toString(),
-            isEssential=binding.dialogIngredientRequiredCheckbox.isChecked
-        )
+        binding.dialogIngredientInputUnitSelect.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                validUnit()
+            }
+        }
     }
 }

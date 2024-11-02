@@ -17,16 +17,14 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.databinding.FragmentRecipeFormBinding
 import com.ottistech.indespensa.shared.AppConstants
-import com.ottistech.indespensa.shared.RecipeLevel
-import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.IngredientDialogCreator
-import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter
 import com.ottistech.indespensa.ui.recyclerview.helper.ingredientItemTouchHelper
 import com.ottistech.indespensa.ui.viewmodel.RecipeFormViewModel
-import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 
 class RecipeFormFragment : Fragment() {
 
@@ -34,52 +32,6 @@ class RecipeFormFragment : Fragment() {
     private lateinit var viewModel: RecipeFormViewModel
     private lateinit var dialogCreator: IngredientDialogCreator
     private lateinit var ingredientsAdapter: IngredientAdapter
-    private lateinit var validator : FieldValidations
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRecipeFormBinding.inflate(inflater, container, false)
-        viewModel = RecipeFormViewModel(
-            RecipeRepository(requireContext())
-        )
-        dialogCreator = IngredientDialogCreator(requireContext())
-        validator = FieldValidations(requireContext())
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupAdapter()
-        setupRecyclerView()
-        setupObservers()
-
-        binding.recipeFormImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            resultLauncherGallery.launch(intent)
-        }
-
-        binding.recipeFormAddIngredientButton.setOnClickListener {
-            dialogCreator.showDialog() { ingredient ->
-                viewModel.addIngredient(ingredient)
-                ingredientsAdapter.addItem(ingredient)
-            }
-        }
-
-        val levelsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.RECIPE_LEVELS)
-        binding.recipeFormSelectLevel.setAdapter(levelsAdapter)
-
-        binding.recipeFormButton.setOnClickListener {
-            if(validateForm()) {
-                val formRecipe = generateFormRecipe()
-                binding.recipeFormButton.isEnabled = false
-                viewModel.save(formRecipe, binding.recipeFormImage.drawable.toBitmap())
-            }
-        }
-    }
 
     private val resultLauncherGallery = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -87,21 +39,86 @@ class RecipeFormFragment : Fragment() {
         val imageUri = result.data?.data
         if(imageUri != null) {
             binding.recipeFormImage.setImageURI(imageUri)
+            viewModel.setNewProductImageBitmap(binding.recipeFormImage.drawable.toBitmap())
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        dialogCreator = IngredientDialogCreator(requireContext())
+        binding = FragmentRecipeFormBinding.inflate(inflater, container, false)
+        viewModel = RecipeFormViewModel(
+            RecipeRepository(requireContext())
+        )
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupAdapter()
+        setupObservers()
+        setupRecyclerView()
+        setupValidationListeners()
+        setupImageInput()
+        setupAddIngredientButton()
+        setupLevelSelect()
+    }
+
+    private fun setupLevelSelect() {
+        val levelsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.RECIPE_LEVELS)
+        binding.recipeFormSelectLevel.setAdapter(levelsAdapter)
+    }
+
+    private fun setupAddIngredientButton() {
+        binding.recipeFormAddIngredientButton.setOnClickListener {
+            dialogCreator.showDialog(viewLifecycleOwner) { ingredient ->
+                ingredientsAdapter.addItem(ingredient)
+            }
+        }
+    }
+
+    private fun setupImageInput() {
+        binding.recipeFormImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            resultLauncherGallery.launch(intent)
         }
     }
 
     private fun setupObservers() {
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
-            when(feedback) {
-                UiConstants.ERROR_NOT_FOUND -> showToast("Algum dos ingredientes não foi encontrado!")
-                UiConstants.ERROR_BAD_REQUEST -> showToast("Não foi possível criar. Revise as informações!")
-                UiConstants.FAIL -> showToast("Não foi possível criar a receita!")
-                UiConstants.CREATED -> {
-                    showToast(requireContext().getString(R.string.created_successfully, "Item"))
-                    findNavController().popBackStack(R.id.recipe_form_dest, true)
-                }
+            feedback?.let {
+                handleFeedback(feedback)
             }
-            binding.recipeFormButton.isEnabled = true
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+        if(feedback.code == FeedbackCode.SUCCESS) {
+            findNavController().popBackStack(R.id.nav_home, false)
+        }
+    }
+
+    private fun setupValidationListeners() {
+        binding.recipeFormNameField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validName() }
+        }
+        binding.recipeFormDescriptionField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validDescription() }
+        }
+        binding.recipeFormTimeField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validTime() }
+        }
+        binding.recipeFormSelectLevel.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validLevel() }
+        }
+        binding.recipeFormPreparationMethodField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validPreparationMethod() }
         }
     }
 
@@ -125,40 +142,6 @@ class RecipeFormFragment : Fragment() {
             this.adapter = ingredientsAdapter
             this.layoutManager = LinearLayoutManager(context)
             ItemTouchHelper(ingredientItemTouchHelper).attachToRecyclerView(this)
-        }
-    }
-
-    private fun validateForm() : Boolean {
-        with(binding) {
-            val isNameValid = validator.validNotNull(recipeFormInputName, recipeFormInputNameContainer, recipeFormInputNameError)
-            val isDescriptionValid = validator.validMinLength(recipeFormInputDescription, recipeFormInputDescriptionContainer, recipeFormInputDescriptionError, 12)
-            val isTimeValid = validator.validMaxValue(recipeFormInputTime, recipeFormInputTimeContainer, recipeFormInputTimeError, 1440)
-            val isLevelValid = validator.validNotNull(recipeFormSelectLevel, recipeFormSelectLevelContainer, recipeFormSelectLevelError)
-            val isPreparationMethod = validator.validNotNull(recipeFormPreparationMethodInput, recipeFormPreparationMethodInputContainer, recipeFormPreparationMethodInputError)
-                    && validator.validMinLength(recipeFormPreparationMethodInput, recipeFormPreparationMethodInputContainer, recipeFormPreparationMethodInputError, 50)
-            val isIngredientsValid = if((viewModel.ingredients.value?.size ?: 0) >= 1) {
-                true
-            } else {
-                validator.setFieldError(null, binding.recipeFormIngredientsError, getString(R.string.form_error_no_ingredients))
-                false
-            }
-
-            return isNameValid && isDescriptionValid && isTimeValid && isLevelValid && isPreparationMethod && isIngredientsValid
-        }
-    }
-
-    private fun generateFormRecipe() : RecipeCreateDTO {
-        with(binding) {
-            return RecipeCreateDTO(
-                createdBy=null,
-                imageUrl=null,
-                title=recipeFormInputName.text.toString(),
-                description=recipeFormInputDescription.text.toString(),
-                level=RecipeLevel.fromString(recipeFormSelectLevel.text.toString())!!,
-                preparationTime=recipeFormInputTime.text.toString().toInt(),
-                preparationMethod=recipeFormPreparationMethodInput.text.toString(),
-                ingredients=null
-            )
         }
     }
 }

@@ -48,30 +48,18 @@ class SignupViewModel (
                 isLoading.value = true
                 try {
                     userRepository.signupUser(formState.value!!.toUserCreateDTO())
-                    _feedback.value = Feedback(
-                        feedbackId=FeedbackId.SIGNUP,
-                        code=FeedbackCode.SUCCESS,
-                        message="Bem vindo ao InDespensa!"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.SIGNUP, FeedbackCode.SUCCESS, "Bem vindo ao InDespensa!")
                 } catch (e: FieldConflictException) {
                     formErrorState.value = formErrorState.value?.copy(email="Este e-mail já está em uso!")
-                    _feedback.value = Feedback(
-                        feedbackId=FeedbackId.SIGNUP,
-                        code=FeedbackCode.CONFLICT,
-                        message="Escolha um e-mail diferente!"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.SIGNUP, FeedbackCode.CONFLICT, "Escolha um e-mail diferente!")
                 } catch (e: BadRequestException) {
-                    _feedback.value = Feedback(
-                        feedbackId=FeedbackId.SIGNUP,
-                        code=FeedbackCode.BAD_REQUEST,
-                        message="Verifique as informações digitadas!"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.SIGNUP, FeedbackCode.BAD_REQUEST, "Verifique as informações digitadas!")
                 } catch(e: Exception) {
-                    _feedback.value = Feedback(
-                        feedbackId=FeedbackId.SIGNUP,
-                        code=FeedbackCode.UNHANDLED,
-                        message="Não foi possível criar conta!"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.SIGNUP, FeedbackCode.UNHANDLED, "Não foi possível criar conta!")
                 }
                 isLoading.value = false
             }

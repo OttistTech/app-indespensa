@@ -23,7 +23,7 @@ object AppConstants {
     )
 
     val TERMS_AND_CONDITIONS_URL : String = "https://terms-and-conditions-webpage.onrender.com"
-    val EXPOTECH_DASHBOARD_URL : String = "https://app.powerbi.com/reportEmbed?reportId=340cfa57-1256-4ba4-af5c-a6da47efcb82&autoAuth=true"
+    val EXPOTECH_DASHBOARD_URL : String = "https://app.powerbi.com/reportEmbed?reportId=125e2547-a1f7-412f-abf9-36b20e1e557c&autoAuth=true"
 
     val PREMIUM_CAROUSEL_MESSAGES: List<String> = listOf(
         "Filtros de receitas personalizados",

@@ -10,7 +10,7 @@
         android:background="@color/white">
         <TextView
             android:id="@+id/ingredient_amount"
-            android:layout_width="80dp"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
             tools:text="250g"
             android:theme="@style/IndespensaHeading4"
@@ -23,13 +23,16 @@
             android:id="@+id/ingredient_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="176dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="Arroz"
-            android:theme="@style/IndespensaText"
+            style="@style/IndespensaText"
             app:layout_constraintStart_toEndOf="@id/ingredient_amount"
             app:layout_constraintTop_toTopOf="@id/ingredient_amount"
             app:layout_constraintBottom_toBottomOf="@id/ingredient_amount"
             app:layout_constraintEnd_toStartOf="@id/ingredient_required_icon"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/margin_2"
             app:layout_constraintHorizontal_bias="0"/>
         <ImageView
             android:id="@+id/ingredient_required_icon"

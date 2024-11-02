@@ -114,15 +114,14 @@ class PantryRepository(
         }
     }
 
-    suspend fun addItem(shopItemId: Long, validityDate: Date): PantryItemFullDTO? {
+    suspend fun addItem(shopItemId: Long, validityDate: Date) {
         val userId = context.getCurrentUser().userId
         Log.d(TAG, "[addItem] Trying to add item to pantry for user $userId")
         val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate)
 
-        return when (result) {
+        when (result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[addItem] Added pantry item successfully")
-                result.value
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[addItem] Error adding item to pantry: ${result.error}, code: ${result.code}")
@@ -130,18 +129,12 @@ class PantryRepository(
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)
                     }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        throw ResourceUnauthorizedException(result.error)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        throw BadRequestException(result.error)
-                    }
-                    else -> null
+                    else -> throw Exception("Could not add item to pantry")
                 }
             }
             else -> {
                 Log.e(TAG, "[addItem] Unexpected result: $result")
-                null
+                throw Exception("Could not add item to pantry")
             }
         }
     }

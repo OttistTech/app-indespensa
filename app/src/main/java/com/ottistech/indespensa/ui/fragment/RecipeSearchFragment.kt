@@ -139,7 +139,7 @@ class RecipeSearchFragment : Fragment() {
                         !viewModel.isLoading.value!! &&
                         viewModel.recipes.value.isNullOrEmpty()
                     ) {
-                        text = feedback
+                        text = feedback.message
                         visibility = View.VISIBLE
                     }
                 } else {

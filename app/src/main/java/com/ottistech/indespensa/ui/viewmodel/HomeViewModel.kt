@@ -64,11 +64,8 @@ class HomeViewModel(
                 _dashboardData.value = data
             } catch (e: Exception) {
                 _isDashboardLoading.value = false
-                _feedback.value = Feedback(
-                    FeedbackId.PERSONAL_DASHBOARD,
-                    FeedbackCode.UNHANDLED,
-                    "Ops! Não foi possível carregar o DashBoard."
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.PERSONAL_DASHBOARD, FeedbackCode.UNHANDLED, "Ops! Não foi possível carregar o DashBoard.")
             }
         }
     }
@@ -83,18 +80,12 @@ class HomeViewModel(
             } catch(e: ResourceNotFoundException) {
                 _isCloseValidityItemsLoading.value = false
                 _closeValidityItems.value = null
-                _feedback.value = Feedback(
-                    FeedbackId.CLOSE_VALIDITY_ITEMS,
-                    FeedbackCode.NOT_FOUND,
-                    "Nenhum item próximo da validade encontrado!"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.CLOSE_VALIDITY_ITEMS, FeedbackCode.NOT_FOUND, "Nenhum item próximo da validade encontrado!")
             } catch (e: Exception) {
                 _isCloseValidityItemsLoading.value = false
-                _feedback.value = Feedback(
-                    FeedbackId.CLOSE_VALIDITY_ITEMS,
-                    FeedbackCode.UNHANDLED,
-                    "Não foi possível carregar os itens próximos da validade!"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.CLOSE_VALIDITY_ITEMS, FeedbackCode.UNHANDLED, "Não foi possível carregar os itens próximos da validade!")
             }
         }
     }
@@ -111,19 +102,13 @@ class HomeViewModel(
                 _isRecipesLoading.value = false
                 if(recipesPage == 0) {
                     _recipes.value = null
-                    _feedback.value = Feedback(
-                        FeedbackId.RECIPES_LIST,
-                        FeedbackCode.NOT_FOUND,
-                        "Nenhuma receita recomendada encontrada!"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.NOT_FOUND, "Nenhuma receita recomendada encontrada!")
                 }
             } catch (e: Exception) {
                 _isRecipesLoading.value = false
-                _feedback.value = Feedback(
-                    FeedbackId.RECIPES_LIST,
-                    FeedbackCode.UNHANDLED,
-                    "Não foi possível carregar as receitas!"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.UNHANDLED, "Não foi possível carregar as receitas!")
             }
         }
     }
