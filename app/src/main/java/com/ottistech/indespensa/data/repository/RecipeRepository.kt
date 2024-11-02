@@ -40,7 +40,9 @@ class RecipeRepository(
             imageDatasource.uploadImage(it)
         }
         Log.d(TAG, "[create] Trying to create recipe with $recipe")
-        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.create(recipe)
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.create(recipe, token)
+
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[create] recipe created successfully: ${result.value}")
@@ -64,7 +66,8 @@ class RecipeRepository(
 
     suspend fun getRecipeDetails(recipeId: Long): RecipeFullDTO? {
         val userId = context.getCurrentUser().userId
-        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.getRecipeDetails(recipeId, userId)
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.getRecipeDetails(recipeId, userId, token)
 
         return when(result) {
             is ResultWrapper.Success -> {
@@ -86,7 +89,8 @@ class RecipeRepository(
     }
 
     suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO) : Boolean {
-        val result: ResultWrapper<Any> = remoteDataSource.rateRecipe(recipeId, rateRecipeRequestDTO)
+        val token = context.getCurrentUser().token
+        val result: ResultWrapper<Any> = remoteDataSource.rateRecipe(recipeId, rateRecipeRequestDTO, token)
 
         return when (result) {
             is ResultWrapper.Success -> {
@@ -120,6 +124,8 @@ class RecipeRepository(
         createdByYou: Boolean? = false
     ) : Pageable<List<RecipePartialDTO>> {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
             queryText=queryText,
             userId=userId,
@@ -128,7 +134,8 @@ class RecipeRepository(
             availability=availability,
             minPreparationTime=minPreparationTime,
             maxPreparationTime=maxPreparationTime,
-            createdByYou=createdByYou
+            createdByYou=createdByYou,
+            token=token
         )
 
         when (result) {

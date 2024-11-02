@@ -14,9 +14,11 @@ class UserLocalDataSource(
     private val TAG = "USER LOCAL DATASOURCE"
     private val USER_PREFERENCES_FILE : String = "user-preferences"
     private val USER_PREFERENCES_KEY : String = "user-data"
+
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
+
     private val sharedPreferences = EncryptedSharedPreferences.create(
         context,
         USER_PREFERENCES_FILE,
@@ -26,10 +28,13 @@ class UserLocalDataSource(
     )
 
     fun saveUser(user: UserCredentialsDTO) {
-        Log.d(TAG, "[saveUser] Saving user credentials locally $user")
+        Log.d(TAG, "[saveUser] Saving user credentials and token locally $user")
         val gson = Gson()
         val userJson = gson.toJson(user)
-        sharedPreferences.edit().putString(USER_PREFERENCES_KEY, userJson).apply()
+
+        sharedPreferences.edit()
+            .putString(USER_PREFERENCES_KEY, userJson)
+            .apply()
     }
 
     fun getUser(): UserCredentialsDTO? {

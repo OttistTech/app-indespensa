@@ -57,8 +57,8 @@ class PantryFormFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_pantry_form, container, false)
         viewModel = PantryFormViewModel(
             PantryRepository(requireContext()),
-            ProductRepository(),
-            CategoryRepository()
+            ProductRepository(requireContext()),
+            CategoryRepository(requireContext())
         )
         binding.model = viewModel
         binding.lifecycleOwner = this

@@ -18,8 +18,11 @@ class DashboardRepository (
 
     suspend fun getPersonalData() : PersonalDashboardDTO {
         val userId = context.getCurrentUser().userId
-        Log.d(TAG, "[getPersonalData] Trying to get data for user $userId")
-        val result : ResultWrapper<PersonalDashboardDTO> = remoteDataSource.getPersonalData(userId)
+        val token = context.getCurrentUser().token
+        Log.d(TAG, "[getPersonalData] Trying to get data for user $userId with token $token")
+
+        val result : ResultWrapper<PersonalDashboardDTO> = remoteDataSource.getPersonalData(userId, token)
+
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[getPersonalData] Found data successfully")
@@ -38,8 +41,9 @@ class DashboardRepository (
 
     suspend fun getProfileData() : ProfileDashboardDTO {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
         Log.d(TAG, "[getProfileData] Trying to get data for user $userId")
-        val result : ResultWrapper<ProfileDashboardDTO> = remoteDataSource.getProfileData(userId)
+        val result : ResultWrapper<ProfileDashboardDTO> = remoteDataSource.getProfileData(userId, token)
 
         return when(result) {
             is ResultWrapper.Success -> {

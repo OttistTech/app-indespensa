@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitInitializer {
 
-    val gson = GsonBuilder()
+    private val gson = GsonBuilder()
         .setDateFormat("yyyy-MM-dd")
         .registerTypeAdapter(RecipeLevel::class.java, RecipeLevelAdapter())
         .create()

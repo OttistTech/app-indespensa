@@ -1,19 +1,25 @@
 package com.ottistech.indespensa.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.CategoryRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
-class CategoryRepository {
+class CategoryRepository (
+    private val context: Context
+) {
 
     private val TAG = "CATEGORY REPOSITORY"
     private val remoteDataSource = CategoryRemoteDataSource()
 
     suspend fun listCategories(pattern: String = "") : List<String> {
         Log.d(TAG, "[listCategories] Trying to fetch product categories")
-        val result : ResultWrapper<List<String>> = remoteDataSource.listCategories(pattern)
+        val token = context.getCurrentUser().token
+
+        val result : ResultWrapper<List<String>> = remoteDataSource.listCategories(pattern, token)
         when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[listCategories] Found categories successfully")
