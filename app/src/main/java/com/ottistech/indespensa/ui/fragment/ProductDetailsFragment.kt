@@ -13,12 +13,14 @@ import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentProductDetailsBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.helpers.DatePickerCreator
+import com.ottistech.indespensa.ui.dialog.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.renderAmount
 import com.ottistech.indespensa.ui.helpers.renderValidityDate
 import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.viewmodel.PantryItemDetailsViewModel
 import com.ottistech.indespensa.ui.viewmodel.ProductItemDetailsViewModel
 import com.ottistech.indespensa.ui.viewmodel.ShopItemDetailsViewModel
@@ -128,9 +130,9 @@ class ProductDetailsFragment : Fragment() {
                 renderProductItem(itemDetails)
             }
         }
-        viewModel.message.observe(viewLifecycleOwner) { messageCode ->
-            messageCode?.let {
-                handleViewModelMessage(messageCode)
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
         }
         viewModel.itemAmount.observe(viewLifecycleOwner) { amount ->
@@ -144,11 +146,16 @@ class ProductDetailsFragment : Fragment() {
         showLoad()
     }
 
-    private fun handleViewModelMessage(messageCode: Int) {
-        when(messageCode) {
-            UiConstants.ERROR_NOT_FOUND -> showToast("Não foi possível carregar o produto").also { popBackStack() }
-            UiConstants.FAIL -> showToast("Não foi possível concluir a ação")
-            UiConstants.OK -> showToast("Adicionado com sucesso").also { popBackStack() }
+    private fun handleFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+        when(feedback.feedbackId) {
+            FeedbackId.ADD_TO_SHOPLIST -> {
+                if(feedback.code == FeedbackCode.SUCCESS) { popBackStack() }
+            }
+            FeedbackId.ADD_TO_PANTRY -> {
+                if(feedback.code == FeedbackCode.SUCCESS) { popBackStack() }
+            }
+            FeedbackId.GET_ITEM_DETAILS -> popBackStack()
         }
     }
 

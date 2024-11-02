@@ -20,6 +20,8 @@ import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.loadImage
 import com.ottistech.indespensa.ui.helpers.makeSpanText
 import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter
 import com.ottistech.indespensa.ui.viewmodel.RecipeDetailsViewModel
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
@@ -65,8 +67,8 @@ class RecipeDetailsFragment : Fragment() {
                     rateRecipeRequestDTO = rateRecipeDTO,
                     recipeId = args.recipeId,
                     onSuccess = {
-                        Toast.makeText(requireContext(), "Receita avaliada com sucesso!", Toast.LENGTH_SHORT).show()
-                        navigateToHome()
+                        showToast("Receita avaliada com sucesso!")
+                        popupBackstack()
                     },
                     onError = { message ->
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -97,11 +99,17 @@ class RecipeDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            error?.message?.let {
-                showToast(it)
-                navigateToHome()
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        if(feedback.feedbackId == FeedbackId.GET_RECIPE_DETAILS) {
+            showToast(feedback.message)
+            popupBackstack()
         }
     }
 
@@ -171,9 +179,8 @@ class RecipeDetailsFragment : Fragment() {
         binding.recipeDetailsContent.visibility = View.VISIBLE
     }
 
-    private fun navigateToHome() {
-        val action = RecipeDetailsFragmentDirections.recipeDetailsToHome()
-        findNavController().navigate(action)
+    private fun popupBackstack() {
+        findNavController().popBackStack(R.id.nav_home, false)
     }
 
 }
