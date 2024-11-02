@@ -45,18 +45,6 @@ class LandingFragment : Fragment() {
             }
         }
 
-//        val carouselPages = AppConstants.START_CAROUSEL_GIFS
-//        val carouselPageAdapter = TextCarouselAdapter(carrouselPage=carouselPages)
-//        binding.landingViewPager.adapter = carouselPageAdapter
-//        binding.landingDotsIndicator.setViewPager2(binding.landingViewPager)
-//        job = CoroutineScope(Dispatchers.Main).launch {
-//            while (true) {
-//                delay(5000)
-//                val nextItem = (binding.landingViewPager.currentItem + 1) % carouselAdapter.itemCount
-//                binding.landingViewPager.currentItem = nextItem
-//            }
-//        }
-
         binding.landingMainButton.setOnClickListener {
             navigateToSignupScreen(AppAccountType.PERSONAL)
         }
