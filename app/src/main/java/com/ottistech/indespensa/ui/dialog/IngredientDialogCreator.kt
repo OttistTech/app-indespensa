@@ -42,7 +42,7 @@ class IngredientDialogCreator(
 
     private var searchHandler: Handler? = Handler(Looper.getMainLooper())
     private var searchRunnable: Runnable? = null
-    private val productRepository = ProductRepository()
+    private val productRepository = ProductRepository(context)
     private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
     private lateinit var searchAdapter: ProductSearchAdapter
 
