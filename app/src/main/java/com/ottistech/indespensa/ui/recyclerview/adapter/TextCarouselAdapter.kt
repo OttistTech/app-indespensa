@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.databinding.ItemTextCarouselBinding
-import com.ottistech.indespensa.ui.CarrouselPage
 
 class TextCarouselAdapter(
-    private val items: List<String> = emptyList(),
-    private val carrouselPage: List<CarrouselPage> = emptyList()
+    private val items: List<String>
 ) : RecyclerView.Adapter<TextCarouselAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
