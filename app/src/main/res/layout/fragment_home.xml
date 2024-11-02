@@ -46,7 +46,7 @@
                         android:layout_width="62dp"
                         android:layout_height="73dp"
                         android:scaleType="centerCrop"
-                        tools:src="@drawable/logo_sad"
+                        tools:src="@drawable/logo_error"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />

@@ -14,7 +14,7 @@ import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
 import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
@@ -25,7 +25,7 @@ class UserRepository (
 ) {
 
     private val TAG = "USER REPOSITORY"
-    private val firebaseDataSource = UserFirebaseDataSource(context)
+    private val firebaseDataSource = UserFirebaseDataSource.getInstance(context)
     private val remoteDataSource = UserRemoteDataSource()
     private val localDataSource = UserLocalDataSource(context)
 
@@ -99,8 +99,11 @@ class UserRepository (
         }
     }
 
-    suspend fun getUserInfo(userId: Long, fullInfo: Boolean) : UserFullIDTO? {
+    suspend fun getUserInfo(fullInfo: Boolean) : UserFullDTO? {
+        val userId = getUserCredentials().userId
+        Log.d(TAG, firebaseDataSource.isUserAuthenticated().toString())
         Log.d(TAG, "[getUserInfo] Trying to find user $userId info")
+        
         val token = context.getCurrentUser().token
         val result: ResultWrapper<UserFullIDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo, token)
 
@@ -129,9 +132,9 @@ class UserRepository (
     }
 
     suspend fun updateUser(
-        userId: Long,
         user: UserUpdateDTO
     ) : UserCredentialsDTO? {
+        val userId = getUserCredentials().userId
         Log.d(TAG, "[updateUser] Trying to update user $userId with $user")
         val token = context.getCurrentUser().token
         val result: ResultWrapper<UserCredentialsDTO> = remoteDataSource.updateUser(userId, user, token)
@@ -176,7 +179,8 @@ class UserRepository (
         localDataSource.removeUser()
     }
 
-    suspend fun deactivateUser(userId: Long) : Boolean {
+    suspend fun deactivateUser() : Boolean {
+        val userId = getUserCredentials().userId
         Log.d(TAG, "[deactivateUser] Trying to deactivate user $userId")
         val token = context.getCurrentUser().token
 

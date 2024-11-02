@@ -2,7 +2,7 @@ package com.ottistech.indespensa.webclient.service
 
 import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
 import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import retrofit2.Response

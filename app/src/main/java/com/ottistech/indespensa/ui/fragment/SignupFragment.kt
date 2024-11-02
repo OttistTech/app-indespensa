@@ -17,7 +17,7 @@ import com.ottistech.indespensa.databinding.FragmentSignupBinding
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.activity.MainActivity
-import com.ottistech.indespensa.ui.helpers.DatePickerCreator
+import com.ottistech.indespensa.ui.dialog.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback

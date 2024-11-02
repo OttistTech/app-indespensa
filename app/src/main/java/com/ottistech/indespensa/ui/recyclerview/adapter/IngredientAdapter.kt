@@ -51,9 +51,15 @@ class IngredientAdapter (
     }
 
     fun addItem(item: RecipeIngredientDTO) {
-        ingredientList.add(item)
+        val existingIndex = ingredientList.indexOfFirst { it.foodName == item.foodName }
+        if (existingIndex == -1) {
+            ingredientList.add(item)
+            notifyItemInserted(ingredientList.size - 1)
+        } else {
+            ingredientList[existingIndex] = item
+            notifyItemChanged(existingIndex)
+        }
         onItemAdded(item)
-        notifyItemInserted(ingredientList.size - 1)
     }
 
     inner class IngredientViewHolder(

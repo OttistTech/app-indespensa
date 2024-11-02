@@ -137,7 +137,7 @@ class HomeFragment : Fragment() {
         with(binding) {
             homeDashboard.visibility = View.GONE
             homeDashboardFeedback.visibility = View.VISIBLE
-            homeDashboardFeedbackLogo.load(R.drawable.logo)
+            homeDashboardFeedbackLogo.load(R.drawable.logo_error)
             homeDashboardFeedbackText.text = feedback.message
         }
     }

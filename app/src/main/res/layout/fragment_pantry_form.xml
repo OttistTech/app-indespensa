@@ -128,7 +128,6 @@
                         android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_name_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.productName}"
@@ -159,7 +158,6 @@
                         android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_food_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.foodName}"
@@ -193,7 +191,6 @@
                         tools:ignore="LabelFor" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_category_select_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.category}"
@@ -227,7 +224,6 @@
                         android:textSize="@dimen/margin_4" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_description_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.description}"
@@ -258,7 +254,6 @@
                         android:inputType="text"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_brand_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.brandName}"
@@ -368,13 +363,12 @@
                         android:layout_gravity="bottom"
                         android:paddingBottom="@dimen/padding_3"
                         android:hint="@string/form_hint_validity_date"
-                        android:textSize="@dimen/margin_4"
+                        android:textSize="@dimen/text_regular"
                         android:inputType="date"
                         android:focusable="false"
                         android:clickable="true" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <TextView
-                    android:id="@+id/pantry_form_input_validity_date_error"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{model.formErrorState.validityDate}"
@@ -387,7 +381,8 @@
                     style="@style/IndespensaButton.primary"
                     android:onClick="@{() -> model.submit()}"
                     android:enabled="@{model.isFormValid &amp;&amp; !model.isLoading}"
-                    android:text="@string/cta_save"/>
+                    android:text="@string/cta_save"
+                    android:layout_marginBottom="@dimen/margin_2"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

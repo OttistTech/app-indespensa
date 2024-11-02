@@ -10,6 +10,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.load
+import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
@@ -173,7 +175,6 @@ class PantryFormViewModel(
                 formActiveState.value!!.unit = false
             }
         }
-
     }
 
     fun fetchProductAndUpdateState(productId: Long) {
@@ -293,6 +294,8 @@ class PantryFormViewModel(
         fun loadImage(view: ImageView, url: String?) {
             url?.let {
                 view.loadImage(it)
+            } ?: run {
+                view.load(R.drawable.image_placeholder)
             }
         }
     }
