@@ -36,9 +36,6 @@ class ProfileViewModel(
     private val _profileData = MutableLiveData<ProfileDashboardDTO>()
     val profileData: LiveData<ProfileDashboardDTO> = _profileData
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
-
     private val _recipes = MutableLiveData<List<RecipePartialDTO>?>()
     val recipes: LiveData<List<RecipePartialDTO>?> = _recipes
 
@@ -83,7 +80,11 @@ class ProfileViewModel(
                 val result = dashboardRepository.getProfileData()
                 _profileData.value = result
             } catch (e: ResourceNotFoundException) {
-                _error.value = "Failed to get dash profile info"
+                _feedback.value = Feedback(
+                    feedbackId = FeedbackId.GET_PROFILE_DATA,
+                    code = FeedbackCode.NOT_FOUND,
+                    message = "Não foi possível encontrar suas informações"
+                )
             }
             _isContentLoading.value = false
         }

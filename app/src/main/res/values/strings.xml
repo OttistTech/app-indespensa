@@ -1,7 +1,7 @@
 <resources>
     <!--  App  -->
     <string name="app_name">InDespensa</string>
-    <string name="app_name_uppercase">InDESPENSA</string>
+    <string name="app_name_uppercase">InDespensa</string>
     <string name="app_slogan">O indispensável na sua cozinha</string>
 
     <!--  Landing  -->

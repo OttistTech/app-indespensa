@@ -1,6 +1,5 @@
 <resources
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.InDespensa" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -11,7 +10,7 @@
 
     <!--  Splash Screen Theme Configurations  -->
     <style name="IndespensaSplashScreen" parent="Theme.SplashScreen.IconBackground">
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_white_with_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_white</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/secondary</item>
         <item name="windowSplashScreenAnimationDuration">2000</item>
         <item name="postSplashScreenTheme">@style/Theme.InDespensa</item>

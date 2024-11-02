@@ -19,7 +19,7 @@ class ShopRepository(
     private val TAG = "SHOP REPOSITORY"
     private val remoteDataSource = ShopRemoteDatasource()
 
-    suspend fun addItem(productId: Long) : Boolean {
+    suspend fun addItem(productId: Long) {
         val userId = context.getCurrentUser().userId
         val token = context.getCurrentUser().token
 
@@ -27,10 +27,9 @@ class ShopRepository(
         val result: ResultWrapper<ShopItemPartialDTO> = remoteDataSource.addItem(
             userId, ShopItemCreateDTO(productId), token
         )
-        return when(result) {
+        when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[addItem] Shop item added successfully: ${result.value}")
-                true
             }
             is ResultWrapper.Error -> {
                 Log.e(TAG, "[addItem] Error while adding shop item: $result")
@@ -38,10 +37,10 @@ class ShopRepository(
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)
                     }
-                    else -> false
+                    else -> throw Exception("Could not add item to shop list")
                 }
             }
-            else -> false
+            else -> throw Exception("Could not add item to shop list")
         }
     }
 

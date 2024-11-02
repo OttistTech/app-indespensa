@@ -4,7 +4,7 @@ import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import com.ottistech.indespensa.webclient.dto.user.UserCredentialsDTO
-import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
+import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
 import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
@@ -101,7 +101,7 @@ class UserRemoteDataSource {
             return if (response.isSuccessful) {
                 Log.d(TAG, "[getUserFullInfo] User info fetched successfully")
                 ResultWrapper.Success(
-                    response.body() as UserFullIDTO
+                    response.body() as UserFullDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())

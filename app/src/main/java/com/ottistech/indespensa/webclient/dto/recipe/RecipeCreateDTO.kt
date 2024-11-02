@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.ottistech.indespensa.shared.RecipeLevel
 
 data class RecipeCreateDTO (
-    var createdBy: Long?,
-    var imageUrl: String?,
+    var createdBy: Long? = null,
+    var imageUrl: String? = null,
     val title: String,
     val description: String,
     val level: RecipeLevel,

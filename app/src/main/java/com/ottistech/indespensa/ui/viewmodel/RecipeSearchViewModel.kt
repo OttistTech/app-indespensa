@@ -11,6 +11,9 @@ import com.ottistech.indespensa.shared.IngredientState
 import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.ui.model.Filter
 import com.ottistech.indespensa.ui.model.FilterType
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.viewmodel.state.RecipeSearchFiltersState
 import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
 import kotlinx.coroutines.launch
@@ -25,8 +28,8 @@ class RecipeSearchViewModel(
     private val _recipes = MutableLiveData<List<RecipePartialDTO>?>()
     val recipes: MutableLiveData<List<RecipePartialDTO>?> = _recipes
 
-    private val _feedback = MutableLiveData<String?>()
-    val feedback: MutableLiveData<String?> = _feedback
+    private val _feedback = MutableLiveData<Feedback?>()
+    val feedback: MutableLiveData<Feedback?> = _feedback
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: MutableLiveData<Boolean> = _isLoading
@@ -61,13 +64,15 @@ class RecipeSearchViewModel(
                     _isLoading.value = false
                     if(page == 0) {
                         _recipes.value = null
-                        _feedback.value = "Não foram encontradas receitas com esses filtros!"
+                        _feedback.value =
+                            Feedback(FeedbackId.RECIPE_SEARCH, FeedbackCode.NOT_FOUND, "Não foram encontradas receitas com esses filtros!")
                     }
                     isLastPageLoaded = true
                 } catch (e: Exception) {
                     _isLoading.value = false
                     _recipes.value = null
-                    _feedback.value = "Não foi possível buscar as receitas!"
+                    _feedback.value =
+                        Feedback(FeedbackId.RECIPE_SEARCH, FeedbackCode.UNHANDLED, "Não foi possível buscar as receitas!")
                 }
             }
         }
