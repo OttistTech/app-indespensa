@@ -169,6 +169,8 @@
     <string name="cta_confirm">Confirmar</string>
     <string name="premium_last_price">R$39,99</string>
     <string name="cta_pay">Ir para pagamento</string>
+    <string name="app_terms_title">Leia com atenção</string>
+    <string name="shoplist_recommendations">Separamos alguns produtos que você pode gostar para começar uma lista de compras:</string>
 
 
 </resources>

@@ -13,7 +13,6 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.databinding.FragmentPantryBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.makeSpanText
 import com.ottistech.indespensa.ui.model.feedback.Feedback
@@ -44,18 +43,10 @@ class PantryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupBackButton()
         setupObservers()
-
-        val currentUserName = requireContext().getCurrentUser().name
-        binding.pantryText.text = makeSpanText(
-            getString(R.string.pantry_text, currentUserName),
-            currentUserName,
-            ContextCompat.getColor(requireContext(), R.color.secondary)
-        )
-
-        binding.pantryFab.setOnClickListener {
-            navigateToPantryForm()
-        }
+        showUserMessage()
+        setupFab()
     }
 
     override fun onResume() {
@@ -67,6 +58,31 @@ class PantryFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         viewModel.syncChanges()
+    }
+
+    private fun setupFab() {
+        binding.pantryFab.setOnClickListener {
+            navigateToPantryForm()
+        }
+    }
+
+    private fun showUserMessage() {
+        val currentUserName = requireContext().getCurrentUser().name
+        binding.pantryText.text = makeSpanText(
+            getString(R.string.pantry_text, currentUserName),
+            currentUserName,
+            ContextCompat.getColor(requireContext(), R.color.secondary)
+        )
+    }
+
+    private fun setupBackButton() {
+        binding.pantryBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.pantry_dest, true)
     }
 
     private fun setupObservers() {

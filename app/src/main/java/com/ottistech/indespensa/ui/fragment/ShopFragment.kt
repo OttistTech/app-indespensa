@@ -12,9 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ProductRepository
+import com.ottistech.indespensa.data.repository.RecommendationRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShoplistBinding
 import com.ottistech.indespensa.shared.ProductItemType
@@ -25,14 +28,17 @@ import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.ProductSearchAdapter
+import com.ottistech.indespensa.ui.recyclerview.adapter.RecommendationAdapter
 import com.ottistech.indespensa.ui.recyclerview.adapter.ShopAdapter
 import com.ottistech.indespensa.ui.viewmodel.ShopViewModel
+import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 
 class ShopFragment : Fragment() {
 
     private lateinit var binding: FragmentShoplistBinding
     private lateinit var shopListAdapter: ShopAdapter
+    private lateinit var recommendationAdapter: RecommendationAdapter
     private lateinit var searchAdapter: ProductSearchAdapter
     private lateinit var viewModel: ShopViewModel
     private lateinit var confirmationDialogCreator: ConfirmationDialogCreator
@@ -41,13 +47,16 @@ class ShopFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        confirmationDialogCreator = ConfirmationDialogCreator(requireContext())
         binding = FragmentShoplistBinding.inflate(inflater, container, false)
         viewModel = ShopViewModel(
             ShopRepository(requireContext()),
             PantryRepository(requireContext()),
             ProductRepository(),
+            RecommendationRepository(requireContext())
         )
-        confirmationDialogCreator = ConfirmationDialogCreator(requireContext())
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -56,7 +65,7 @@ class ShopFragment : Fragment() {
         binding.shoplistAddAllToPantryButton.isEnabled = false
 
         setupAdapter()
-        setupRecyclerView()
+        setupSearchRecyclerView()
         setupObservers()
         setupUiInteractions()
         setupSearchBar()
@@ -64,7 +73,6 @@ class ShopFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.shoplistProgressbar.visibility = View.VISIBLE
         viewModel.fetchShop()
     }
 
@@ -84,6 +92,14 @@ class ShopFragment : Fragment() {
                 navigateToProductDetails(itemId)
             }
         )
+        recommendationAdapter = RecommendationAdapter(
+            context = requireContext(),
+            onAdd = { product ->
+                product.productId?.let {
+                    viewModel.addItemToShopList(it)
+                }
+            }
+        )
         searchAdapter = ProductSearchAdapter(
             requireContext()
         ) { product ->
@@ -96,33 +112,39 @@ class ShopFragment : Fragment() {
             ) {
                 viewModel.addItemToShopList(product.productId)
             }
-
         }
     }
 
-    private fun setupRecyclerView() {
-        with(binding.shoplistProductList) {
-            adapter = shopListAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    private fun setupSearchRecyclerView() {
         with(binding.shoplistSearchResultList) {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
     }
 
+    private fun setupShopRecyclerView(recyclerViewAdapter: Adapter<*>) {
+        with(binding.shoplistProductList) {
+            adapter = recyclerViewAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
     private fun setupObservers() {
-        viewModel.shopState.observe(viewLifecycleOwner) { shopItems ->
-            binding.shoplistProgressbar.visibility = View.GONE
+        viewModel.shopItems.observe(viewLifecycleOwner) { shopItems ->
             if (!shopItems.isNullOrEmpty()) {
-                binding.shoplistMessage.visibility = View.GONE
-                binding.shoplistAddAllToPantryButton.isEnabled = true
-                binding.shoplistProductList.visibility = View.VISIBLE
+                setupShopRecyclerView(shopListAdapter)
                 handleShopListResult(shopItems)
             }
         }
 
-        viewModel.searchProductResult.observe(viewLifecycleOwner) { result ->
+        viewModel.recommendations.observe(viewLifecycleOwner) { products ->
+            if (!products.isNullOrEmpty()) {
+                setupShopRecyclerView(recommendationAdapter)
+                handleRecommendationsResult(products)
+            }
+        }
+
+        viewModel.searchResult.observe(viewLifecycleOwner) { result ->
             result?.let {
                 binding.shoplistSearchResultList.visibility = View.VISIBLE
                 searchAdapter.updateState(it)
@@ -130,21 +152,31 @@ class ShopFragment : Fragment() {
         }
 
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
-            binding.shoplistProgressbar.visibility = View.GONE
             feedback?.let {
                 handleFeedback(it)
             }
         }
     }
 
+    private fun handleRecommendationsResult(products: List<ProductDTO>) {
+        recommendationAdapter.updateState(products)
+        binding.shoplistMessage.visibility = View.GONE
+        binding.shoplistProductList.visibility = View.VISIBLE
+        binding.shoplistRecommendationsSubtitle.visibility = View.VISIBLE
+    }
+
     private fun handleShopListResult(shopItems: List<ShopItemPartialDTO>) {
         shopListAdapter.updateState(shopItems)
         val itemsInShopListText = shopItems.size.toString() + " ingredientes"
-        binding.shoplistQuantityIngredients.text = makeSpanText(
+        binding.shoplistIngredientsCount.text = makeSpanText(
             getString(R.string.shoplist_ingredients_count, itemsInShopListText),
             itemsInShopListText,
             ContextCompat.getColor(requireContext(), R.color.secondary)
         )
+        binding.shoplistMessage.visibility = View.GONE
+        binding.shoplistRecommendationsSubtitle.visibility = View.GONE
+        binding.shoplistAddAllToPantryButton.isEnabled = true
+        binding.shoplistProductList.visibility = View.VISIBLE
     }
 
     private fun handleFeedback(feedback: Feedback) {
@@ -161,7 +193,16 @@ class ShopFragment : Fragment() {
             FeedbackId.ADD_TO_SHOPLIST -> {
                 handleAddItemFeedback(feedback)
             }
+            FeedbackId.RECOMMENDATIONS -> {
+                handleRecommendationsFeedback(feedback)
+            }
         }
+    }
+
+    private fun handleRecommendationsFeedback(feedback: Feedback) {
+        binding.shoplistMessage.visibility = View.VISIBLE
+        binding.shoplistMessage.text = feedback.message
+        binding.shoplistAddAllToPantryButton.isEnabled = false
     }
 
     private fun handleAddItemFeedback(feedback: Feedback) {
@@ -169,18 +210,22 @@ class ShopFragment : Fragment() {
     }
 
     private fun handleShopListFeedback(feedback: Feedback) {
-        binding.shoplistMessage.visibility = View.VISIBLE
-        binding.shoplistMessage.text = feedback.message
         binding.shoplistAddAllToPantryButton.isEnabled = false
-        binding.shoplistQuantityIngredients.text = makeSpanText(
-            getString(R.string.shoplist_ingredients_count, "0 ingredientes"),
-            "0 ingredientes",
-            ContextCompat.getColor(requireContext(), R.color.secondary)
-        )
+        when(feedback.code) {
+            FeedbackCode.NOT_FOUND -> {
+                binding.shoplistIngredientsCount.text = makeSpanText(
+                    getString(R.string.shoplist_ingredients_count, "0 ingredientes"),
+                    "0 ingredientes",
+                    ContextCompat.getColor(requireContext(), R.color.secondary)
+                )
+            }
+            FeedbackCode.UNHANDLED -> {
+                showToast(feedback.message)
+            }
+        }
     }
 
     private fun handleAddAllToPantryFeedback(feedback: Feedback) {
-        binding.shoplistMessage.visibility = View.VISIBLE
         showToast(feedback.message)
     }
 
@@ -239,7 +284,5 @@ class ShopFragment : Fragment() {
         val action = ShopFragmentDirections.shoplistToShopHistory()
         findNavController().navigate(action)
     }
-
-
 }
 

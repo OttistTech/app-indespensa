@@ -67,6 +67,17 @@ class RecipeFormFragment : Fragment() {
         setupImageInput()
         setupAddIngredientButton()
         setupLevelSelect()
+        setupBackButton()
+    }
+
+    private fun setupBackButton() {
+        binding.recipeFormBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.recipe_form_dest, true)
     }
 
     private fun setupLevelSelect() {

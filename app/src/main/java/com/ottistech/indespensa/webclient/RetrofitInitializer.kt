@@ -13,15 +13,19 @@ class RetrofitInitializer {
         .registerTypeAdapter(RecipeLevel::class.java, RecipeLevelAdapter())
         .create()
 
-    private fun getRetrofit() : Retrofit {
+    private fun getRetrofit(url: String) : Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ApiConstants.BASE_URL)
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
-    fun <T> getService(clazz: Class<T>) : T {
-        return getRetrofit().create(clazz)
+    fun <T> getCoreService(clazz: Class<T>) : T {
+        return getRetrofit(ApiConstants.BASE_URL).create(clazz)
+    }
+
+    fun <T> getRecommendationService(clazz: Class<T>) : T {
+        return getRetrofit(ApiConstants.RECOMMENDATION_URL).create(clazz)
     }
 
 }

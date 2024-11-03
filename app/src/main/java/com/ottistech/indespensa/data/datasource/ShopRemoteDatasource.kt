@@ -8,7 +8,7 @@ import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.ShopService
+import com.ottistech.indespensa.webclient.service.core.ShopService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
@@ -16,7 +16,7 @@ class ShopRemoteDatasource {
 
     private val TAG = "SHOP REMOTE DATASOURCE"
     private val service : ShopService =
-        RetrofitInitializer().getService(ShopService::class.java)
+        RetrofitInitializer().getCoreService(ShopService::class.java)
 
     suspend fun addItem(
         userId: Long,

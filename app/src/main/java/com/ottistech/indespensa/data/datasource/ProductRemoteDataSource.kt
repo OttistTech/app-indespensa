@@ -5,7 +5,7 @@ import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.ProductService
+import com.ottistech.indespensa.webclient.service.core.ProductService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
@@ -13,7 +13,7 @@ class ProductRemoteDataSource {
 
     private val TAG = "PRODUCT REMOTE DATASOURCE"
     private val service : ProductService =
-        RetrofitInitializer().getService(ProductService::class.java)
+        RetrofitInitializer().getCoreService(ProductService::class.java)
 
     suspend fun findByBarcode(barcode: String) : ResultWrapper<ProductDTO> {
         try {

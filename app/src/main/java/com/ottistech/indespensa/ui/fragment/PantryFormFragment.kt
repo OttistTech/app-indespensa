@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -76,6 +75,7 @@ class PantryFormFragment : Fragment() {
         setupUnitiesSelect(AppConstants.AMOUNT_UNITIES)
         setupDatePicker()
         setupSearchBar()
+        setupBackButton()
 
         setupAdapter()
         setupRecyclerView()
@@ -112,6 +112,12 @@ class PantryFormFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         viewModel.clearCallbacks()
+    }
+
+    private fun setupBackButton() {
+        binding.pantryFormBack.setOnClickListener {
+            popBackStack()
+        }
     }
 
     private fun setupAdapter() {
@@ -175,11 +181,11 @@ class PantryFormFragment : Fragment() {
             feedback.feedbackId == FeedbackId.CREATE_PANTRY_ITEM &&
             feedback.code == FeedbackCode.SUCCESS
         ) {
-            popupBackStack()
+            popBackStack()
         }
     }
 
-    private fun popupBackStack() {
+    private fun popBackStack() {
         findNavController().popBackStack(R.id.pantry_form_dest, true)
     }
 

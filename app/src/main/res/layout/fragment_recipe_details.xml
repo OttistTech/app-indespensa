@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".ui.fragment.RecipeDetailsFragment">
+    <ImageButton
+        android:id="@+id/recipe_details_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow"
+        android:elevation="2dp"
+        android:outlineProvider="none"
+        android:backgroundTint="@color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_2"
+        android:layout_marginStart="@dimen/margin_2"/>
     <ProgressBar
         android:id="@+id/recipe_details_progressbar"
         android:layout_width="@dimen/progressbar_large"
@@ -22,8 +34,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/recipe_details_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_2">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/recipe_details_image"
                 android:layout_width="0dp"

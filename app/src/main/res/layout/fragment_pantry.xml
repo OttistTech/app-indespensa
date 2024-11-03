@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
+    <ImageButton
+        android:id="@+id/pantry_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow"
+        android:elevation="1dp"
+        android:outlineProvider="none"
+        android:backgroundTint="@color/transparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="@dimen/margin_2"
+        android:layout_marginStart="@dimen/margin_2"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pantry_fab"
         android:layout_width="wrap_content"

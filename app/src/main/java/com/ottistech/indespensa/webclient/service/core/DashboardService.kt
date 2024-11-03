@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.webclient.service
+package com.ottistech.indespensa.webclient.service.core
 
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO

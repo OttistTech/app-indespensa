@@ -10,7 +10,7 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.PantryService
+import com.ottistech.indespensa.webclient.service.core.PantryService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.util.Date
@@ -19,7 +19,7 @@ class PantryRemoteDatasource {
 
     private val TAG = "PANTRY REMOTE DATASOURCE"
     private val service : PantryService =
-        RetrofitInitializer().getService(PantryService::class.java)
+        RetrofitInitializer().getCoreService(PantryService::class.java)
 
     suspend fun createItem(
         userId: Long,

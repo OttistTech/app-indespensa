@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.webclient.service
+package com.ottistech.indespensa.webclient.service.core
 
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO

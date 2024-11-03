@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.ShopRepository
@@ -40,6 +41,7 @@ class ShopHistoryFragment : Fragment() {
 
         setupRecyclerView()
         setupObservers()
+        setupBackButton()
     }
 
     override fun onResume() {
@@ -51,6 +53,16 @@ class ShopHistoryFragment : Fragment() {
         return PurchaseHistoryAdapter(
             context = requireContext()
         )
+    }
+
+    private fun setupBackButton() {
+        binding.shopHistoryBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.shop_history_dest, true)
     }
 
     private fun setupRecyclerView() {

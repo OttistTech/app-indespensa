@@ -11,7 +11,7 @@ import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
-import com.ottistech.indespensa.webclient.service.RecipeService
+import com.ottistech.indespensa.webclient.service.core.RecipeService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
@@ -19,7 +19,7 @@ class RecipeRemoteDataSource {
 
     private val TAG = "RECIPE REMOTE DATASOURCE"
     private val service : RecipeService =
-        RetrofitInitializer().getService(RecipeService::class.java)
+        RetrofitInitializer().getCoreService(RecipeService::class.java)
 
     suspend fun create(
         recipe: RecipeCreateDTO
