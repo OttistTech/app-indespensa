@@ -188,8 +188,7 @@ class RecipeDetailsFragment : Fragment() {
 
         binding.recipeDetailsLevel.text = recipeDetails.level.displayName
         binding.recipeDetailsTitle.text = recipeDetails.title
-
-        binding.recipeDetailsRatingBar.rating = recipeDetails.numStars.toFloat()
+        binding.recipeDetailsRatingBar.rating = recipeDetails.numStars
 
         binding.recipeDetailsDescription.text = recipeDetails.description
 

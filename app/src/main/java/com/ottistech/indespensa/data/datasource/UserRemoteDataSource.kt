@@ -94,10 +94,10 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean) : ResultWrapper<UserFullDTO> {
+    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean, token: String) : ResultWrapper<UserFullDTO> {
         try {
             Log.d(TAG, "[getUserFullInfo] Trying to fetch user info")
-            val response = service.getUserFullInfo(userId, fullInfo)
+            val response = service.getUserFullInfo(userId, fullInfo, token)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[getUserFullInfo] User info fetched successfully")
                 ResultWrapper.Success(
@@ -134,10 +134,10 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun updateUser(userId: Long, updateUserDTO: UserUpdateDTO): ResultWrapper<UserCredentialsDTO> {
+    suspend fun updateUser(userId: Long, updateUserDTO: UserUpdateDTO, token: String): ResultWrapper<UserCredentialsDTO> {
         return try {
             Log.d(TAG, "[updateUser] Trying to update user")
-            val response = service.updateUser(userId, updateUserDTO)
+            val response = service.updateUser(userId, updateUserDTO, token)
             if (response.isSuccessful) {
                 Log.d(TAG, "[updateUser] User updated successfully")
                 ResultWrapper.Success(response.body() as UserCredentialsDTO)
@@ -172,10 +172,10 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun deactivateUser(userId: Long) : ResultWrapper<Any> {
+    suspend fun deactivateUser(userId: Long, token: String) : ResultWrapper<Any> {
         return try {
             Log.d(TAG, "[deactivateUser] Trying to deactivate user")
-            val response = service.deactivateUser(userId)
+            val response = service.deactivateUser(userId, token)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[deactivateUser] User deactivated successfully")
                 ResultWrapper.Success("User deactivated successfully")
@@ -211,10 +211,10 @@ class UserRemoteDataSource {
         }
     }
 
-    suspend fun updateUserBecomePremium(userId: Long) : ResultWrapper<Any> {
+    suspend fun updateUserBecomePremium(userId: Long, token: String) : ResultWrapper<Any> {
         return try {
             Log.d(TAG, "[updateUserBecomePremium] Trying to update user to premium")
-            val response = service.updateUserBecomePremium(userId)
+            val response = service.updateUserBecomePremium(userId, token)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[updateUserBecomePremium] User become premium successfully")
                 ResultWrapper.Success("User become premium successfully")

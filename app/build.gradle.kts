@@ -47,6 +47,7 @@ dependencies {
     val retrofit_version = "2.9.0"
     val navigationVersion = "2.7.7"
     val cameraVersion = "1.2.2"
+    val work_version = "2.9.1"
 
     // ANDROID CORE
     implementation("androidx.core:core-ktx:1.13.1")
@@ -89,6 +90,10 @@ dependencies {
     // ENCRYPTED PREFERENCES
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
 
+    // Lottie para renderizar animações no formato JSON do Adobe After Effects
+    implementation("com.airbnb.android:lottie:6.3.0")
+
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 
     testImplementation("junit:junit:4.13.2")
 

@@ -15,10 +15,10 @@ class ProductRemoteDataSource {
     private val service : ProductService =
         RetrofitInitializer().getCoreService(ProductService::class.java)
 
-    suspend fun findByBarcode(barcode: String) : ResultWrapper<ProductDTO> {
+    suspend fun findByBarcode(barcode: String, token: String) : ResultWrapper<ProductDTO> {
         try {
             Log.d(TAG, "[findByBarcode] Trying to find product by barcode")
-            val response = service.findByBarcode(barcode)
+            val response = service.findByBarcode(barcode, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[findByBarcode] Product found successfully")
                 ResultWrapper.Success(
@@ -44,10 +44,10 @@ class ProductRemoteDataSource {
         }
     }
 
-    suspend fun search(query: String) : ResultWrapper<List<ProductSearchResponseDTO>> {
+    suspend fun search(query: String, token: String) : ResultWrapper<List<ProductSearchResponseDTO>> {
         try {
             Log.d(TAG, "[search] Trying to search products matching $query")
-            val response = service.search(query)
+            val response = service.search(query, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[search] ${response.body()?.size} products found successfully")
                 ResultWrapper.Success(
@@ -73,10 +73,10 @@ class ProductRemoteDataSource {
         }
     }
 
-    suspend fun findById(productId: Long) : ResultWrapper<ProductDTO> {
+    suspend fun findById(productId: Long, token: String) : ResultWrapper<ProductDTO> {
         try {
             Log.d(TAG, "[findById] Trying to find product by id")
-            val response = service.findById(productId)
+            val response = service.findById(productId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[findById] Product found successfully")
                 ResultWrapper.Success(

@@ -33,12 +33,14 @@ class PantryRepository(
         imageBitmap: Bitmap?
     ) : Boolean {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         if (pantryItem.productImageUrl == null && imageBitmap != null) {
             Log.d(TAG, "[createItem] Detected new product image")
             pantryItem.productImageUrl = imageDatasource.uploadImage(imageBitmap)
         }
         Log.d(TAG, "[createItem] Trying to create pantry item with $pantryItem")
-        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.createItem(userId, pantryItem)
+        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.createItem(userId, pantryItem, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[createItem] Pantry item created successfully: ${result.value}")
@@ -59,8 +61,10 @@ class PantryRepository(
 
     suspend fun listItems() : List<PantryItemPartialDTO>? {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         Log.d(TAG, "[listItems] Trying to fetch pantry items for user $userId")
-        val result : ResultWrapper<List<PantryItemPartialDTO>> = remoteDataSource.listItems(userId)
+        val result : ResultWrapper<List<PantryItemPartialDTO>> = remoteDataSource.listItems(userId, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[listItems] Found pantry items successfully")
@@ -80,7 +84,10 @@ class PantryRepository(
     suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
         if(items.isNotEmpty()) {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList())
+
+            val token = context.getCurrentUser().token
+            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList(), token)
+
             when(result) {
                 is ResultWrapper.Success -> {
                     Log.d(TAG, "[updateItemsAmount] Updated items successfully")
@@ -97,7 +104,10 @@ class PantryRepository(
 
     suspend fun getItemDetails(itemId: Long) : PantryItemDetailsDTO? {
         Log.d(TAG, "[getItemDetails] Trying to get item details with id $itemId")
-        val result : ResultWrapper<PantryItemDetailsDTO> = remoteDataSource.getItemDetails(itemId)
+
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<PantryItemDetailsDTO> = remoteDataSource.getItemDetails(itemId, token)
+
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[getItemDetails] Found pantry item details successfully")
@@ -116,8 +126,10 @@ class PantryRepository(
 
     suspend fun addItem(shopItemId: Long, validityDate: Date) {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         Log.d(TAG, "[addItem] Trying to add item to pantry for user $userId")
-        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate)
+        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate, token)
 
         when (result) {
             is ResultWrapper.Success -> {
@@ -141,9 +153,10 @@ class PantryRepository(
 
     suspend fun addAllShopItemsToPantry(): Boolean {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
 
         Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry of user $userId")
-        val result: ResultWrapper<Any> = remoteDataSource.addAllShopItemsToPantry(userId)
+        val result: ResultWrapper<Any> = remoteDataSource.addAllShopItemsToPantry(userId, token)
 
         return when (result) {
             is ResultWrapper.Success -> {
@@ -171,8 +184,10 @@ class PantryRepository(
 
     suspend fun listCloseValidityItems() : List<PantryItemCloseValidityDTO> {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         Log.d(TAG, "[listCloseValidityItems] Trying to fetch pantry items for user $userId")
-        val result : ResultWrapper<List<PantryItemCloseValidityDTO>> = remoteDataSource.listCloseValidityItems(userId)
+        val result : ResultWrapper<List<PantryItemCloseValidityDTO>> = remoteDataSource.listCloseValidityItems(userId, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[listCloseValidityItems] Found pantry items successfully")

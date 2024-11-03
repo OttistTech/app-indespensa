@@ -1,21 +1,27 @@
 package com.ottistech.indespensa.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
-class ProductRepository {
+class ProductRepository(
+    val context: Context
+) {
 
     private val TAG = "PRODUCT REPOSITORY"
     private val remoteDataSource = ProductRemoteDataSource()
 
     suspend fun findByBarcode(barcode: String) : ProductDTO? {
         Log.d(TAG, "[findByBarcode] trying to find product by barcode")
-        val result : ResultWrapper<ProductDTO> = remoteDataSource.findByBarcode(barcode)
+        val token = context.getCurrentUser().token
+
+        val result : ResultWrapper<ProductDTO> = remoteDataSource.findByBarcode(barcode, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 val productFound = result.value
@@ -37,7 +43,9 @@ class ProductRepository {
 
     suspend fun search(query: String) : List<ProductSearchResponseDTO> {
         Log.d(TAG, "[search] Trying to search products matching $query")
-        val result : ResultWrapper<List<ProductSearchResponseDTO>> = remoteDataSource.search(query)
+        val token = context.getCurrentUser().token
+
+        val result : ResultWrapper<List<ProductSearchResponseDTO>> = remoteDataSource.search(query, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[search] Found ${result.value.size} products successfully")
@@ -58,7 +66,9 @@ class ProductRepository {
 
     suspend fun findById(productId: Long) : ProductDTO {
         Log.d(TAG, "[findById] trying to find product by id")
-        val result : ResultWrapper<ProductDTO> = remoteDataSource.findById(productId)
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<ProductDTO> = remoteDataSource.findById(productId, token)
+
         return when(result) {
             is ResultWrapper.Success -> {
                 val productFound = result.value

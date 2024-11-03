@@ -14,11 +14,12 @@ class CategoryRemoteDataSource {
         RetrofitInitializer().getCoreService(CategoryService::class.java)
 
     suspend fun listCategories(
-        pattern: String
+        pattern: String,
+        token: String
     ) : ResultWrapper<List<String>> {
         try {
             Log.d(TAG, "[listCategories] Trying to fetch categories")
-            val response = service.listCategories(pattern)
+            val response = service.listCategories(pattern, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[listCategories] Found categories successfully")
                 ResultWrapper.Success(

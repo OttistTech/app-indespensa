@@ -42,7 +42,7 @@ class ScannerFragment : Fragment() {
         android.Manifest.permission.CAMERA
     )
     private var barcodeFound : String? = null
-    private val repository = ProductRepository()
+    private val repository = ProductRepository(requireContext())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

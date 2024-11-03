@@ -20,11 +20,12 @@ class ShopRemoteDatasource {
 
     suspend fun addItem(
         userId: Long,
-        shopItem: ShopItemCreateDTO
+        shopItem: ShopItemCreateDTO,
+        token: String
     ) : ResultWrapper<ShopItemPartialDTO> {
         try {
             Log.d(TAG, "[addItem] Trying to add shop item with $shopItem")
-            val response = service.addItem(userId, shopItem)
+            val response = service.addItem(userId, shopItem, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[addItem] Shop item added successfully")
                 ResultWrapper.Success(
@@ -50,10 +51,10 @@ class ShopRemoteDatasource {
         }
     }
 
-    suspend fun listItems(userId: Long) : ResultWrapper<List<ShopItemPartialDTO>> {
+    suspend fun listItems(userId: Long, token: String) : ResultWrapper<List<ShopItemPartialDTO>> {
         try {
             Log.d(TAG, "[listItems] Trying to fetch shop items for user $userId")
-            val response = service.listItems(userId)
+            val response = service.listItems(userId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[listItems] Found shop items for user $userId")
                 ResultWrapper.Success(
@@ -78,10 +79,10 @@ class ShopRemoteDatasource {
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<Boolean> {
+    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>, token: String) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
-            val response = service.updateItemsAmount(pantryItems)
+            val response = service.updateItemsAmount(pantryItems, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[updateItemsAmount] Updated amount successfully")
                 ResultWrapper.Success(true)
@@ -96,10 +97,10 @@ class ShopRemoteDatasource {
         }
     }
 
-    suspend fun getItemDetails(itemId: Long): ResultWrapper<ShopItemDetailsDTO> {
+    suspend fun getItemDetails(itemId: Long, token: String): ResultWrapper<ShopItemDetailsDTO> {
         try {
             Log.d(TAG, "[getItemDetails] Trying to get pantry item details for $itemId")
-            val response = service.getItemDetails(itemId)
+            val response = service.getItemDetails(itemId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[getItemDetails] Found pantry item details successfully $itemId")
                 ResultWrapper.Success(
@@ -124,10 +125,10 @@ class ShopRemoteDatasource {
         }
     }
 
-    suspend fun getHistory(userId: Long): ResultWrapper<List<PurchaseDTO>> {
+    suspend fun getHistory(userId: Long, token: String): ResultWrapper<List<PurchaseDTO>> {
         try {
             Log.d(TAG, "[getHistory] Trying to get history for $userId")
-            val response = service.getHistory(userId)
+            val response = service.getHistory(userId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[getHistory] Found history successfully")
                 ResultWrapper.Success(
