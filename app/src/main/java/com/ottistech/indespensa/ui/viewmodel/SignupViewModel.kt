@@ -22,7 +22,7 @@ import com.ottistech.indespensa.ui.viewmodel.state.SignupFormFieldsState
 import kotlinx.coroutines.launch
 
 class SignupViewModel (
-    signupType: AppAccountType,
+    private val signupType: AppAccountType,
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -191,7 +191,9 @@ class SignupViewModel (
 
     private fun validAllFields() {
         validName()
-        validEnterpriseType()
+        if(signupType == AppAccountType.BUSINESS) {
+            validEnterpriseType()
+        }
         validEmail()
         validBirthdate()
         validPassword()

@@ -21,9 +21,11 @@ class ShopRepository(
 
     suspend fun addItem(productId: Long) {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
+
         Log.d(TAG, "[addItem] Trying to add shop item with $productId")
         val result: ResultWrapper<ShopItemPartialDTO> = remoteDataSource.addItem(
-            userId, ShopItemCreateDTO(productId)
+            userId, ShopItemCreateDTO(productId), token
         )
         when(result) {
             is ResultWrapper.Success -> {
@@ -44,7 +46,8 @@ class ShopRepository(
 
     suspend fun listItems() : List<ShopItemPartialDTO>? {
         val userId = context.getCurrentUser().userId
-        val result : ResultWrapper<List<ShopItemPartialDTO>> = remoteDataSource.listItems(userId)
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<List<ShopItemPartialDTO>> = remoteDataSource.listItems(userId, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[listItems] Found shop items successfully")
@@ -63,7 +66,9 @@ class ShopRepository(
 
     suspend fun getItemDetails(itemId: Long): ShopItemDetailsDTO? {
         Log.d(TAG, "[getItemDetails] Trying to get item details with id $itemId")
-        val result : ResultWrapper<ShopItemDetailsDTO> = remoteDataSource.getItemDetails(itemId)
+        val token = context.getCurrentUser().token
+        val result : ResultWrapper<ShopItemDetailsDTO> = remoteDataSource.getItemDetails(itemId, token)
+
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[getItemDetails] Found pantry item details successfully")
@@ -83,7 +88,8 @@ class ShopRepository(
     suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
         if(items.isNotEmpty()) {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList())
+            val token = context.getCurrentUser().token
+            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList(), token)
             when(result) {
                 is ResultWrapper.Success -> {
                     Log.d(TAG, "[updateItemsAmount] Updated successfully items")
@@ -100,8 +106,9 @@ class ShopRepository(
 
     suspend fun getHistory(): List<PurchaseDTO>? {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
         Log.d(TAG, "[getHistory] Trying to get history with id $userId")
-        val result : ResultWrapper<List<PurchaseDTO>> = remoteDataSource.getHistory(userId)
+        val result : ResultWrapper<List<PurchaseDTO>> = remoteDataSource.getHistory(userId, token)
         return when(result) {
             is ResultWrapper.Success -> {
                 Log.d(TAG, "[getHistory] Found history successfully")

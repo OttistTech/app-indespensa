@@ -15,6 +15,7 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentProfileBinding
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.RecipeAdapter
@@ -64,15 +65,7 @@ class ProfileFragment : Fragment() {
             binding.profileCancelPremium.visibility = View.VISIBLE
 
             binding.profileCancelPremium.setOnClickListener {
-                viewModel.fetchSwitchPremium(
-                    onSuccess = { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                        navigateToHome()
-                    },
-                    onError = { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                    }
-                )
+                viewModel.fetchSwitchPremium()
             }
         } else {
             binding.profilePremiumInfo.visibility = View.VISIBLE
@@ -121,23 +114,8 @@ class ProfileFragment : Fragment() {
         }
 
         viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
-            binding.apply {
-                binding.profileYourRecipesList.visibility = if (feedback?.code == FeedbackCode.NOT_FOUND) {
-                    View.GONE
-                } else {
-                    View.VISIBLE
-                }
-
-                profileMessage.apply {
-                    if (feedback?.feedbackId == FeedbackId.RECIPES_LIST) {
-                        if (!viewModel.isRecipesLoading.value!! && viewModel.recipes.value.isNullOrEmpty()) {
-                            text = feedback.message
-                            visibility = View.VISIBLE
-                        }
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
+            feedback?.let {
+                handleFeedback(feedback)
             }
         }
 
@@ -153,6 +131,21 @@ class ProfileFragment : Fragment() {
 
         viewModel.fetchProfileData()
         viewModel.fetchRecipes()
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        when(feedback.feedbackId) {
+            FeedbackId.GET_PROFILE_DATA -> {
+                showToast(feedback.message)
+            }
+            FeedbackId.RECIPES_LIST -> {
+                binding.profileMessage.text = feedback.message
+                binding.profileMessage.visibility = View.VISIBLE
+            }
+            FeedbackId.SWITCH_PREMIUM -> {
+                showToast(feedback.message)
+            }
+        }
     }
 
     private fun setupLoadOnScroll() {
@@ -177,11 +170,6 @@ class ProfileFragment : Fragment() {
 
     private fun navigateToSettings() {
         val action = ProfileFragmentDirections.actionProfileToUpdateProfile()
-        findNavController().navigate(action)
-    }
-
-    private fun navigateToHome() {
-        val action = ProfileFragmentDirections.actionProfileToHome()
         findNavController().navigate(action)
     }
 

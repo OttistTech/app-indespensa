@@ -125,7 +125,7 @@ class ProfileViewModel(
         }
     }
 
-    fun fetchSwitchPremium(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
+    fun fetchSwitchPremium() {
         viewModelScope.launch {
             try {
                 if (userRepository.updateUserBecomePremium()) {
@@ -135,7 +135,6 @@ class ProfileViewModel(
                         code = FeedbackCode.SUCCESS,
                         message = "Você cancelou seu plano Premium"
                     )
-                    onSuccess("Você cancelou seu plano premium")
                 }
             } catch (e: Exception) {
                 _feedback.value = Feedback(
@@ -143,7 +142,6 @@ class ProfileViewModel(
                     code = FeedbackCode.UNHANDLED,
                     message = "Não foi possível cancelar o plano"
                 )
-                onError("Algo aconteceu. Tente novamente mais tarde!")
             }
             _isRecipesLoading.value = false
         }

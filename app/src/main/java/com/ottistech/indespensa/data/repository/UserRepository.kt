@@ -103,7 +103,9 @@ class UserRepository (
         val userId = getUserCredentials().userId
         Log.d(TAG, firebaseDataSource.isUserAuthenticated().toString())
         Log.d(TAG, "[getUserInfo] Trying to find user $userId info")
-        val result: ResultWrapper<UserFullDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo)
+        
+        val token = context.getCurrentUser().token
+        val result: ResultWrapper<UserFullDTO> = remoteDataSource.getUserFullInfo(userId, fullInfo, token)
 
         return when (result) {
             is ResultWrapper.Success -> {
@@ -134,7 +136,8 @@ class UserRepository (
     ) : UserCredentialsDTO? {
         val userId = getUserCredentials().userId
         Log.d(TAG, "[updateUser] Trying to update user $userId with $user")
-        val result: ResultWrapper<UserCredentialsDTO> = remoteDataSource.updateUser(userId, user)
+        val token = context.getCurrentUser().token
+        val result: ResultWrapper<UserCredentialsDTO> = remoteDataSource.updateUser(userId, user, token)
 
         return when(result) {
             is ResultWrapper.Success -> {
@@ -179,7 +182,9 @@ class UserRepository (
     suspend fun deactivateUser() : Boolean {
         val userId = getUserCredentials().userId
         Log.d(TAG, "[deactivateUser] Trying to deactivate user $userId")
-        val result: ResultWrapper<Any> = remoteDataSource.deactivateUser(userId)
+        val token = context.getCurrentUser().token
+
+        val result: ResultWrapper<Any> = remoteDataSource.deactivateUser(userId, token)
 
         return when (result) {
             is ResultWrapper.Success -> {
@@ -222,8 +227,9 @@ class UserRepository (
 
     suspend fun updateUserBecomePremium() : Boolean {
         val userId = context.getCurrentUser().userId
+        val token = context.getCurrentUser().token
 
-        val result: ResultWrapper<Any> = remoteDataSource.updateUserBecomePremium(userId)
+        val result: ResultWrapper<Any> = remoteDataSource.updateUserBecomePremium(userId, token)
 
         return when (result) {
             is ResultWrapper.Success -> {

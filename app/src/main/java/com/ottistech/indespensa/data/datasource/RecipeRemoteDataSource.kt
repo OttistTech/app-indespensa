@@ -22,11 +22,12 @@ class RecipeRemoteDataSource {
         RetrofitInitializer().getCoreService(RecipeService::class.java)
 
     suspend fun create(
-        recipe: RecipeCreateDTO
+        recipe: RecipeCreateDTO,
+        token: String
     ) : ResultWrapper<RecipeFullDTO> {
         try {
             Log.d(TAG, "[create] Trying to create recipe with $recipe")
-            val response = service.create(recipe)
+            val response = service.create(recipe, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[create] Recipe created successfully")
                 ResultWrapper.Success(
@@ -57,9 +58,9 @@ class RecipeRemoteDataSource {
         }
     }
 
-    suspend fun getRecipeDetails(recipeId: Long, userId: Long) : ResultWrapper<RecipeFullDTO> {
+    suspend fun getRecipeDetails(recipeId: Long, userId: Long, token: String) : ResultWrapper<RecipeFullDTO> {
         try {
-            val response = service.getRecipeDetails(recipeId, userId)
+            val response = service.getRecipeDetails(recipeId, userId, token)
 
             return if(response.isSuccessful) {
                 ResultWrapper.Success(
@@ -87,9 +88,9 @@ class RecipeRemoteDataSource {
         }
     }
 
-    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO): ResultWrapper<Any> {
+    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO, token: String): ResultWrapper<Any> {
         return try {
-            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO)
+            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO, token)
 
             return if (response.isSuccessful) {
                 ResultWrapper.Success("Recipe rated successfully")
@@ -124,7 +125,8 @@ class RecipeRemoteDataSource {
         availability: IngredientState?,
         minPreparationTime: Int?,
         maxPreparationTime: Int?,
-        createdByYou: Boolean?
+        createdByYou: Boolean?,
+        token: String
     ) : ResultWrapper<Pageable<List<RecipePartialDTO>>?> {
         return try {
             val response = service.list(
@@ -136,7 +138,8 @@ class RecipeRemoteDataSource {
                 availability=availability,
                 minPreparationTime=minPreparationTime,
                 maxPreparationTime=maxPreparationTime,
-                createdByYou=createdByYou
+                createdByYou=createdByYou,
+                token=token
             )
 
             return if (response.isSuccessful) {

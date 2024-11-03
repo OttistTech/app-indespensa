@@ -52,7 +52,7 @@ class ShopFragment : Fragment() {
         viewModel = ShopViewModel(
             ShopRepository(requireContext()),
             PantryRepository(requireContext()),
-            ProductRepository(),
+            ProductRepository(requireContext()),
             RecommendationRepository(requireContext())
         )
         binding.model = viewModel

@@ -15,10 +15,10 @@ class DashboardRemoteDataSource {
     private val service : DashboardService =
         RetrofitInitializer().getCoreService(DashboardService::class.java)
 
-    suspend fun getPersonalData(userId: Long) : ResultWrapper<PersonalDashboardDTO> {
+    suspend fun getPersonalData(userId: Long, token: String) : ResultWrapper<PersonalDashboardDTO> {
         try {
             Log.d(TAG, "[getPersonalData] Trying to get personal dashboard data for $userId")
-            val response = service.getPersonalData(userId)
+            val response = service.getPersonalData(userId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[getPersonalData] Found personal dashboard data successfully $userId")
                 ResultWrapper.Success(
@@ -43,10 +43,10 @@ class DashboardRemoteDataSource {
         }
     }
 
-    suspend fun getProfileData(userId: Long) : ResultWrapper<ProfileDashboardDTO> {
+    suspend fun getProfileData(userId: Long, token: String) : ResultWrapper<ProfileDashboardDTO> {
         try {
             Log.d(TAG, "[getProfileData] Trying to get profile dashboard data for $userId")
-            val response = service.getProfileData(userId)
+            val response = service.getProfileData(userId, token)
             return if(response.isSuccessful) {
                 Log.d(TAG, "[getProfileData] Found personal profile data successfully $userId")
                 ResultWrapper.Success(
