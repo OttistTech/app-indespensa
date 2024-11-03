@@ -115,7 +115,7 @@ class RecipeDetailsFragment : Fragment() {
     private fun setupObservers() {
         viewModel.recipeDetails.observe(viewLifecycleOwner) { recipeDetails ->
 
-        binding.recipeDetailsProgressbar.visibility = View.GONE
+            binding.recipeDetailsProgressbar.visibility = View.GONE
             recipeDetails?.let {
                 updateRecipeUI(it)
             }
