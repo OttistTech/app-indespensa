@@ -47,13 +47,24 @@ class RecipeDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupRecyclerView()
         setupObservers()
+        setupPrepareRecipeButton()
+        setupBackButton()
+    }
 
-        binding.recipeDetailsContent.visibility = View.GONE
-        binding.recipeDetailsProgressbar.visibility = View.VISIBLE
-        viewModel.fetchRecipeDetails(args.recipeId)
+    private fun setupBackButton() {
+        binding.recipeDetailsBack.setOnClickListener {
+            popBackStack()
+        }
+    }
 
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.recipe_details_dest, true)
+    }
+
+    private fun setupPrepareRecipeButton() {
         val ratingDialogCreator = RatingDialogCreator(requireContext())
         binding.recipeDetailsPrepareButton.setOnClickListener {
             ratingDialogCreator.showRatingDialog { rating ->
@@ -68,7 +79,7 @@ class RecipeDetailsFragment : Fragment() {
                     recipeId = args.recipeId,
                     onSuccess = {
                         showToast("Receita avaliada com sucesso!")
-                        popupBackstack()
+                        popBackStack()
                     },
                     onError = { message ->
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -76,6 +87,17 @@ class RecipeDetailsFragment : Fragment() {
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchData()
+    }
+
+    private fun fetchData() {
+        binding.recipeDetailsContent.visibility = View.GONE
+        binding.recipeDetailsProgressbar.visibility = View.VISIBLE
+        viewModel.fetchRecipeDetails(args.recipeId)
     }
 
     private fun setupAdapter(): IngredientAdapter {
@@ -109,7 +131,7 @@ class RecipeDetailsFragment : Fragment() {
     private fun handleFeedback(feedback: Feedback) {
         if(feedback.feedbackId == FeedbackId.GET_RECIPE_DETAILS) {
             showToast(feedback.message)
-            popupBackstack()
+            popBackStack()
         }
     }
 
@@ -178,9 +200,4 @@ class RecipeDetailsFragment : Fragment() {
 
         binding.recipeDetailsContent.visibility = View.VISIBLE
     }
-
-    private fun popupBackstack() {
-        findNavController().popBackStack(R.id.nav_home, false)
-    }
-
 }

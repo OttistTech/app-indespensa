@@ -59,6 +59,7 @@ class SignupFragment : Fragment() {
         setupTermsLink()
         setupObservers()
         setupValidationListeners()
+        setupBackButton()
 
         var passwordVisibility = false
         binding.signupPasswordLayout.setEndIconOnClickListener {
@@ -69,6 +70,16 @@ class SignupFragment : Fragment() {
         binding.signupPasswordConfirmationLayout.setEndIconOnClickListener {
             passwordConfirmationVisibility = visibilitySwitcher.switch(passwordConfirmationVisibility, binding.signupPasswordConfirmationField, binding.signupPasswordConfirmationLayout)
         }
+    }
+
+    private fun setupBackButton() {
+        binding.signupBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.signup_dest, true)
     }
 
     private fun setupTermsLink() {

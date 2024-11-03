@@ -55,12 +55,23 @@ class UpdateProfileFragment : Fragment() {
         setupStatesSelect()
         setupLogoutButton()
         setupObservers()
+        setupBackButton()
 
         var passwordVisibility = false
         binding.updateProfilePasswordLayout.setEndIconOnClickListener {
             passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
                 binding.updateProfilePasswordField, binding.updateProfilePasswordLayout)
         }
+    }
+
+    private fun setupBackButton() {
+        binding.updateProfileBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.update_profile_dest, true)
     }
 
     private fun setupDeactivateButton() {

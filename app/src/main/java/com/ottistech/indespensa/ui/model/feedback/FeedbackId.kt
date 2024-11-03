@@ -1,6 +1,7 @@
 package com.ottistech.indespensa.ui.model.feedback
 
 object FeedbackId {
+    const val RECOMMENDATIONS = "RECOMMENDATIONS"
     const val SHOP_HISTORY = "SHOP HISTORY"
     const val RECIPE_SEARCH = "RECIPE SEARCH"
     const val GET_RECIPE_DETAILS = "RECIPE DETAILS"

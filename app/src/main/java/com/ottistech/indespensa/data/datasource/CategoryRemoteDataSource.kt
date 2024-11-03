@@ -3,7 +3,7 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.CategoryService
+import com.ottistech.indespensa.webclient.service.core.CategoryService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
@@ -11,7 +11,7 @@ class CategoryRemoteDataSource {
 
     private val TAG = "CATEGORY REMOTE DATASOURCE"
     private val service : CategoryService =
-        RetrofitInitializer().getService(CategoryService::class.java)
+        RetrofitInitializer().getCoreService(CategoryService::class.java)
 
     suspend fun listCategories(
         pattern: String

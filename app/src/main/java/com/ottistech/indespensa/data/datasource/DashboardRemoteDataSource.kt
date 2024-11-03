@@ -5,7 +5,7 @@ import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.DashboardService
+import com.ottistech.indespensa.webclient.service.core.DashboardService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 
@@ -13,7 +13,7 @@ class DashboardRemoteDataSource {
 
     private val TAG = "DASHBOARD REMOTE DATASOURCE"
     private val service : DashboardService =
-        RetrofitInitializer().getService(DashboardService::class.java)
+        RetrofitInitializer().getCoreService(DashboardService::class.java)
 
     suspend fun getPersonalData(userId: Long) : ResultWrapper<PersonalDashboardDTO> {
         try {

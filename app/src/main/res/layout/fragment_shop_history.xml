@@ -13,16 +13,25 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/shop_history_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginStart="@dimen/margin_2"/>
         <TextView
             android:id="@+id/shop_history_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/IndespensaHeading2"
             android:text="@string/shop_history"
-            android:layout_marginStart="@dimen/margin_4"
-            android:layout_marginTop="@dimen/margin_5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@id/shop_history_back"
+            app:layout_constraintTop_toTopOf="@id/shop_history_back"
+            app:layout_constraintBottom_toBottomOf="@id/shop_history_back"/>
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"

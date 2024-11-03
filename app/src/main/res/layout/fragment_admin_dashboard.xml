@@ -28,10 +28,9 @@
         android:id="@+id/admin_dashboard_progressbar"
         android:layout_width="@dimen/progressbar_large"
         android:layout_height="@dimen/progressbar_large"
+        android:theme="@style/IndespensaProgressbar"
         app:layout_constraintTop_toTopOf="@id/admin_dashboard_webview"
         app:layout_constraintBottom_toBottomOf="@id/admin_dashboard_webview"
         app:layout_constraintStart_toStartOf="@id/admin_dashboard_webview"
-        app:layout_constraintEnd_toEndOf="@id/admin_dashboard_webview"
-        android:indeterminateTint="@color/secondary"
-        android:indeterminateBehavior="repeat" />
+        app:layout_constraintEnd_toEndOf="@id/admin_dashboard_webview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

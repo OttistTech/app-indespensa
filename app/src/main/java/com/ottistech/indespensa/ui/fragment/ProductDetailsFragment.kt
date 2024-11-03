@@ -49,6 +49,7 @@ class ProductDetailsFragment : Fragment() {
 
         setupObservers()
         setupUiInteractions()
+        setupBackButton()
     }
 
     override fun onResume() {
@@ -161,12 +162,14 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-    private fun popBackStack() {
-        if(args.itemType == ProductItemType.PANTRY_ITEM) {
-            findNavController().popBackStack(R.id.pantry_dest, false)
-        } else {
-            findNavController().popBackStack(R.id.nav_shoplist, false)
+    private fun setupBackButton() {
+        binding.productDetailsBack.setOnClickListener {
+            popBackStack()
         }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.product_details_dest, true)
     }
 
     private fun setupForProductType() {

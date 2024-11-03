@@ -39,6 +39,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupObservers()
+        setupBackButton()
         setupSignupButton()
 
         var passwordVisibility = false
@@ -46,7 +47,16 @@ class LoginFragment : Fragment() {
             passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
                 binding.loginPasswordField, binding.loginPasswordLayout)
         }
+    }
 
+    private fun setupBackButton() {
+        binding.loginBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.login_dest, true)
     }
 
     private fun setupSignupButton() {

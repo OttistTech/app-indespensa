@@ -8,7 +8,7 @@ import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
 import com.ottistech.indespensa.webclient.dto.user.UserLoginDTO
 import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.UserService
+import com.ottistech.indespensa.webclient.service.core.UserService
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import kotlin.Exception
@@ -17,7 +17,7 @@ class UserRemoteDataSource {
 
     private val TAG = "USER REMOTE DATASOURCE"
     private val service : UserService =
-        RetrofitInitializer().getService(UserService::class.java)
+        RetrofitInitializer().getCoreService(UserService::class.java)
 
     suspend fun create(user: UserCreateDTO) : ResultWrapper<UserCredentialsDTO> {
         try {
