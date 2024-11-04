@@ -15,6 +15,7 @@ import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentHomeBinding
 import com.ottistech.indespensa.shared.ProductItemType
+import com.ottistech.indespensa.ui.helpers.PermissionManager
 import com.ottistech.indespensa.ui.helpers.formatAsString
 import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
@@ -33,10 +34,19 @@ class HomeFragment : Fragment() {
     private lateinit var recipeAdapter: RecipeAdapter
     private lateinit var closeValidityAdapter: CloseValidityAdapter
 
+    private lateinit var permissionManager: PermissionManager
+    private val permissions = arrayOf(android.Manifest.permission.POST_NOTIFICATIONS)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        permissionManager = PermissionManager(
+            fragment = this,
+            permissions = permissions,
+            onRequestSuccess = { showToast("Você será notificado de itens próximos da validade!") },
+            onRequestFailure = { showToast("Permission is required") }
+        )
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = HomeViewModel(
             UserRepository(requireContext()),
@@ -62,6 +72,10 @@ class HomeFragment : Fragment() {
 
         binding.homeAccessPantry.setOnClickListener {
             navigateToPantry()
+        }
+
+        if(!permissionManager.checkPermissions()) {
+            permissionManager.requestPermissions()
         }
     }
 

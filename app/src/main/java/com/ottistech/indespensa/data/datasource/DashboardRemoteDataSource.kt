@@ -15,12 +15,15 @@ class DashboardRemoteDataSource {
     private val service : DashboardService =
         RetrofitInitializer().getCoreService(DashboardService::class.java)
 
-    suspend fun getPersonalData(userId: Long, token: String) : ResultWrapper<PersonalDashboardDTO> {
-        try {
-            Log.d(TAG, "[getPersonalData] Trying to get personal dashboard data for $userId")
+    suspend fun getPersonalData(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<PersonalDashboardDTO> {
+        return try {
+            Log.d(TAG, "[getPersonalData] Fetching personal dashboard data")
             val response = service.getPersonalData(userId, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getPersonalData] Found personal dashboard data successfully $userId")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getPersonalData] Found successfully")
                 ResultWrapper.Success(
                     response.body() as PersonalDashboardDTO
                 )
@@ -32,23 +35,26 @@ class DashboardRemoteDataSource {
                         Log.e(TAG, "[getPersonalData] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                        Log.e(TAG, "[getPersonalData] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[getPersonalData] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getPersonalData] Failed while getting personal dashboard data", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getPersonalData] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getProfileData(userId: Long, token: String) : ResultWrapper<ProfileDashboardDTO> {
-        try {
-            Log.d(TAG, "[getProfileData] Trying to get profile dashboard data for $userId")
+    suspend fun getProfileData(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<ProfileDashboardDTO> {
+        return try {
+            Log.d(TAG, "[getProfileData] Fetching profile dashboard data")
             val response = service.getProfileData(userId, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getProfileData] Found personal profile data successfully $userId")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getProfileData] Found successfully")
                 ResultWrapper.Success(
                     response.body() as ProfileDashboardDTO
                 )
@@ -60,15 +66,14 @@ class DashboardRemoteDataSource {
                         Log.e(TAG, "[getProfileData] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                    Log.e(TAG, "[getProfileData] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
+                        Log.e(TAG, "[getProfileData] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getProfileData] Failed while getting profile dashboard data", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getProfileData] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
-
 }

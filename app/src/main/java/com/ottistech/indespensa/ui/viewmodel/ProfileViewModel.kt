@@ -128,7 +128,7 @@ class ProfileViewModel(
     fun fetchSwitchPremium() {
         viewModelScope.launch {
             try {
-                if (userRepository.updateUserBecomePremium()) {
+                if (userRepository.switchPremium()) {
                     _isPremium.value = true
                     _feedback.value = Feedback(
                         feedbackId = FeedbackId.SWITCH_PREMIUM,

@@ -13,15 +13,15 @@ class CategoryRemoteDataSource {
     private val service : CategoryService =
         RetrofitInitializer().getCoreService(CategoryService::class.java)
 
-    suspend fun listCategories(
+    suspend fun list(
         pattern: String,
         token: String
     ) : ResultWrapper<List<String>> {
-        try {
-            Log.d(TAG, "[listCategories] Trying to fetch categories")
+        return try {
+            Log.d(TAG, "[listCategories] Fetching categories")
             val response = service.listCategories(pattern, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[listCategories] Found categories successfully")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[listCategories] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<String>
                 )
@@ -34,14 +34,14 @@ class CategoryRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[listCategories] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[listCategories] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listCategories] Failed while fetching categories", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[listCategories] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 }

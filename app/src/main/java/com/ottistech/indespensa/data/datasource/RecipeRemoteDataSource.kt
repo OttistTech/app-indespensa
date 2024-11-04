@@ -24,96 +24,97 @@ class RecipeRemoteDataSource {
     suspend fun create(
         recipe: RecipeCreateDTO,
         token: String
-    ) : ResultWrapper<RecipeFullDTO> {
-        try {
-            Log.d(TAG, "[create] Trying to create recipe with $recipe")
-            val response = service.create(recipe, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[create] Recipe created successfully")
-                ResultWrapper.Success(
-                    response.body() as RecipeFullDTO
-                )
-            } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_CONFLICT -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[create] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[create] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[create] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "[create] Failed while creating recipe", e)
-            return ResultWrapper.NetworkError
-        }
-    }
-
-    suspend fun getRecipeDetails(recipeId: Long, userId: Long, token: String) : ResultWrapper<RecipeFullDTO> {
-        try {
-            val response = service.getRecipeDetails(recipeId, userId, token)
-
-            return if(response.isSuccessful) {
-                ResultWrapper.Success(
-                    response.body() as RecipeFullDTO
-                )
-            } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[deactivateUser] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            return ResultWrapper.NetworkError
-        }
-    }
-
-    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO, token: String): ResultWrapper<Any> {
+    ) : ResultWrapper<Boolean> {
         return try {
-            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO, token)
-
-            return if (response.isSuccessful) {
-                ResultWrapper.Success("Recipe rated successfully")
+            Log.d(TAG, "[create] Creating recipe with: $recipe")
+            val response = service.create(recipe, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[create] Created successfully")
+                ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-                Log.d(TAG, response.code().toString())
-
-                return when (response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        ResultWrapper.Error(response.code(), detail)
-                    }
+                when(response.code()) {
                     HttpURLConnection.HTTP_BAD_REQUEST -> {
                         val detail = error.get(error.keys().next()).toString()
+                        Log.e(TAG, "[create] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
+                        Log.e(TAG, "[create] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            ResultWrapper.NetworkError
+            Log.e(TAG, "[create] Failed", e)
+            ResultWrapper.ConnectionError
+        }
+    }
+
+    suspend fun getDetails(
+        recipeId: Long,
+        userId: Long,
+        token: String
+    ) : ResultWrapper<RecipeFullDTO> {
+        return try {
+            Log.d(TAG, "[getRecipeDetails] Fetching recipe by id: $recipeId")
+            val response = service.getRecipeDetails(recipeId, userId, token)
+            if(response.isSuccessful) {
+                ResultWrapper.Success(
+                    response.body() as RecipeFullDTO
+                )
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when(response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.d(TAG, "[getRecipeDetails] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[getRecipeDetails] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[getRecipeDetails] Failed", e)
+            ResultWrapper.ConnectionError
+        }
+    }
+
+    suspend fun rate(
+        recipeId: Long,
+        rateRecipeRequestDTO: RateRecipeRequestDTO,
+        token: String
+    ): ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[rateRecipe] Rating recipe with id: $recipeId")
+            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO, token)
+            if (response.isSuccessful) {
+                ResultWrapper.Success(true)
+            } else {
+                val error = JSONObject(response.errorBody()!!.string())
+                when (response.code()) {
+                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                        val detail = error.get("detail").toString()
+                        Log.d(TAG, "[rateRecipe] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                        val detail = error.get(error.keys().next()).toString()
+                        Log.d(TAG, "[rateRecipe] $detail")
+                        ResultWrapper.Error(response.code(), detail)
+                    }
+                    else -> {
+                        Log.e(TAG, "[rateRecipe] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[rateRecipe] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
@@ -129,6 +130,7 @@ class RecipeRemoteDataSource {
         token: String
     ) : ResultWrapper<Pageable<List<RecipePartialDTO>>?> {
         return try {
+            Log.d(TAG, "[list] Fetching recipes with filters")
             val response = service.list(
                 queryText=queryText,
                 userId=userId,
@@ -141,25 +143,29 @@ class RecipeRemoteDataSource {
                 createdByYou=createdByYou,
                 token=token
             )
-
-            return if (response.isSuccessful) {
-                ResultWrapper.Success(response.body())
+            if (response.isSuccessful) {
+                Log.d(TAG, "[list] Found successfully")
+                ResultWrapper.Success(
+                    response.body()
+                )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
                 Log.d(TAG, response.code().toString())
-
+                val error = JSONObject(response.errorBody()!!.string())
                 return when (response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
+                        Log.d(TAG, "[list] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
+                        Log.d(TAG, "[list] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            ResultWrapper.NetworkError
+            Log.e(TAG, "[list] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 }

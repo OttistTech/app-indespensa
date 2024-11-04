@@ -25,7 +25,6 @@ class RecipeRepository(
     private val context: Context
 ) {
 
-    private val TAG = "RECIPE REPOSITORY"
     private val remoteDataSource = RecipeRemoteDataSource()
     private val imageDatasource = ImageFirebaseDatasource(DataConstants.FIREBASE_STORAGE_RECIPES)
 
@@ -37,80 +36,70 @@ class RecipeRepository(
         recipe.createdBy = currentUser.userId
         recipe.isShared = currentUser.type == AppAccountType.PERSONAL
         recipe.imageUrl = imageBitmap?.let {
-            imageDatasource.uploadImage(it)
+            imageDatasource.upload(it)
         }
-        Log.d(TAG, "[create] Trying to create recipe with $recipe")
         val token = context.getCurrentUser().token
-        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.create(recipe, token)
-
+        val result =
+            remoteDataSource.create(recipe, token)
         return when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[create] recipe created successfully: ${result.value}")
-                true
+                result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[create] Error while creating recipe: $result")
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw ResourceNotFoundException(result.error)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
+                    HttpURLConnection.HTTP_BAD_REQUEST ->
                         throw BadRequestException(result.error)
-                    }
-                    else -> false
+                    else ->
+                        false
                 }
             }
             else -> false
         }
     }
 
-    suspend fun getRecipeDetails(recipeId: Long): RecipeFullDTO? {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-        val result : ResultWrapper<RecipeFullDTO> = remoteDataSource.getRecipeDetails(recipeId, userId, token)
-
-        return when(result) {
+    suspend fun getDetails(
+        recipeId: Long
+    ): RecipeFullDTO {
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.getDetails(recipeId, currentUser.userId, currentUser.token)
+        when(result) {
             is ResultWrapper.Success -> {
-                result.value
+                return result.value
             }
             is ResultWrapper.Error -> {
                 when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> throw ResourceNotFoundException("Não foi possível encontrar essa receita")
-                    HttpURLConnection.HTTP_BAD_REQUEST -> throw BadRequestException("Tente novamente mais tarde!")
-                    else -> {
-                        null
-                    }
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
                 }
             }
-            else -> {
-                null
-            }
+            else ->  throw Exception("Error while getting recipe details")
         }
     }
 
-    suspend fun rateRecipe(recipeId: Long, rateRecipeRequestDTO: RateRecipeRequestDTO) : Boolean {
+    suspend fun rateRecipe(
+        recipeId: Long,
+        rateRecipeRequestDTO: RateRecipeRequestDTO
+    ) : Boolean {
         val token = context.getCurrentUser().token
-        val result: ResultWrapper<Any> = remoteDataSource.rateRecipe(recipeId, rateRecipeRequestDTO, token)
-
+        val result =
+            remoteDataSource.rate(recipeId, rateRecipeRequestDTO, token)
         return when (result) {
             is ResultWrapper.Success -> {
                 result.value
-                true
             }
             is ResultWrapper.Error -> {
                 when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
+                    HttpURLConnection.HTTP_BAD_REQUEST ->
                         throw ResourceUnauthorizedException(result.error)
-                    }
                     else -> false
                 }
             }
-            else -> {
-                false
-            }
+            else -> false
         }
     }
 
@@ -123,44 +112,35 @@ class RecipeRepository(
         maxPreparationTime: Int? = null,
         createdByYou: Boolean? = false
     ) : Pageable<List<RecipePartialDTO>> {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
+        val currentUser = context.getCurrentUser()
         val result: ResultWrapper<Pageable<List<RecipePartialDTO>>?> = remoteDataSource.list(
             queryText=queryText,
-            userId=userId,
+            userId=currentUser.userId,
             pageNumber=pageNumber,
             level=level,
             availability=availability,
             minPreparationTime=minPreparationTime,
             maxPreparationTime=maxPreparationTime,
             createdByYou=createdByYou,
-            token=token
+            token=currentUser.token
         )
-
         when (result) {
             is ResultWrapper.Success -> {
-                return if(result.value?.content?.isNotEmpty() == true) {
-                     result.value
+                if(result.value?.content?.isNotEmpty() == true) {
+                    return result.value
                 } else {
                     throw ResourceNotFoundException("No recipes found")
                 }
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[list] Error while listing recipes: $result")
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         throw ResourceNotFoundException(result.error)
                     }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        throw ResourceUnauthorizedException(result.error)
-                    }
-                    else -> throw Exception("Could not fetch recipes")
+                    else -> throw Exception("Could not list recipes with filters")
                 }
             }
-            else -> {
-                throw Exception("Could not fetch recipes")
-            }
+            else -> throw Exception("Error while listing recipes")
         }
     }
 }

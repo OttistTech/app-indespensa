@@ -19,11 +19,14 @@ class UserRemoteDataSource {
     private val service : UserService =
         RetrofitInitializer().getCoreService(UserService::class.java)
 
-    suspend fun create(user: UserCreateDTO) : ResultWrapper<UserCredentialsDTO> {
-        try {
+    suspend fun create(
+        user: UserCreateDTO
+    ) : ResultWrapper<UserCredentialsDTO> {
+        return try {
+            Log.d(TAG, "[create] Trying to create user with: $user")
             val response = service.create(user)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[create] User created successfully")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[create] User successfully")
                 ResultWrapper.Success(
                     response.body() as UserCredentialsDTO
                 )
@@ -41,30 +44,31 @@ class UserRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[create] A not mapped error occurred")
+                        Log.e(TAG, "[create] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
 
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed while creating user", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun loginUser(userInfo : UserLoginDTO) : ResultWrapper<UserCredentialsDTO> {
-        try {
+    suspend fun login(
+        userInfo : UserLoginDTO
+    ) : ResultWrapper<UserCredentialsDTO> {
+        return try {
+            Log.d(TAG, "[loginUser] Trying to log user in with: $userInfo")
             val response = service.getUser(userInfo)
-
-            return if (response.isSuccessful) {
-                Log.d(TAG, "[loginUser] User logged successfully")
+            if (response.isSuccessful) {
+                Log.d(TAG, "[loginUser] Logged in successfully")
                 ResultWrapper.Success(
                     response.body() as UserCredentialsDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-
                 when(response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
@@ -82,65 +86,63 @@ class UserRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[loginUser] A not mapped error occurred")
+                        Log.e(TAG, "[loginUser] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
-
         } catch (e: Exception) {
-            Log.e(TAG, "Failed while logging user", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getUserFullInfo(userId: Long, fullInfo: Boolean, token: String) : ResultWrapper<UserFullDTO> {
+    suspend fun getData(
+        userId: Long,
+        fullInfo: Boolean,
+        token: String
+    ) : ResultWrapper<UserFullDTO> {
         try {
-            Log.d(TAG, "[getUserFullInfo] Trying to fetch user info")
+            Log.d(TAG, "[getUserFullInfo] Fetching user info")
             val response = service.getUserFullInfo(userId, fullInfo, token)
             return if (response.isSuccessful) {
-                Log.d(TAG, "[getUserFullInfo] User info fetched successfully")
+                Log.d(TAG, "[getUserFullInfo] Found successfully")
                 ResultWrapper.Success(
                     response.body() as UserFullDTO
                 )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-
                 when(response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
                         Log.e(TAG, "[getUserFullInfo] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
-                    HttpURLConnection.HTTP_UNAUTHORIZED -> {
-                        val detail =  error.get("detail").toString()
-                        Log.e(TAG, "[getUserFullInfo] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[getUserFullInfo] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
                     else -> {
-                        Log.e(TAG, "[getUserFullInfo] A not mapped error occurred")
+                        Log.e(TAG, "[getUserFullInfo] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed while fetching user info", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "Failed", e)
+            return ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun updateUser(userId: Long, updateUserDTO: UserUpdateDTO, token: String): ResultWrapper<UserCredentialsDTO> {
+    suspend fun update(
+        userId: Long,
+        user: UserUpdateDTO,
+        token: String
+    ): ResultWrapper<UserCredentialsDTO> {
         return try {
-            Log.d(TAG, "[updateUser] Trying to update user")
-            val response = service.updateUser(userId, updateUserDTO, token)
+            Log.d(TAG, "[updateUser] Trying to update user with: $user")
+            val response = service.updateUser(userId, user, token)
             if (response.isSuccessful) {
-                Log.d(TAG, "[updateUser] User updated successfully")
-                ResultWrapper.Success(response.body() as UserCredentialsDTO)
+                Log.d(TAG, "[updateUser] Updated successfully")
+                ResultWrapper.Success(
+                    response.body() as UserCredentialsDTO
+                )
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
                 when (response.code()) {
@@ -160,94 +162,79 @@ class UserRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[updateUser] A not mapped error occurred")
+                        Log.e(TAG, "[updateUser] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
-
         } catch (e: Exception) {
-            Log.e(TAG, "[updateUser] Failed while updating user", e)
-            ResultWrapper.NetworkError
+            Log.e(TAG, "[updateUser] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun deactivateUser(userId: Long, token: String) : ResultWrapper<Any> {
+    suspend fun deactivate(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[deactivateUser] Trying to deactivate user")
+            Log.d(TAG, "[deactivateUser] Deactivating user")
             val response = service.deactivateUser(userId, token)
             return if (response.isSuccessful) {
-                Log.d(TAG, "[deactivateUser] User deactivated successfully")
-                ResultWrapper.Success("User deactivated successfully")
+                Log.d(TAG, "[deactivateUser] Deactivated successfully")
+                ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-                Log.d(TAG, response.code().toString())
-
                 return when (response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
-                        Log.e(TAG, "[deactivateUser] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_CONFLICT -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[deactivateUser] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
                         Log.e(TAG, "[deactivateUser] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[deactivateUser] A not mapped error occurred")
+                        Log.e(TAG, "[deactivateUser] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to deactivate user", e)
-            ResultWrapper.NetworkError
+            Log.e(TAG, "Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun updateUserBecomePremium(userId: Long, token: String) : ResultWrapper<Any> {
+    suspend fun switchPremium(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[updateUserBecomePremium] Trying to update user to premium")
-            val response = service.updateUserBecomePremium(userId, token)
+            Log.d(TAG, "[switchPremium] Trying to switch user premium plan")
+            val response = service.switchPremium(userId, token)
             return if (response.isSuccessful) {
-                Log.d(TAG, "[updateUserBecomePremium] User become premium successfully")
-                ResultWrapper.Success("User become premium successfully")
+                Log.d(TAG, "[switchPremium] Switched successfully")
+                ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-                Log.d(TAG, response.code().toString())
-
                 return when (response.code()) {
                     HttpURLConnection.HTTP_NOT_FOUND -> {
                         val detail = error.get("detail").toString()
-                        Log.e(TAG, "[updateUserBecomePremium] $detail")
+                        Log.e(TAG, "[switchPremium] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
                     HttpURLConnection.HTTP_GONE -> {
                         val detail = error.get("detail").toString()
-                        Log.e(TAG, "[updateUserBecomePremium] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[updateUserBecomePremium] $detail")
+                        Log.e(TAG, "[switchPremium] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[updateUserBecomePremium] A not mapped error occurred")
+                        Log.e(TAG, "[switchPremium] Not mapped error")
                         ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to update user to premium", e)
-            ResultWrapper.NetworkError
+            Log.e(TAG, "Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
-
 }

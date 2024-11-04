@@ -52,7 +52,7 @@ class PremiumViewModel(
     fun handlePaymentClick(onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                if (repository.updateUserBecomePremium()) {
+                if (repository.switchPremium()) {
                     _isPremium.value = true
                     onSuccess()
                 }

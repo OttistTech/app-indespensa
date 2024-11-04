@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.PantryRepository
-import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
@@ -29,7 +28,7 @@ class PantryViewModel(
     fun fetchPantry() {
         viewModelScope.launch {
             try {
-                val pantryItems = repository.listItems()
+                val pantryItems = repository.list()
                 _pantryState.value = pantryItems
             } catch(e: ResourceNotFoundException) {
                 _feedback.value =
@@ -41,7 +40,7 @@ class PantryViewModel(
 
     fun syncChanges() {
         viewModelScope.launch {
-            repository.updateItemsAmount(*pantryChanges.toTypedArray())
+            repository.updateAmount(*pantryChanges.toTypedArray())
         }
     }
 

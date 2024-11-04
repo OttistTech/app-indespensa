@@ -49,7 +49,7 @@ interface UserService {
     ) : Response<Any>
 
     @PATCH("users/{id}")
-    suspend fun updateUserBecomePremium(
+    suspend fun switchPremium(
         @Path("id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<Any>

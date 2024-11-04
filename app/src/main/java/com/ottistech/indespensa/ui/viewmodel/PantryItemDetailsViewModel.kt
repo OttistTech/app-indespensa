@@ -31,7 +31,7 @@ class PantryItemDetailsViewModel(
     override fun getItemDetails(itemId: Long) {
         viewModelScope.launch {
             try {
-                val itemDetails = pantryRepository.getItemDetails(itemId)
+                val itemDetails = pantryRepository.getDetails(itemId)
                 if(itemDetails != null) {
                     _itemDetails.value = itemDetails
                     _itemAmount.value = itemDetails.amount
@@ -51,7 +51,7 @@ class PantryItemDetailsViewModel(
         val newAmount: Int? = _itemAmount.value
         if(pantryItemId != null && newAmount != null) {
             viewModelScope.launch {
-                pantryRepository.updateItemsAmount(
+                pantryRepository.updateAmount(
                     ProductItemUpdateAmountDTO(
                         pantryItemId,
                         newAmount
@@ -75,7 +75,7 @@ class PantryItemDetailsViewModel(
             viewModelScope.launch {
                 syncChanges()
                 try {
-                    shopRepository.addItem(productId)
+                    shopRepository.add(productId)
                     _feedback.value =
                         Feedback(FeedbackId.ADD_TO_SHOPLIST, FeedbackCode.SUCCESS, "Adicionado à lista de compras!")
                 } catch (e: Exception) {

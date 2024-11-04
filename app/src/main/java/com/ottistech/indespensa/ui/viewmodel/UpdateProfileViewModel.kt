@@ -18,7 +18,6 @@ import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.viewmodel.state.UpdateProfileFormErrorState
 import com.ottistech.indespensa.ui.viewmodel.state.UpdateProfileFormFieldsState
 import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
-import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 import kotlinx.coroutines.launch
 
 class UpdateProfileViewModel(
@@ -40,7 +39,7 @@ class UpdateProfileViewModel(
         viewModelScope.launch {
             isLoading.value = true
             try {
-                val userInfo = repository.getUserInfo(true)
+                val userInfo = repository.getData(true)
                 userInfo?.let {
                     setStateWithUser(it)
                 }

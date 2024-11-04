@@ -27,7 +27,7 @@ class RecipeDetailsViewModel(
     fun fetchRecipeDetails(recipeId: Long) {
         viewModelScope.launch {
             try {
-                val details = recipeRepository.getRecipeDetails(recipeId)
+                val details = recipeRepository.getDetails(recipeId)
                 _recipeDetails.value = details
             } catch (e: Exception) {
                 _feedback.value =

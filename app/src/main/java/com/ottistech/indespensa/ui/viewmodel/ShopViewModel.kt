@@ -50,7 +50,7 @@ class ShopViewModel(
         viewModelScope.launch {
             isLoading.value = true
             try {
-                val shopItems = shopRepository.listItems()
+                val shopItems = shopRepository.list()
                 _shopItems.value = shopItems
             } catch(e: ResourceNotFoundException) {
                 _feedback.value =
@@ -93,7 +93,7 @@ class ShopViewModel(
     fun addAllItemsFromShopToPantry() {
         viewModelScope.launch {
             try {
-                pantryRepository.addAllShopItemsToPantry()
+                pantryRepository.addAllShopItems()
                 _feedback.value =
                     Feedback(FeedbackId.ADD_ALL_TO_PANTRY, FeedbackCode.SUCCESS, "Produtos adicionados à despensa!")
                 fetchShop()
@@ -134,7 +134,7 @@ class ShopViewModel(
     fun addItemToShopList(productId: Long) {
         viewModelScope.launch {
             try {
-                shopRepository.addItem(productId)
+                shopRepository.add(productId)
                 _feedback.value =
                     Feedback(FeedbackId.ADD_TO_SHOPLIST, FeedbackCode.SUCCESS, "Produto adicionado à lista de compras!")
                 fetchShop()
