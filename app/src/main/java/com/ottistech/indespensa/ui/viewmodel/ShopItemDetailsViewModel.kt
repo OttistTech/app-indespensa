@@ -32,7 +32,7 @@ class ShopItemDetailsViewModel(
     override fun getItemDetails(itemId: Long) {
         viewModelScope.launch {
             try {
-                val itemDetails = shopRepository.getItemDetails(itemId)
+                val itemDetails = shopRepository.getDetails(itemId)
                 if(itemDetails != null) {
                     _itemDetails.value = itemDetails
                     _itemAmount.value = itemDetails.amount
@@ -75,7 +75,7 @@ class ShopItemDetailsViewModel(
             _itemDetails.value?.let { item ->
                 syncChanges()
                 try {
-                    pantryRepository.addItem(item.itemId, validityDate)
+                    pantryRepository.addShopItem(item.itemId, validityDate)
                     _feedback.value =
                         Feedback(FeedbackId.ADD_TO_PANTRY, FeedbackCode.SUCCESS, "Adicionado à despensa!")
                 } catch (e: Exception) {

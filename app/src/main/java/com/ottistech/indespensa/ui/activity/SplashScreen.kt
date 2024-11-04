@@ -19,7 +19,7 @@ class SplashScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition {true}
-        val isUserAuthenticated = userRepository.isUserAuthenticated()
+        val isUserAuthenticated = userRepository.isAuthenticated()
         openNextActivity(isUserAuthenticated)
         finish()
     }

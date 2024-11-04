@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,14 +36,17 @@ import java.util.concurrent.Executor
 class ScannerFragment : Fragment() {
 
     private val TAG = "SCANNER FRAGMENT"
-    private lateinit var binding : FragmentScannerBinding
-    private lateinit var barcodeScanner : BarcodeScanner
+    private lateinit var binding: FragmentScannerBinding
+    private lateinit var barcodeScanner: BarcodeScanner
     private lateinit var permissionManager: PermissionManager
-    private val permissions = arrayOf(
-        android.Manifest.permission.CAMERA
-    )
-    private var barcodeFound : String? = null
-    private val repository = ProductRepository(requireContext())
+    private lateinit var repository: ProductRepository
+    private val permissions = arrayOf(android.Manifest.permission.CAMERA)
+    private var barcodeFound: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        repository = ProductRepository(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -100,7 +100,9 @@ class SignupFragment : Fragment() {
                 val datePickerCreator = DatePickerCreator()
                 datePicker = datePickerCreator.createDatePicker(binding.signupBirthdateField, getString(R.string.form_hint_birthdate), true)
                 binding.signupBirthdateField.setOnClickListener {
-                    datePicker.show(parentFragmentManager, "DATE PICKER")
+                    if (!datePicker.isAdded) {
+                        datePicker.show(parentFragmentManager, "DATE PICKER")
+                    }
                 }
             }
 

@@ -2,18 +2,14 @@ package com.ottistech.indespensa.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import com.ottistech.indespensa.data.DataConstants
 import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.PantryRemoteDatasource
-import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
@@ -24,184 +20,132 @@ class PantryRepository(
     private val context: Context
 ) {
 
-    private val TAG = "PANTRY REPOSITORY"
     private val remoteDataSource = PantryRemoteDatasource()
     private val imageDatasource = ImageFirebaseDatasource(DataConstants.FIREBASE_STORAGE_PRODUCTS)
 
-    suspend fun createItem(
+    suspend fun create(
         pantryItem: PantryItemCreateDTO,
         imageBitmap: Bitmap?
     ) : Boolean {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
         if (pantryItem.productImageUrl == null && imageBitmap != null) {
-            Log.d(TAG, "[createItem] Detected new product image")
-            pantryItem.productImageUrl = imageDatasource.uploadImage(imageBitmap)
+            pantryItem.productImageUrl = imageDatasource.upload(imageBitmap)
         }
-        Log.d(TAG, "[createItem] Trying to create pantry item with $pantryItem")
-        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.createItem(userId, pantryItem, token)
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.create(currentUser.userId, pantryItem, currentUser.token)
         return when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[createItem] Pantry item created successfully: ${result.value}")
-                true
-            }
-            is ResultWrapper.Error -> {
-                Log.e(TAG, "[createItem] Error while creating pantry item: $result")
-                when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw ResourceNotFoundException(result.error)
-                    }
-                    else -> false
-                }
+                result.value
             }
             else -> false
         }
     }
 
-    suspend fun listItems() : List<PantryItemPartialDTO>? {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
-        Log.d(TAG, "[listItems] Trying to fetch pantry items for user $userId")
-        val result : ResultWrapper<List<PantryItemPartialDTO>> = remoteDataSource.listItems(userId, token)
+    suspend fun list() : List<PantryItemPartialDTO> {
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.list(currentUser.userId, currentUser.token)
         return when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[listItems] Found pantry items successfully")
                 result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[listItems] Error while fetching user pantry items: $result")
                 throw ResourceNotFoundException("Could not find any pantry item")
             }
             else -> {
-                Log.e(TAG, "[listItems] Unexpected error occurred while fetching user pantry items")
-                null
+                throw Exception("Error while listing pantry items")
             }
         }
     }
 
-    suspend fun updateItemsAmount(vararg items: ProductItemUpdateAmountDTO) {
-        if(items.isNotEmpty()) {
-            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${items.size} items")
-
+    suspend fun updateAmount(vararg items: ProductItemUpdateAmountDTO) : Boolean {
+        return if(items.isNotEmpty()) {
             val token = context.getCurrentUser().token
-            val result : ResultWrapper<Boolean> = remoteDataSource.updateItemsAmount(items.asList(), token)
-
-            when(result) {
-                is ResultWrapper.Success -> {
-                    Log.d(TAG, "[updateItemsAmount] Updated items successfully")
-                }
-                is ResultWrapper.Error -> {
-                    Log.e(TAG, "[updateItemsAmount] Error while while updating items amount: $result")
-                }
-                else -> {
-                    Log.e(TAG, "[updateItemsAmount] Unexpected error occurred while updating items amount")
-                }
+            val result =
+                remoteDataSource.updateAmount(items.asList(), token)
+            if(result is ResultWrapper.Success) {
+                result.value
+            } else {
+                false
             }
+        } else {
+            false
         }
     }
 
-    suspend fun getItemDetails(itemId: Long) : PantryItemDetailsDTO? {
-        Log.d(TAG, "[getItemDetails] Trying to get item details with id $itemId")
-
+    suspend fun getDetails(itemId: Long) : PantryItemDetailsDTO {
         val token = context.getCurrentUser().token
-        val result : ResultWrapper<PantryItemDetailsDTO> = remoteDataSource.getItemDetails(itemId, token)
-
-        return when(result) {
+        val result =
+            remoteDataSource.getDetails(itemId, token)
+        when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[getItemDetails] Found pantry item details successfully")
-                result.value
+                return result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[getItemDetails] Error while getting pantry item details: $result")
                 throw ResourceNotFoundException("Could not find pantry item")
             }
             else -> {
-                Log.e(TAG, "[getItemDetails] Unexpected error occurred while getting pantry item details")
-                null
+                throw Exception("Error while getting pantry item details")
             }
         }
     }
 
-    suspend fun addItem(shopItemId: Long, validityDate: Date) {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
-        Log.d(TAG, "[addItem] Trying to add item to pantry for user $userId")
-        val result : ResultWrapper<PantryItemFullDTO> = remoteDataSource.addItem(userId, shopItemId, validityDate, token)
-
+    suspend fun addShopItem(
+        shopItemId: Long,
+        validityDate: Date
+    ) : Boolean {
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.addShopItem(currentUser.userId, shopItemId, validityDate, currentUser.token)
         when (result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[addItem] Added pantry item successfully")
+                return result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[addItem] Error adding item to pantry: ${result.error}, code: ${result.code}")
-                when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw ResourceNotFoundException(result.error)
-                    }
-                    else -> throw Exception("Could not add item to pantry")
-                }
+                throw Exception("Could not add item to pantry")
             }
             else -> {
-                Log.e(TAG, "[addItem] Unexpected result: $result")
-                throw Exception("Could not add item to pantry")
+                throw Exception("Error while adding item")
             }
         }
     }
 
-    suspend fun addAllShopItemsToPantry(): Boolean {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
-        Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry of user $userId")
-        val result: ResultWrapper<Any> = remoteDataSource.addAllShopItemsToPantry(userId, token)
-
+    suspend fun addAllShopItems(): Boolean {
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.addAllShopItems(currentUser.userId, currentUser.token)
         return when (result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
-                true
+                result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[addAllShopItemsToPantry] Error adding all shop items to pantry of user: ${result.error}, code: ${result.code}")
-                when (result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        throw ResourceNotFoundException(result.error)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        throw BadRequestException(result.error)
-                    }
-                    else -> false
-                }
+                throw Exception("Could not add all items to pantry")
             }
             else -> {
-                Log.e(TAG, "[addAllShopItemsToPantry] Unexpected result: $result")
-                false
+                throw Exception("Error while adding all items to pantry")
             }
         }
     }
 
     suspend fun listCloseValidityItems() : List<PantryItemCloseValidityDTO> {
-        val userId = context.getCurrentUser().userId
-        val token = context.getCurrentUser().token
-
-        Log.d(TAG, "[listCloseValidityItems] Trying to fetch pantry items for user $userId")
-        val result : ResultWrapper<List<PantryItemCloseValidityDTO>> = remoteDataSource.listCloseValidityItems(userId, token)
+        val currentUser = context.getCurrentUser()
+        val result =
+            remoteDataSource.listCloseValidityItems(currentUser.userId, currentUser.token)
         return when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[listCloseValidityItems] Found pantry items successfully")
                 result.value
             }
             is ResultWrapper.Error -> {
-                Log.e(TAG, "[listCloseValidityItems] Error while fetching user pantry items: $result")
-                throw ResourceNotFoundException("Could not find any pantry item")
+                when(result.code) {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
+                }
             }
             else -> {
-                Log.e(TAG, "[listCloseValidityItems] Unexpected error occurred while fetching user pantry items")
-                throw Exception("Could not fetch pantry items")
+                throw Exception("Error while listing close validity pantry items")
             }
         }
     }
-
 }

@@ -25,9 +25,7 @@ class CheckPantryItemValidityWorker(
     workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams) {
 
-    companion object {
-        const val CHANNEL_ID = "ingredient_expiration_channel"
-    }
+    private val TAG = "PANTRY ITEM VALIDITY DATE NOTIFICATION WORKER"
 
     override suspend fun doWork(): Result {
         return try {
@@ -75,7 +73,7 @@ class CheckPantryItemValidityWorker(
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS)
                 == PackageManager.PERMISSION_GRANTED
             ) {
-                val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                val notification = NotificationCompat.Builder(applicationContext, NotificationConstants.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.logo)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationText)
@@ -83,11 +81,12 @@ class CheckPantryItemValidityWorker(
                     .build()
 
                 NotificationManagerCompat.from(applicationContext).notify(ingredient.pantryItemId.hashCode(), notification)
+                Log.d(TAG, "Notification sent successfully")
             } else {
-                Log.e("CheckPantryItemValidityWorker", "Permission of sending notification denied")
+                Log.e(TAG, "Permission of sending notification denied")
             }
         } catch (e: Exception) {
-            Log.e("CheckPantryItemValidityWorker", "Error parsing date or sending notification", e)
+            Log.e(TAG, "Error parsing date or sending notification", e)
 
         }
 
@@ -97,7 +96,7 @@ class CheckPantryItemValidityWorker(
         val name = "Ingredient Expiration Alerts"
         val descriptionText = "Notifies when ingredients are close to their expiration date"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+        val channel = NotificationChannel(NotificationConstants.NOTIFICATION_CHANNEL_ID, name, importance).apply {
             description = descriptionText
         }
 

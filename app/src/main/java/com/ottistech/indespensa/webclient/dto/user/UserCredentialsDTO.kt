@@ -10,5 +10,5 @@ data class UserCredentialsDTO(
     val password: String,
     val enterpriseType: String?,
     val isPremium: Boolean,
-    val token: String
+    var token: String
 )

@@ -27,37 +27,37 @@ class UserFirebaseDataSource private constructor(
         val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     }
 
-    fun isUserAuthenticated() : Boolean {
+    fun isAuthenticated() : Boolean {
         val currentAuthenticatedUser = auth.currentUser
         Log.d(TAG, "[isUserAuthenticated] Current user: $currentAuthenticatedUser")
         return currentAuthenticatedUser != null
     }
 
-    fun saveUser(email: String, password: String) {
+    fun save(email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(executor) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Log.d(TAG, "[saveUser] Saved and authenticated user: $user")
+                    Log.d(TAG, "[saveUser] Saved and authenticated: $user")
                 } else {
-                    Log.e(TAG, "[saveUser] Failed while saving the user")
+                    Log.e(TAG, "[saveUser] Failed")
                 }
             }
     }
 
-    fun loginUser(email: String, password: String) {
+    fun login(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(executor) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    Log.d(TAG, "[loginUser] User logged in: $user")
+                    Log.d(TAG, "[loginUser] Logged in: $user")
                 } else {
-                    Log.e(TAG, "[loginUser] Failed while authenticating the user")
+                    Log.e(TAG, "[loginUser] Failed")
                 }
             }
     }
 
-    fun updateUser(
+    fun update(
         currentEmail: String,
         currentPassword: String,
         newEmail: String,
@@ -67,34 +67,33 @@ class UserFirebaseDataSource private constructor(
             currentEmail != newEmail ||
             currentPassword != newPassword
         ) {
-            removeUser(currentEmail, currentPassword)
-            saveUser(newEmail, newPassword)
+            remove(currentEmail, currentPassword)
+            save(newEmail, newPassword)
         }
-        Log.d(TAG, "[updateUser] Updated user successfully")
+        Log.d(TAG, "[updateUser] Updated successfully")
     }
 
-    fun logoutUser() {
-        Log.d(TAG, "[logoutUser] User logged out successfully")
+    fun logout() {
+        Log.d(TAG, "[logoutUser] Logged out successfully")
         auth.signOut()
     }
 
-    private fun removeUser(email: String, password: String) {
-        Log.d(TAG, "[removeUser] trying to remove user with email $email")
+    private fun remove(email: String, password: String) {
         val credential = EmailAuthProvider.getCredential(email, password)
         auth.currentUser?.let { user ->
             user.reauthenticate(credential)
-                .addOnCompleteListener { reauthTask ->
-                    if (reauthTask.isSuccessful) {
+                .addOnCompleteListener { authTask ->
+                    if (authTask.isSuccessful) {
                         user.delete()
                             .addOnCompleteListener { deleteTask ->
                                 if (deleteTask.isSuccessful) {
-                                    Log.d(TAG, "[removeUser] User account removed successfully")
+                                    Log.d(TAG, "[removeUser] Removed successfully")
                                 } else {
-                                    Log.e(TAG, "[removeUser] Could not remove user", deleteTask.exception)
+                                    Log.e(TAG, "[removeUser] Could not remove", deleteTask.exception)
                                 }
                             }
                     } else {
-                        Log.e(TAG, "[removeUser] Reauthentication failed", reauthTask.exception)
+                        Log.e(TAG, "[removeUser] Authentication before removing user failed", authTask.exception)
                     }
                 }
         }

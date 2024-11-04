@@ -18,19 +18,17 @@ class ShopRemoteDatasource {
     private val service : ShopService =
         RetrofitInitializer().getCoreService(ShopService::class.java)
 
-    suspend fun addItem(
+    suspend fun add(
         userId: Long,
         shopItem: ShopItemCreateDTO,
         token: String
-    ) : ResultWrapper<ShopItemPartialDTO> {
-        try {
-            Log.d(TAG, "[addItem] Trying to add shop item with $shopItem")
+    ) : ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[addItem] Adding shop item with: $shopItem")
             val response = service.addItem(userId, shopItem, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[addItem] Shop item added successfully")
-                ResultWrapper.Success(
-                    response.body() as ShopItemPartialDTO
-                )
+            if(response.isSuccessful) {
+                Log.d(TAG, "[addItem] Added successfully")
+                ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
                 when(response.code()) {
@@ -40,23 +38,26 @@ class ShopRemoteDatasource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[addItem] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[addItem] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[addItem] Failed while adding shop item", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[addItem] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun listItems(userId: Long, token: String) : ResultWrapper<List<ShopItemPartialDTO>> {
-        try {
-            Log.d(TAG, "[listItems] Trying to fetch shop items for user $userId")
+    suspend fun list(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<List<ShopItemPartialDTO>> {
+        return try {
+            Log.d(TAG, "[listItems] Fetching shop items")
             val response = service.listItems(userId, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[listItems] Found shop items for user $userId")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[listItems] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<ShopItemPartialDTO>
                 )
@@ -68,41 +69,47 @@ class ShopRemoteDatasource {
                         Log.e(TAG, "[listItems] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                    Log.e(TAG, "[listItems] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
+                    Log.e(TAG, "[listItems] Not mapped error")
+                    ResultWrapper.Error(response.code(), "Unexpected Error")
                 }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listItems] Failed while listing shop items", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[listItems] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>, token: String) : ResultWrapper<Boolean> {
+    suspend fun updateAmount(
+        pantryItems : List<ProductItemUpdateAmountDTO>,
+        token: String
+    ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
             val response = service.updateItemsAmount(pantryItems, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[updateItemsAmount] Updated amount successfully")
+                Log.d(TAG, "[updateItemsAmount] Updated successfully")
                 ResultWrapper.Success(true)
             } else {
                 val error = JSONObject(response.errorBody()!!.string())
-                Log.e(TAG, "[updateItemsAmount] A not mapped error occurred")
+                Log.e(TAG, "[updateItemsAmount] Not mapped error")
                 ResultWrapper.Error(response.code(), error.get("detail").toString())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[updateItemsAmount] Failed while updating items amount", e)
-            ResultWrapper.NetworkError
+            Log.e(TAG, "[updateItemsAmount] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getItemDetails(itemId: Long, token: String): ResultWrapper<ShopItemDetailsDTO> {
-        try {
-            Log.d(TAG, "[getItemDetails] Trying to get pantry item details for $itemId")
+    suspend fun getDetails(
+        itemId: Long,
+        token: String
+    ): ResultWrapper<ShopItemDetailsDTO> {
+        return try {
+            Log.d(TAG, "[getItemDetails] Fetching item details by id $itemId")
             val response = service.getItemDetails(itemId, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getItemDetails] Found pantry item details successfully $itemId")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getItemDetails] Found successfully")
                 ResultWrapper.Success(
                     response.body() as ShopItemDetailsDTO
                 )
@@ -114,23 +121,26 @@ class ShopRemoteDatasource {
                         Log.e(TAG, "[getItemDetails] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                    Log.e(TAG, "[getItemDetails] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
+                        Log.e(TAG, "[getItemDetails] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
+                    }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getItemDetails] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getHistory(userId: Long, token: String): ResultWrapper<List<PurchaseDTO>> {
+    suspend fun getHistory(
+        userId: Long,
+        token: String
+    ): ResultWrapper<List<PurchaseDTO>> {
         try {
-            Log.d(TAG, "[getHistory] Trying to get history for $userId")
+            Log.d(TAG, "[getHistory] Fetching history")
             val response = service.getHistory(userId, token)
             return if(response.isSuccessful) {
-                Log.d(TAG, "[getHistory] Found history successfully")
+                Log.d(TAG, "[getHistory] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<PurchaseDTO>
                 )
@@ -142,16 +152,14 @@ class ShopRemoteDatasource {
                         Log.e(TAG, "[getHistory] $detail")
                         ResultWrapper.Error(response.code(), detail)
                     } else -> {
-                    Log.e(TAG, "[getHistory] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
+                    Log.e(TAG, "[getHistory] Not mapped error")
+                    ResultWrapper.Error(response.code(), "Unexpected Error")
                 }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getHistory] Failed while getting history", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getHistory] Failed", e)
+            return ResultWrapper.ConnectionError
         }
     }
-
-
 }

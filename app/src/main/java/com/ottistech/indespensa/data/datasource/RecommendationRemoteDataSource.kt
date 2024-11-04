@@ -2,12 +2,8 @@ package com.ottistech.indespensa.data.datasource
 
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
-import com.ottistech.indespensa.webclient.dto.recommendation.ProductRecommendationDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.core.PantryService
 import com.ottistech.indespensa.webclient.service.recommendation.RecommendationService
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -18,12 +14,14 @@ class RecommendationRemoteDataSource {
     private val service : RecommendationService =
         RetrofitInitializer().getRecommendationService(RecommendationService::class.java)
 
-    suspend fun getProductRecommendations(userId: Long) : ResultWrapper<List<ProductDTO>> {
-        try {
-            Log.d(TAG, "[getProductRecommendations] Trying to get recommendations")
+    suspend fun getProductRecommendations(
+        userId: Long
+    ) : ResultWrapper<List<ProductDTO>> {
+        return try {
+            Log.d(TAG, "[getProductRecommendations] Fetching recommendations")
             val response = service.getProductRecommendations(userId)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getProductRecommendations] Found recommendations")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getProductRecommendations] Found successfully")
                 ResultWrapper.Success(
                     response.body()?.products ?: emptyList()
                 )
@@ -36,15 +34,14 @@ class RecommendationRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[getProductRecommendations] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[getProductRecommendations] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getProductRecommendations] Failed while fetching recommendations", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getProductRecommendations] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
-
 }

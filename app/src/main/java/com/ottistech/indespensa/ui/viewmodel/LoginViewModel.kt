@@ -28,7 +28,7 @@ class LoginViewModel(
         viewModelScope.launch {
             isLoading.value = true
             try {
-                userRepository.loginUser(formState.value!!.toUserLoginDTO())
+                userRepository.login(formState.value!!.toUserLoginDTO())
                 _feedback.value = Feedback(FeedbackId.LOGIN, FeedbackCode.SUCCESS, "Bem vindo de volta!")
             } catch (e: ResourceNotFoundException) {
                 _feedback.value = Feedback(FeedbackId.LOGIN, FeedbackCode.NOT_FOUND, "O usuário não existe!")

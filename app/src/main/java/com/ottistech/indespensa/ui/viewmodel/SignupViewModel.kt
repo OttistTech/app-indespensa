@@ -1,6 +1,5 @@
 package com.ottistech.indespensa.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,7 @@ class SignupViewModel (
             viewModelScope.launch {
                 isLoading.value = true
                 try {
-                    userRepository.signupUser(formState.value!!.toUserCreateDTO())
+                    userRepository.signup(formState.value!!.toUserCreateDTO())
                     _feedback.value =
                         Feedback(FeedbackId.SIGNUP, FeedbackCode.SUCCESS, "Bem vindo ao InDespensa!")
                 } catch (e: FieldConflictException) {

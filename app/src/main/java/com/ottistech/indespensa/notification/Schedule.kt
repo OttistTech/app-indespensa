@@ -10,11 +10,11 @@ fun schedulePantryItemValidityCheck(
     context: Context
 ) {
     val checkValidityWork = PeriodicWorkRequestBuilder<CheckPantryItemValidityWorker>(
-        1, TimeUnit.DAYS
+        15, TimeUnit.MINUTES
     ).build()
 
     WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-        "CheckPantryItemValidityWork",
+        NotificationConstants.WORKER_NAME,
         ExistingPeriodicWorkPolicy.KEEP,
         checkValidityWork
     )

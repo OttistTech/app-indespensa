@@ -68,7 +68,7 @@ class PantryFormViewModel(
     fun fetchCategories() {
         viewModelScope.launch {
             isLoading.value = true
-            _categories.value = categoryRepository.listCategories()
+            _categories.value = categoryRepository.list()
             isLoading.value = false
         }
     }
@@ -113,7 +113,7 @@ class PantryFormViewModel(
             viewModelScope.launch {
                 isLoading.value = true
                 try {
-                    pantryRepository.createItem(
+                    pantryRepository.create(
                         formState.value!!.toPantryItemCreateDTO(),
                         formState.value!!.newImageBitmap
                     )

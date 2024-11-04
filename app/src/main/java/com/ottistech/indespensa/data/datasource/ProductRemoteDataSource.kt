@@ -15,12 +15,15 @@ class ProductRemoteDataSource {
     private val service : ProductService =
         RetrofitInitializer().getCoreService(ProductService::class.java)
 
-    suspend fun findByBarcode(barcode: String, token: String) : ResultWrapper<ProductDTO> {
-        try {
-            Log.d(TAG, "[findByBarcode] Trying to find product by barcode")
+    suspend fun findByBarcode(
+        barcode: String,
+        token: String
+    ) : ResultWrapper<ProductDTO> {
+        return try {
+            Log.d(TAG, "[findByBarcode] Looking for product by barcode")
             val response = service.findByBarcode(barcode, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[findByBarcode] Product found successfully")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[findByBarcode] Found successfully")
                 ResultWrapper.Success(
                     response.body() as ProductDTO
                 )
@@ -33,23 +36,26 @@ class ProductRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[findByBarcode] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[findByBarcode] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[findByBarcode] Failed while looking for product by barcode", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[findByBarcode] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun search(query: String, token: String) : ResultWrapper<List<ProductSearchResponseDTO>> {
-        try {
-            Log.d(TAG, "[search] Trying to search products matching $query")
+    suspend fun search(
+        query: String,
+        token: String
+    ) : ResultWrapper<List<ProductSearchResponseDTO>> {
+        return try {
+            Log.d(TAG, "[search] Searching products matching $query")
             val response = service.search(query, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[search] ${response.body()?.size} products found successfully")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[search] Found ${response.body()?.size} successfully")
                 ResultWrapper.Success(
                     response.body() as List<ProductSearchResponseDTO>
                 )
@@ -62,23 +68,23 @@ class ProductRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[search] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[search] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[search] Failed while looking for products by query", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[search] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
     suspend fun findById(productId: Long, token: String) : ResultWrapper<ProductDTO> {
-        try {
-            Log.d(TAG, "[findById] Trying to find product by id")
+        return try {
+            Log.d(TAG, "[findById] Fetching product by id $productId")
             val response = service.findById(productId, token)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[findById] Product found successfully")
+            if(response.isSuccessful) {
+                Log.d(TAG, "[findById] Found successfully")
                 ResultWrapper.Success(
                     response.body() as ProductDTO
                 )
@@ -91,14 +97,14 @@ class ProductRemoteDataSource {
                         ResultWrapper.Error(response.code(), detail)
                     }
                     else -> {
-                        Log.e(TAG, "[findById] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
+                        Log.e(TAG, "[findById] Not mapped error")
+                        ResultWrapper.Error(response.code(), "Unexpected Error")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[findById] Failed while looking for product by id", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[findById] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 }
