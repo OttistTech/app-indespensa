@@ -12,19 +12,31 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/home_to_pantry"
-            app:destination="@id/pantry_dest"/>
+            app:destination="@id/pantry_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/home_to_recipe_details"
-            app:destination="@id/recipe_details_dest" />
+            app:destination="@id/recipe_details_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/home_to_recipe_form"
-            app:destination="@id/recipe_form_dest"/>
+            app:destination="@id/recipe_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/home_to_recipe_search"
             app:destination="@id/recipe_search_dest"/>
         <action
             android:id="@+id/home_to_product_details"
-            app:destination="@id/product_details_dest"/>
+            app:destination="@id/product_details_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -34,10 +46,16 @@
         tools:layout="@layout/fragment_shoplist">
         <action
             android:id="@+id/action_shoplist_to_product_details"
-            app:destination="@id/product_details_dest"/>
+            app:destination="@id/product_details_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/shoplist_to_shop_history"
-            app:destination="@id/shop_history_dest"/>
+            app:destination="@id/shop_history_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -47,13 +65,23 @@
         tools:layout="@layout/fragment_profile" >
         <action
             android:id="@+id/action_profile_to_updateProfile"
-            app:destination="@id/update_profile_dest" />
+            app:destination="@id/update_profile_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_profile_to_premium"
-            app:destination="@id/premium_dest" />
+            app:destination="@id/premium_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_profile_to_recipe_details"
-            app:destination="@id/recipe_details_dest" />
+            app:destination="@id/recipe_details_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_profile_to_home"
             app:destination="@id/nav_home"/>
@@ -112,10 +140,16 @@
         tools:layout="@layout/fragment_pantry" >
         <action
             android:id="@+id/pantry_to_pantry_form"
-            app:destination="@id/pantry_form_dest" />
+            app:destination="@id/pantry_form_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/pantry_to_product_details"
-            app:destination="@id/product_details_dest" />
+            app:destination="@id/product_details_dest"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -165,5 +199,4 @@
             android:id="@+id/recipe_search_to_recipe_details"
             app:destination="@id/recipe_details_dest"/>
     </fragment>
-
 </navigation>

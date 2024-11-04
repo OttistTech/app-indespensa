@@ -12,6 +12,7 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentPremiumBinding
 import com.ottistech.indespensa.ui.dialog.PaymentDialogCreator
+import com.ottistech.indespensa.ui.helpers.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.TextCarouselAdapter
 import com.ottistech.indespensa.ui.viewmodel.PremiumViewModel
 
@@ -47,11 +48,7 @@ class PremiumFragment : Fragment() {
             paymentDialogCreator.showPaymentDialog("R$${viewModel.currentPrice.value}") {
                 viewModel.handlePaymentClick(
                     onSuccess = {
-                        Toast.makeText(
-                            requireContext(),
-                            "Agora você é um Premium",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast("Agora você é premium")
                         navigateToHome()
                     },
                     onError = { message ->

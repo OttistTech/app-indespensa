@@ -179,7 +179,7 @@ class UserRepository (
                 currentUser = if (currentUser.isPremium) {
                     currentUser.copy(isPremium=false)
                 } else {
-                    currentUser.copy(isPremium=false)
+                    currentUser.copy(isPremium=true)
                 }
                 localDataSource.save(currentUser)
                 true
