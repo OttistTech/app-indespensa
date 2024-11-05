@@ -130,6 +130,8 @@ class UserRepository (
                         throw ResourceNotFoundException(result.error)
                     HttpURLConnection.HTTP_BAD_REQUEST ->
                         throw BadRequestException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else -> throw Exception(result.error)
                 }
             }
@@ -154,6 +156,8 @@ class UserRepository (
                 when (result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }
@@ -192,6 +196,8 @@ class UserRepository (
                         throw ResourceGoneException(result.error)
                     HttpURLConnection.HTTP_BAD_REQUEST ->
                         throw BadRequestException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         false
                 }

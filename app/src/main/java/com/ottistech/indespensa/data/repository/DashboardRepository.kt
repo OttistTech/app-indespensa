@@ -3,6 +3,7 @@ package com.ottistech.indespensa.data.repository
 import android.content.Context
 import com.ottistech.indespensa.data.datasource.DashboardRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
@@ -27,6 +28,8 @@ class DashboardRepository (
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }
@@ -49,6 +52,8 @@ class DashboardRepository (
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }

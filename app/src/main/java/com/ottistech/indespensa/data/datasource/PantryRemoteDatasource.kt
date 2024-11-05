@@ -10,8 +10,6 @@ import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.core.PantryService
-import org.json.JSONObject
-import java.net.HttpURLConnection
 import java.util.Date
 
 class PantryRemoteDatasource {
@@ -26,27 +24,17 @@ class PantryRemoteDatasource {
         token: String
     ) : ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[createItem] Trying to create with: $pantryItem")
+            Log.d(TAG, "[create] Trying to create with: $pantryItem")
             val response = service.createItem(userId, pantryItem, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[createItem] Created successfully")
+                Log.d(TAG, "[create] Created successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[createItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[createItem] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[create] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[createItem] Failed", e)
+            Log.e(TAG, "[create] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -56,28 +44,19 @@ class PantryRemoteDatasource {
         token: String
     ) : ResultWrapper<List<PantryItemPartialDTO>> {
         return try {
-            Log.d(TAG, "[listItems] Fetching pantry items")
+            Log.d(TAG, "[list] Fetching pantry items")
             val response = service.listItems(userId, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[listItems] Found pantry items successfully")
+                Log.d(TAG, "[list] Found pantry items successfully")
                 ResultWrapper.Success(
                     response.body() as List<PantryItemPartialDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[listItems] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                        Log.e(TAG, "[listItems] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[list] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listItems] Failed", e)
+            Log.e(TAG, "[list] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -87,18 +66,17 @@ class PantryRemoteDatasource {
         token: String
     ) : ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
+            Log.d(TAG, "[updateAmount] Trying to update amount of ${pantryItems.size} items")
             val response = service.updateItemsAmount(pantryItems, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[updateItemsAmount] Updated successfully")
+                Log.d(TAG, "[updateAmount] Updated successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                Log.e(TAG, "[updateItemsAmount] Not mapped error")
-                ResultWrapper.Error(response.code(), error.get("detail").toString())
+                Log.e(TAG, "[updateAmount] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[updateItemsAmount] Failed", e)
+            Log.e(TAG, "[updateAmount] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -108,28 +86,19 @@ class PantryRemoteDatasource {
         token: String
     ) : ResultWrapper<PantryItemDetailsDTO> {
         return try {
-            Log.d(TAG, "[getItemDetails] Fetching pantry item details for $pantryItemId")
+            Log.d(TAG, "[getDetails] Fetching pantry item details for $pantryItemId")
             val response = service.getItemDetails(pantryItemId, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[getItemDetails] Found successfully")
+                Log.d(TAG, "[getDetails] Found successfully")
                 ResultWrapper.Success(
                     response.body() as PantryItemDetailsDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getItemDetails] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                    Log.e(TAG, "[getItemDetails] Not mapped error")
-                    ResultWrapper.Error(response.code(), "Unexpected Error")
-                }
-                }
+                Log.e(TAG, "[getDetails] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getItemDetails] Failed", e)
+            Log.e(TAG, "[getDetails] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -142,32 +111,17 @@ class PantryRemoteDatasource {
     ) : ResultWrapper<Boolean> {
         return try {
             val pantryItemAdd = PantryItemAddDTO(shopItemId, validityDate)
-            Log.d(TAG, "[addItem] Trying to add item with: $pantryItemAdd")
+            Log.d(TAG, "[addShopItem] Trying to add item with: $pantryItemAdd")
             val response = service.addPantryItem(userId, pantryItemAdd, token)
             if(response.isSuccessful) {
-                Log.d(TAG, "[addItem] Added successfully")
+                Log.d(TAG, "[addShopItem] Added successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[addItem] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[addShopItem] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[addAllShopItemsToPantry] Failed", e)
+            Log.e(TAG, "[addShopItem] Failed", e)
             return ResultWrapper.ConnectionError
         }
     }
@@ -177,32 +131,17 @@ class PantryRemoteDatasource {
         token: String
     ): ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items")
+            Log.d(TAG, "[addAllShopItems] Trying to add all shop items")
             val response = service.addAllShopItemsToPantry(userId, token)
             if (response.isSuccessful) {
-                Log.d(TAG, "[addAllShopItemsToPantry] Added all successfully")
+                Log.d(TAG, "[addAllShopItems] Added all successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when (response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[addAllShopItemsToPantry] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[addAllShopItems] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Failed", e)
+            Log.e(TAG, "[addAllShopItems] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -220,17 +159,8 @@ class PantryRemoteDatasource {
                     response.body() as List<PantryItemCloseValidityDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[listCloseValidityItems] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                        Log.e(TAG, "[listCloseValidityItems] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[listCloseValidityItems] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[listCloseValidityItems] Failed", e)

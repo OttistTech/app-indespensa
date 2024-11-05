@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.ottistech.indespensa.data.datasource.ShopRemoteDatasource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
@@ -29,9 +30,10 @@ class ShopRepository(
             }
             is ResultWrapper.Error -> {
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else -> false
                 }
             }
@@ -49,9 +51,10 @@ class ShopRepository(
             }
             is ResultWrapper.Error -> {
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else -> throw Exception(result.error)
                 }
             }
@@ -71,9 +74,10 @@ class ShopRepository(
             }
             is ResultWrapper.Error -> {
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else -> throw Exception(result.error)
                 }
             }
@@ -108,9 +112,10 @@ class ShopRepository(
             }
             is ResultWrapper.Error -> {
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else -> throw Exception(result.error)
                 }
             }
