@@ -4,7 +4,7 @@ import android.content.Context
 import com.ottistech.indespensa.data.datasource.DashboardRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper

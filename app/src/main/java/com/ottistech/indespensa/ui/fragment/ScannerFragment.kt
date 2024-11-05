@@ -27,7 +27,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.databinding.FragmentScannerBinding
 import com.ottistech.indespensa.ui.helpers.PermissionManager
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import kotlinx.coroutines.launch

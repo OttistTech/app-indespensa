@@ -16,10 +16,10 @@ import com.ottistech.indespensa.databinding.FragmentRecipeDetailsBinding
 import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.RatingDialogCreator
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.getCurrentUser
+import com.ottistech.indespensa.shared.loadImage
 import com.ottistech.indespensa.ui.helpers.makeSpanText
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter

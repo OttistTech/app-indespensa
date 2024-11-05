@@ -12,7 +12,7 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentPremiumBinding
 import com.ottistech.indespensa.ui.dialog.PaymentDialogCreator
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.TextCarouselAdapter
 import com.ottistech.indespensa.ui.viewmodel.PremiumViewModel
 

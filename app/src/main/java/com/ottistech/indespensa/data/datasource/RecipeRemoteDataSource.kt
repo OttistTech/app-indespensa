@@ -45,7 +45,7 @@ class RecipeRemoteDataSource {
     ) : ResultWrapper<RecipeFullDTO> {
         return try {
             Log.d(TAG, "[getDetails] Fetching recipe by id: $recipeId")
-            val response = service.getRecipeDetails(recipeId, userId, token)
+            val response = service.getDetails(recipeId, userId, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[getDetails] Fetched successfully")
                 ResultWrapper.Success(
@@ -68,7 +68,7 @@ class RecipeRemoteDataSource {
     ): ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[rate] Rating recipe with id: $recipeId")
-            val response = service.rateRecipe(recipeId, rateRecipeRequestDTO, token)
+            val response = service.rate(recipeId, rateRecipeRequestDTO, token)
             if (response.isSuccessful) {
                 Log.d(TAG, "[rate] Rated successfully")
                 ResultWrapper.Success(true)

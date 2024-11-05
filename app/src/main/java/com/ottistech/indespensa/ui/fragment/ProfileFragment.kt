@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,10 +12,9 @@ import com.ottistech.indespensa.data.repository.DashboardRepository
 import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentProfileBinding
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.getCurrentUser
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
-import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.RecipeAdapter
 import com.ottistech.indespensa.ui.recyclerview.adapter.TextCarouselAdapter

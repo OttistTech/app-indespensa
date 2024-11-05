@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -19,10 +21,13 @@ import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.ui.dialog.DatePickerCreator
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.viewmodel.SignupViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SignupFragment : Fragment() {
 
@@ -124,8 +129,11 @@ class SignupFragment : Fragment() {
 
     private fun handleFeedback(feedback: Feedback) {
         showToast(feedback.message)
-        if(feedback.code == FeedbackCode.SUCCESS) {
-            navigateToHome()
+        if (feedback.code == FeedbackCode.SUCCESS) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                delay(2000)
+                navigateToHome()
+            }
         }
     }
 
@@ -139,14 +147,20 @@ class SignupFragment : Fragment() {
         binding.signupEmailField.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) { viewModel.validEmail() }
         }
-        binding.signupBirthdateField.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) { viewModel.validBirthdate() }
+        binding.signupBirthdateField.addTextChangedListener {
+            viewModel.validBirthdate()
         }
         binding.signupPasswordField.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) { viewModel.validPassword() }
+            if (!hasFocus) {
+                viewModel.validPassword()
+                viewModel.validPasswordConfirmation()
+            }
         }
-        binding.signupPasswordConfirmationLayout.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) { viewModel.validPasswordConfirmation() }
+        binding.signupPasswordConfirmationField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                viewModel.validPasswordConfirmation()
+                viewModel.validPassword()
+            }
         }
         binding.signupCepField.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) { viewModel.validCep() }

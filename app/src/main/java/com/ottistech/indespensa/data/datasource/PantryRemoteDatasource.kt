@@ -25,7 +25,7 @@ class PantryRemoteDatasource {
     ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[create] Trying to create with: $pantryItem")
-            val response = service.createItem(userId, pantryItem, token)
+            val response = service.create(userId, pantryItem, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[create] Created successfully")
                 ResultWrapper.Success(true)
@@ -45,7 +45,7 @@ class PantryRemoteDatasource {
     ) : ResultWrapper<List<PantryItemPartialDTO>> {
         return try {
             Log.d(TAG, "[list] Fetching pantry items")
-            val response = service.listItems(userId, token)
+            val response = service.list(userId, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[list] Found pantry items successfully")
                 ResultWrapper.Success(
@@ -67,7 +67,7 @@ class PantryRemoteDatasource {
     ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[updateAmount] Trying to update amount of ${pantryItems.size} items")
-            val response = service.updateItemsAmount(pantryItems, token)
+            val response = service.updateAmount(pantryItems, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[updateAmount] Updated successfully")
                 ResultWrapper.Success(true)
@@ -87,7 +87,7 @@ class PantryRemoteDatasource {
     ) : ResultWrapper<PantryItemDetailsDTO> {
         return try {
             Log.d(TAG, "[getDetails] Fetching pantry item details for $pantryItemId")
-            val response = service.getItemDetails(pantryItemId, token)
+            val response = service.getDetails(pantryItemId, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[getDetails] Found successfully")
                 ResultWrapper.Success(
@@ -112,7 +112,7 @@ class PantryRemoteDatasource {
         return try {
             val pantryItemAdd = PantryItemAddDTO(shopItemId, validityDate)
             Log.d(TAG, "[addShopItem] Trying to add item with: $pantryItemAdd")
-            val response = service.addPantryItem(userId, pantryItemAdd, token)
+            val response = service.add(userId, pantryItemAdd, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[addShopItem] Added successfully")
                 ResultWrapper.Success(true)
@@ -132,7 +132,7 @@ class PantryRemoteDatasource {
     ): ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[addAllShopItems] Trying to add all shop items")
-            val response = service.addAllShopItemsToPantry(userId, token)
+            val response = service.addAllShopItems(userId, token)
             if (response.isSuccessful) {
                 Log.d(TAG, "[addAllShopItems] Added all successfully")
                 ResultWrapper.Success(true)

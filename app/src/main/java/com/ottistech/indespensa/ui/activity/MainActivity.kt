@@ -7,9 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.ActivityMainBinding
@@ -18,7 +16,7 @@ import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.fragment.HomeFragmentDirections
 import com.ottistech.indespensa.ui.helpers.clearInputFocus
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
 
 class MainActivity : AppCompatActivity() {
 

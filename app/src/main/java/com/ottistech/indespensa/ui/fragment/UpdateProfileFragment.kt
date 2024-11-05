@@ -17,7 +17,7 @@ import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.activity.AuthActivity
 import com.ottistech.indespensa.ui.dialog.ConfirmationDialogCreator
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId

@@ -13,7 +13,7 @@ import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentLoginBinding
 import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.viewmodel.LoginViewModel
 

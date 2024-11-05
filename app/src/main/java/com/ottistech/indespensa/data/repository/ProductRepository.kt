@@ -4,7 +4,7 @@ import android.content.Context
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper

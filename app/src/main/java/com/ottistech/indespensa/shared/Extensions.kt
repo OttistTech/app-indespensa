@@ -1,4 +1,4 @@
-package com.ottistech.indespensa.ui.helpers
+package com.ottistech.indespensa.shared
 
 import android.annotation.SuppressLint
 import android.content.Context

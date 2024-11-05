@@ -43,6 +43,9 @@ class ShopItemDetailsViewModel(
             } catch(e: ResourceNotFoundException) {
                 _feedback.value =
                     Feedback(FeedbackId.GET_ITEM_DETAILS, FeedbackCode.NOT_FOUND, "Informações não encontradas")
+            } catch (e: Exception) {
+                _feedback.value =
+                    Feedback(FeedbackId.GET_ITEM_DETAILS, FeedbackCode.UNHANDLED, "Não foi possível carregar!")
             }
         }
     }

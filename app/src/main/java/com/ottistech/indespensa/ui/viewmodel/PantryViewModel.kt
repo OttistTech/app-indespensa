@@ -33,14 +33,18 @@ class PantryViewModel(
             } catch(e: ResourceNotFoundException) {
                 _feedback.value =
                     Feedback(FeedbackId.PANTRY_LIST, FeedbackCode.NOT_FOUND, "Sua despensa está vazia no momento.")
-
+            } catch(e: Exception) {
+                _feedback.value =
+                    Feedback(FeedbackId.PANTRY_LIST, FeedbackCode.UNHANDLED, "Não foi possível carregar a despensa!")
             }
         }
     }
 
     fun syncChanges() {
-        viewModelScope.launch {
-            repository.updateAmount(*pantryChanges.toTypedArray())
+        if(pantryChanges.isNotEmpty()) {
+            viewModelScope.launch {
+                repository.updateAmount(*pantryChanges.toTypedArray())
+            }
         }
     }
 

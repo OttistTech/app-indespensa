@@ -17,7 +17,7 @@ class CategoryRemoteDataSource {
     ) : ResultWrapper<List<String>> {
         return try {
             Log.d(TAG, "[list] Fetching categories")
-            val response = service.listCategories(pattern, token)
+            val response = service.list(pattern, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[list] Found successfully")
                 ResultWrapper.Success(

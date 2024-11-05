@@ -18,39 +18,39 @@ import retrofit2.http.Path
 interface PantryService {
 
     @POST("pantry/{user_id}/create")
-    suspend fun createItem(
+    suspend fun create(
         @Path("user_id") userId: Long,
         @Body pantryItem: PantryItemCreateDTO,
         @Header("Authorization") token: String
     ) : Response<PantryItemFullDTO>
 
     @GET("pantry/{user_id}/list")
-    suspend fun listItems(
+    suspend fun list(
         @Path("user_id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<List<PantryItemPartialDTO>>
 
     @PATCH("pantry/update-items-amount")
-    suspend fun updateItemsAmount(
+    suspend fun updateAmount(
         @Body pantryItems: List<ProductItemUpdateAmountDTO>,
         @Header("Authorization") token: String
     ) : Response<Void>
 
     @GET("pantry/{pantry_item_id}/details")
-    suspend fun getItemDetails(
+    suspend fun getDetails(
         @Path("pantry_item_id") pantryItemId: Long,
         @Header("Authorization") token: String
     ) : Response<PantryItemDetailsDTO>
 
     @POST("pantry/{user_id}/add")
-    suspend fun addPantryItem(
+    suspend fun add(
         @Path("user_id") userId: Long,
         @Body pantryItemAdd: PantryItemAddDTO,
         @Header("Authorization") token: String
     ) : Response<PantryItemFullDTO>
 
     @POST("pantry/{user_id}/add-all")
-    suspend fun addAllShopItemsToPantry(
+    suspend fun addAllShopItems(
         @Path("user_id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<Any>

@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface CategoryService {
 
     @GET("categories/list")
-    suspend fun listCategories(
+    suspend fun list(
         @Query("match") pattern: String,
         @Header("Authorization") token: String
     ) : Response<List<String>>

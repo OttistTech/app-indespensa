@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.CardShopItemBinding
-import com.ottistech.indespensa.ui.helpers.loadImage
-import com.ottistech.indespensa.ui.helpers.renderAmount
+import com.ottistech.indespensa.shared.loadImage
+import com.ottistech.indespensa.shared.renderAmount
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 
 class ShopAdapter(

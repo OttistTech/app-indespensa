@@ -18,8 +18,8 @@ import com.ottistech.indespensa.databinding.FragmentHomeBinding
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.activity.AuthActivity
 import com.ottistech.indespensa.ui.helpers.PermissionManager
-import com.ottistech.indespensa.ui.helpers.formatAsString
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.formatAsString
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId

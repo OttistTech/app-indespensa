@@ -24,32 +24,32 @@ interface UserService {
     ) : Response<UserCredentialsDTO>
 
     @POST("users/login")
-    suspend fun getUser(
+    suspend fun login (
         @Body user: UserLoginDTO
     ) : Response<UserCredentialsDTO>
 
     @GET("users/{id}")
-    suspend fun getUserFullInfo(
+    suspend fun getUserData (
         @Path("id") userId: Long,
         @Query("full-info") fullInfo: Boolean = true,
         @Header("Authorization") token: String
     ) : Response<UserFullDTO>
 
     @PUT("users/update/{id}")
-    suspend fun updateUser(
+    suspend fun update (
         @Path("id") userId: Long,
         @Body updateUserDTO: UserUpdateDTO,
         @Header("Authorization") token: String
     ): Response<UserCredentialsDTO>
 
     @DELETE("users/deactivation/{id}")
-    suspend fun deactivateUser(
+    suspend fun deactivate (
         @Path("id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<Any>
 
     @PATCH("users/{id}")
-    suspend fun switchPremium(
+    suspend fun switchPremium (
         @Path("id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<Any>
