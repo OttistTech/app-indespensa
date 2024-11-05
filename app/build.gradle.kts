@@ -22,7 +22,6 @@ android {
     }
     buildFeatures {
         dataBinding = true
-        viewBinding = true
     }
     buildTypes {
         release {
@@ -89,14 +88,13 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.2.2")
     // ENCRYPTED PREFERENCES
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
-
-    // Lottie para renderizar animações no formato JSON do Adobe After Effects
+    // GIFS AND ANIMATIONS
     implementation("com.airbnb.android:lottie:6.3.0")
-
+    // WORKER
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
+    // TESTS
     testImplementation("junit:junit:4.13.2")
-
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }

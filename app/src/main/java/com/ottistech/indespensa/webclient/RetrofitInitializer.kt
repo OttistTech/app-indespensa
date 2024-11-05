@@ -16,9 +16,9 @@ class RetrofitInitializer {
         .create()
 
     private val client = OkHttpClient.Builder()
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
-        .writeTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(ApiConstants.TIMEOUT, TimeUnit.SECONDS)
+        .readTimeout(ApiConstants.TIMEOUT, TimeUnit.SECONDS)
+        .writeTimeout(ApiConstants.TIMEOUT, TimeUnit.SECONDS)
         .build()
 
     private fun getRetrofit(url: String) : Retrofit {

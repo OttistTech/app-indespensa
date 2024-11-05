@@ -40,6 +40,7 @@
     <dimen name="checkbox_size">32dp</dimen>
 
     <dimen name="image_size_big">272dp</dimen>
+    <dimen name="tablet_image_size_big">400dp</dimen>
 
     <dimen name="navbar_height">64dp</dimen>
     <dimen name="navbar_icon_size">32dp</dimen>
