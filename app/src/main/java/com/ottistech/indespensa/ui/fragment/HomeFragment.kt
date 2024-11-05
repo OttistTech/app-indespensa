@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.ottistech.indespensa.data.repository.RecipeRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentHomeBinding
 import com.ottistech.indespensa.shared.ProductItemType
+import com.ottistech.indespensa.ui.activity.AuthActivity
 import com.ottistech.indespensa.ui.helpers.PermissionManager
 import com.ottistech.indespensa.ui.helpers.formatAsString
 import com.ottistech.indespensa.ui.helpers.showToast
@@ -119,6 +121,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleFeedback(feedback: Feedback) {
+        if(feedback.code == FeedbackCode.UNAUTHORIZED) {
+            showToast(feedback.message)
+            navigateToAuth()
+        }
         when(feedback.feedbackId) {
             FeedbackId.PERSONAL_DASHBOARD -> {
                 handleDashboardFeedback(feedback)
@@ -260,5 +266,13 @@ class HomeFragment : Fragment() {
         val itemType = ProductItemType.PANTRY_ITEM
         val action = HomeFragmentDirections.homeToProductDetails(productId, itemType)
         findNavController().navigate(action)
+    }
+
+    private fun navigateToAuth() {
+        val currentActivity = requireActivity()
+        val intent = Intent(currentActivity, AuthActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        currentActivity.startActivity(intent)
+        currentActivity.finish()
     }
 }

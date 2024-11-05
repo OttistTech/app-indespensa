@@ -6,6 +6,7 @@ import com.ottistech.indespensa.data.DataConstants
 import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.PantryRemoteDatasource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
@@ -37,6 +38,16 @@ class PantryRepository(
             is ResultWrapper.Success -> {
                 result.value
             }
+            is ResultWrapper.Error -> {
+                when(result.code) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        false
+                }
+            }
             else -> false
         }
     }
@@ -50,7 +61,14 @@ class PantryRepository(
                 result.value
             }
             is ResultWrapper.Error -> {
-                throw ResourceNotFoundException("Could not find any pantry item")
+                when(result.code) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
+                }
             }
             else -> {
                 throw Exception("Error while listing pantry items")
@@ -82,7 +100,14 @@ class PantryRepository(
                 return result.value
             }
             is ResultWrapper.Error -> {
-                throw ResourceNotFoundException("Could not find pantry item")
+                when(result.code) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
+                }
             }
             else -> {
                 throw Exception("Error while getting pantry item details")
@@ -102,7 +127,14 @@ class PantryRepository(
                 return result.value
             }
             is ResultWrapper.Error -> {
-                throw Exception("Could not add item to pantry")
+                when(result.code) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
+                }
             }
             else -> {
                 throw Exception("Error while adding item")
@@ -119,7 +151,14 @@ class PantryRepository(
                 result.value
             }
             is ResultWrapper.Error -> {
-                throw Exception("Could not add all items to pantry")
+                when(result.code) {
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    HttpURLConnection.HTTP_NOT_FOUND ->
+                        throw ResourceNotFoundException(result.error)
+                    else ->
+                        throw Exception(result.error)
+                }
             }
             else -> {
                 throw Exception("Error while adding all items to pantry")
@@ -139,6 +178,8 @@ class PantryRepository(
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }

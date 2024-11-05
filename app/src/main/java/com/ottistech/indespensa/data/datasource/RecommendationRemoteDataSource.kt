@@ -5,8 +5,6 @@ import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.recommendation.RecommendationService
-import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class RecommendationRemoteDataSource {
 
@@ -26,18 +24,8 @@ class RecommendationRemoteDataSource {
                     response.body()?.products ?: emptyList()
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getProductRecommendations] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[getProductRecommendations] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[getProductRecommendations] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[getProductRecommendations] Failed", e)

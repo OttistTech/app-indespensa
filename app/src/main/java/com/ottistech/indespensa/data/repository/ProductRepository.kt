@@ -3,6 +3,7 @@ package com.ottistech.indespensa.data.repository
 import android.content.Context
 import com.ottistech.indespensa.data.datasource.ProductRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.ui.helpers.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
@@ -27,6 +28,8 @@ class ProductRepository(
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }
@@ -47,6 +50,8 @@ class ProductRepository(
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }
@@ -67,6 +72,8 @@ class ProductRepository(
                 when(result.code) {
                     HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
                     else ->
                         throw Exception(result.error)
                 }

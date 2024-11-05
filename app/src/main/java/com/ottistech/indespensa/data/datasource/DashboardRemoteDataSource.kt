@@ -6,8 +6,6 @@ import com.ottistech.indespensa.webclient.dto.dashboard.PersonalDashboardDTO
 import com.ottistech.indespensa.webclient.dto.dashboard.ProfileDashboardDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.core.DashboardService
-import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class DashboardRemoteDataSource {
 
@@ -28,17 +26,8 @@ class DashboardRemoteDataSource {
                     response.body() as PersonalDashboardDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getPersonalData] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                        Log.e(TAG, "[getPersonalData] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[getPersonalData] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[getPersonalData] Failed", e)
@@ -59,17 +48,8 @@ class DashboardRemoteDataSource {
                     response.body() as ProfileDashboardDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getProfileData] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                        Log.e(TAG, "[getProfileData] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[getProfileData] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[getProfileData] Failed", e)

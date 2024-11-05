@@ -144,6 +144,7 @@ class ProfileFragment : Fragment() {
             }
             FeedbackId.SWITCH_PREMIUM -> {
                 showToast(feedback.message)
+                navigateToHome()
             }
         }
     }
@@ -170,6 +171,11 @@ class ProfileFragment : Fragment() {
 
     private fun navigateToSettings() {
         val action = ProfileFragmentDirections.actionProfileToUpdateProfile()
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToHome() {
+        val action = ProfileFragmentDirections.actionProfileToHome()
         findNavController().navigate(action)
     }
 

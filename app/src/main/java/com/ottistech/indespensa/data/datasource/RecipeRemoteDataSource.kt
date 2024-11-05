@@ -5,15 +5,12 @@ import com.ottistech.indespensa.shared.IngredientState
 import com.ottistech.indespensa.shared.RecipeLevel
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.Pageable
-
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
-import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeFullDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
+import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import com.ottistech.indespensa.webclient.service.core.RecipeService
-import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class RecipeRemoteDataSource {
 
@@ -32,18 +29,8 @@ class RecipeRemoteDataSource {
                 Log.d(TAG, "[create] Created successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[create] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[create] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[create] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[create] Failed", e)
@@ -57,28 +44,19 @@ class RecipeRemoteDataSource {
         token: String
     ) : ResultWrapper<RecipeFullDTO> {
         return try {
-            Log.d(TAG, "[getRecipeDetails] Fetching recipe by id: $recipeId")
+            Log.d(TAG, "[getDetails] Fetching recipe by id: $recipeId")
             val response = service.getRecipeDetails(recipeId, userId, token)
             if(response.isSuccessful) {
+                Log.d(TAG, "[getDetails] Fetched successfully")
                 ResultWrapper.Success(
                     response.body() as RecipeFullDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.d(TAG, "[getRecipeDetails] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[getRecipeDetails] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[getDetails] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getRecipeDetails] Failed", e)
+            Log.e(TAG, "[getDetails] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -89,31 +67,17 @@ class RecipeRemoteDataSource {
         token: String
     ): ResultWrapper<Boolean> {
         return try {
-            Log.d(TAG, "[rateRecipe] Rating recipe with id: $recipeId")
+            Log.d(TAG, "[rate] Rating recipe with id: $recipeId")
             val response = service.rateRecipe(recipeId, rateRecipeRequestDTO, token)
             if (response.isSuccessful) {
+                Log.d(TAG, "[rate] Rated successfully")
                 ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when (response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.d(TAG, "[rateRecipe] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.d(TAG, "[rateRecipe] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[rateRecipe] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[rate] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[rateRecipe] Failed", e)
+            Log.e(TAG, "[rate] Failed", e)
             ResultWrapper.ConnectionError
         }
     }
@@ -149,19 +113,8 @@ class RecipeRemoteDataSource {
                     response.body()
                 )
             } else {
-                Log.d(TAG, response.code().toString())
-                val error = JSONObject(response.errorBody()!!.string())
-                return when (response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.d(TAG, "[list] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.d(TAG, "[list] Not mapped error")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[list] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
             Log.e(TAG, "[list] Failed", e)

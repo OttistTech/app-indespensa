@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.data.repository.DashboardRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.RecipeRepository
@@ -62,6 +63,10 @@ class HomeViewModel(
                 val data = dashboardRepository.getPersonalData()
                 _isDashboardLoading.value = false
                 _dashboardData.value = data
+            } catch(e: ResourceUnauthorizedException) {
+                userRepository.logoutUser()
+                _feedback.value =
+                    Feedback(FeedbackId.PERSONAL_DASHBOARD, FeedbackCode.UNAUTHORIZED, "Realize login novamente!")
             } catch (e: Exception) {
                 _isDashboardLoading.value = false
                 _feedback.value =
@@ -82,6 +87,10 @@ class HomeViewModel(
                 _closeValidityItems.value = null
                 _feedback.value =
                     Feedback(FeedbackId.CLOSE_VALIDITY_ITEMS, FeedbackCode.NOT_FOUND, "Nenhum item próximo da validade encontrado!")
+            } catch(e: ResourceUnauthorizedException) {
+                userRepository.logoutUser()
+                _feedback.value =
+                    Feedback(FeedbackId.CLOSE_VALIDITY_ITEMS, FeedbackCode.UNAUTHORIZED, "Realize login novamente!")
             } catch (e: Exception) {
                 _isCloseValidityItemsLoading.value = false
                 _feedback.value =
@@ -94,17 +103,25 @@ class HomeViewModel(
         viewModelScope.launch {
             try {
                 _isRecipesLoading.value = true
-                val data = recipeRepository.list(pageNumber=recipesPage)
+                val data = recipeRepository.list(pageNumber = recipesPage)
                 _isRecipesLoading.value = false
                 _recipes.value = data.content
                 isLastRecipePageLoaded = data.last
-            } catch(e: ResourceNotFoundException) {
+            } catch (e: ResourceNotFoundException) {
                 _isRecipesLoading.value = false
-                if(recipesPage == 0) {
+                if (recipesPage == 0) {
                     _recipes.value = null
                     _feedback.value =
-                        Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.NOT_FOUND, "Nenhuma receita recomendada encontrada!")
+                        Feedback(
+                            FeedbackId.RECIPES_LIST,
+                            FeedbackCode.NOT_FOUND,
+                            "Nenhuma receita recomendada encontrada!"
+                        )
                 }
+            } catch(e: ResourceUnauthorizedException) {
+                userRepository.logoutUser()
+                _feedback.value =
+                    Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.UNAUTHORIZED, "Realize login novamente!")
             } catch (e: Exception) {
                 _isRecipesLoading.value = false
                 _feedback.value =
