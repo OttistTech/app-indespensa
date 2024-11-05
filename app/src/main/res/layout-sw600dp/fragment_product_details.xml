@@ -29,7 +29,7 @@
             <ImageView
                 android:id="@+id/product_details_image"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/image_size_big"
+                android:layout_height="@dimen/tablet_image_size_big"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/image_alternative"
                 app:layout_constraintTop_toTopOf="parent"

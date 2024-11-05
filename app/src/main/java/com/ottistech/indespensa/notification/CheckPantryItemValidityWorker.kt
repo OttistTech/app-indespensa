@@ -3,7 +3,9 @@ package com.ottistech.indespensa.notification
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -13,6 +15,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
+import com.ottistech.indespensa.shared.ProductItemType
+import com.ottistech.indespensa.ui.activity.MainActivity
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,11 +77,27 @@ class CheckPantryItemValidityWorker(
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.POST_NOTIFICATIONS)
                 == PackageManager.PERMISSION_GRANTED
             ) {
+                val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    putExtra("navigateTo", R.id.product_details_dest)
+                    putExtra("pantryItemId", ingredient.pantryItemId)
+                    putExtra("itemType", ProductItemType.PANTRY_ITEM)
+                }
+
+                val pendingIntent = PendingIntent.getActivity(
+                    applicationContext,
+                    ingredient.pantryItemId.hashCode(),
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
                 val notification = NotificationCompat.Builder(applicationContext, NotificationConstants.NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.logo)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationText)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
                     .build()
 
                 NotificationManagerCompat.from(applicationContext).notify(ingredient.pantryItemId.hashCode(), notification)

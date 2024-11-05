@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/transparent">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/padding_4"
-        android:paddingTop="@dimen/padding_2"
-        android:paddingEnd="@dimen/padding_2"
-        android:paddingBottom="@dimen/padding_2"
-        android:layout_marginBottom="@dimen/margin_1">
-        <TextView
-            android:id="@+id/card_recipe_details_item_amount"
-            android:layout_width="wrap_content"
+        android:background="@color/transparent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxWidth="160dp"
-            android:maxLines="1"
-            android:theme="@style/IndespensaHeading5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="500g" />
-        <TextView
-            android:id="@+id/card_recipe_details_item_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_8"
-            android:ellipsize="end"
-            android:maxWidth="240dp"
-            android:maxLines="1"
-            android:textColor="@color/black"
-            android:textSize="12sp"
-            android:theme="@style/IndespensaText"
-            app:layout_constraintBottom_toBottomOf="@+id/card_recipe_details_item_amount"
-            app:layout_constraintStart_toEndOf="@+id/card_recipe_details_item_amount"
-            app:layout_constraintTop_toTopOf="@+id/card_recipe_details_item_amount"
-            tools:text="Arroz" />
-        <ImageView
-            android:id="@+id/card_recipe_details_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_check"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/border_bold"
-        android:layout_gravity="bottom"
-        android:background="@color/lightGray" />
-</androidx.cardview.widget.CardView>
+            android:paddingStart="@dimen/padding_4"
+            android:paddingTop="@dimen/padding_2"
+            android:paddingEnd="@dimen/padding_2"
+            android:paddingBottom="@dimen/padding_2"
+            android:layout_marginBottom="@dimen/margin_1">
+            <TextView
+                android:id="@+id/card_recipe_details_item_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxWidth="160dp"
+                android:maxLines="1"
+                android:theme="@style/IndespensaHeading5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="500g" />
+            <TextView
+                android:id="@+id/card_recipe_details_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_8"
+                android:ellipsize="end"
+                android:maxWidth="240dp"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:theme="@style/IndespensaText"
+                app:layout_constraintBottom_toBottomOf="@+id/card_recipe_details_item_amount"
+                app:layout_constraintStart_toEndOf="@+id/card_recipe_details_item_amount"
+                app:layout_constraintTop_toTopOf="@+id/card_recipe_details_item_amount"
+                tools:text="Arroz" />
+            <ImageView
+                android:id="@+id/card_recipe_details_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_check"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/border_bold"
+            android:layout_gravity="bottom"
+            android:background="@color/lightGray" />
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -93,9 +93,9 @@
                 <ImageView
                     android:id="@+id/premium_image_carousel"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:layout_marginTop="@dimen/margin_1"
-                    android:src="@drawable/premium_cellphone"
+                    android:layout_height="360dp"
+                    android:layout_marginTop="@dimen/margin_4"
+                    android:src="@drawable/premium_cellphone_big"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/premium_price_current" />
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="80dp"
-                    android:layout_marginTop="@dimen/margin_1"
+                    android:layout_marginTop="@dimen/margin_4"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
