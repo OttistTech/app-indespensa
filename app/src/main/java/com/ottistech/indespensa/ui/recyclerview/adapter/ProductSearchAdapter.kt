@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.databinding.CardProductSearchBinding
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.loadImage
 import com.ottistech.indespensa.webclient.dto.product.ProductSearchResponseDTO
 
 class ProductSearchAdapter (

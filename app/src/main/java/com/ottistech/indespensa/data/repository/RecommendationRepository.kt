@@ -1,10 +1,9 @@
 package com.ottistech.indespensa.data.repository
 
 import android.content.Context
-import android.util.Log
 import com.ottistech.indespensa.data.datasource.RecommendationRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection

@@ -8,7 +8,7 @@ import coil.load
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.CardRecipeItemBinding
 import com.ottistech.indespensa.shared.RecipeLevel
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.loadImage
 import com.ottistech.indespensa.webclient.dto.recipe.RecipePartialDTO
 
 class RecipeAdapter(

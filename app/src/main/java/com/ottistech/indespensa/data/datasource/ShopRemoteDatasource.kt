@@ -23,7 +23,7 @@ class ShopRemoteDatasource {
     ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[add] Adding shop item with: $shopItem")
-            val response = service.addItem(userId, shopItem, token)
+            val response = service.add(userId, shopItem, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[add] Added successfully")
                 ResultWrapper.Success(true)
@@ -43,7 +43,7 @@ class ShopRemoteDatasource {
     ) : ResultWrapper<List<ShopItemPartialDTO>> {
         return try {
             Log.d(TAG, "[list] Fetching shop items")
-            val response = service.listItems(userId, token)
+            val response = service.list(userId, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[list] Found successfully")
                 ResultWrapper.Success(
@@ -65,7 +65,7 @@ class ShopRemoteDatasource {
     ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[updateAmount] Trying to update amount of ${pantryItems.size} items")
-            val response = service.updateItemsAmount(pantryItems, token)
+            val response = service.updateAmount(pantryItems, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[updateAmount] Updated successfully")
                 ResultWrapper.Success(true)
@@ -85,7 +85,7 @@ class ShopRemoteDatasource {
     ): ResultWrapper<ShopItemDetailsDTO> {
         return try {
             Log.d(TAG, "[getDetails] Fetching item details by id $itemId")
-            val response = service.getItemDetails(itemId, token)
+            val response = service.getDetails(itemId, token)
             if(response.isSuccessful) {
                 Log.d(TAG, "[getDetails] Found successfully")
                 ResultWrapper.Success(

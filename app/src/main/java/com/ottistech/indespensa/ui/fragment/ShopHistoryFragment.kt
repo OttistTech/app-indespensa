@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShopHistoryBinding
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.recyclerview.adapter.PurchaseHistoryAdapter
@@ -92,8 +93,10 @@ class ShopHistoryFragment : Fragment() {
     private fun handleFeedback(feedback: Feedback) {
         if(feedback.code == FeedbackCode.NOT_FOUND) {
             binding.shopHistoryList.visibility = View.GONE
-            binding.shopHistoryMessage.text = getString(R.string.shop_history_message_empty)
+            binding.shopHistoryMessage.text = feedback.message
             binding.shopHistoryMessage.visibility = View.VISIBLE
+        } else {
+            showToast(feedback.message)
         }
     }
 

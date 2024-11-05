@@ -2,7 +2,6 @@ package com.ottistech.indespensa.data.repository
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import com.ottistech.indespensa.data.DataConstants
 import com.ottistech.indespensa.data.datasource.ImageFirebaseDatasource
 import com.ottistech.indespensa.data.datasource.RecipeRemoteDataSource
@@ -12,7 +11,7 @@ import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.IngredientState
 import com.ottistech.indespensa.shared.RecipeLevel
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
 import com.ottistech.indespensa.webclient.dto.Pageable
 import com.ottistech.indespensa.webclient.dto.recipe.RateRecipeRequestDTO
 import com.ottistech.indespensa.webclient.dto.recipe.RecipeCreateDTO

@@ -13,7 +13,8 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.databinding.FragmentPantryBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.helpers.makeSpanText
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
@@ -110,6 +111,8 @@ class PantryFragment : Fragment() {
             binding.pantryItemsList.visibility = View.GONE
             binding.pantryMessage.text = feedback.message
             binding.pantryMessage.visibility = View.VISIBLE
+        } else {
+            showToast(feedback.message)
         }
     }
 

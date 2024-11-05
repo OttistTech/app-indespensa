@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.DialogConfirmationBinding
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.loadImage
 
 class ConfirmationDialogCreator(
     private val context: Context

@@ -1,7 +1,7 @@
 package com.ottistech.indespensa.ui.viewmodel.state
 
 import com.ottistech.indespensa.shared.AppAccountType
-import com.ottistech.indespensa.ui.helpers.toDate
+import com.ottistech.indespensa.shared.toDate
 import com.ottistech.indespensa.webclient.dto.user.UserCreateDTO
 import java.util.Date
 

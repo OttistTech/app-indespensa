@@ -16,26 +16,26 @@ import retrofit2.http.Path
 interface ShopService {
 
     @POST("shop/{user_id}/add")
-    suspend fun addItem(
+    suspend fun add(
         @Path("user_id") userId: Long,
         @Body listItem: ShopItemCreateDTO,
         @Header("Authorization") token: String
     ) : Response<ShopItemPartialDTO>
 
     @GET("shop/{user_id}/list")
-    suspend fun listItems(
+    suspend fun list(
         @Path("user_id") userId: Long,
         @Header("Authorization") token: String
     ) : Response<List<ShopItemPartialDTO>>
 
     @PATCH("shop/update-items-amount")
-    suspend fun updateItemsAmount(
+    suspend fun updateAmount(
         @Body pantryItems: List<ProductItemUpdateAmountDTO>,
         @Header("Authorization") token: String
     ) : Response<Void>
 
     @GET("shop/{pantry_item_id}/details")
-    suspend fun getItemDetails(
+    suspend fun getDetails(
         @Path("pantry_item_id") pantryItemId: Long,
         @Header("Authorization") token: String
     ) : Response<ShopItemDetailsDTO>

@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
@@ -23,7 +22,7 @@ import com.ottistech.indespensa.databinding.FragmentShoplistBinding
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.dialog.ConfirmationDialogCreator
 import com.ottistech.indespensa.ui.helpers.makeSpanText
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId

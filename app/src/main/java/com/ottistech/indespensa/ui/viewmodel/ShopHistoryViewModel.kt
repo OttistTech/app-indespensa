@@ -33,7 +33,10 @@ class ShopHistoryViewModel(
                 _history.value = repository.getHistory()
             } catch(e: ResourceNotFoundException) {
                 _feedback.value =
-                    Feedback(FeedbackId.SHOP_HISTORY, FeedbackCode.NOT_FOUND, "")
+                    Feedback(FeedbackId.SHOP_HISTORY, FeedbackCode.NOT_FOUND, "Não há compras registradas.")
+            } catch (e: Exception) {
+                _feedback.value =
+                    Feedback(FeedbackId.SHOP_HISTORY, FeedbackCode.UNHANDLED, "Não foi possível carregar suas compras!")
             }
             _isLoading.value = false
         }

@@ -18,14 +18,14 @@ import retrofit2.http.Query
 interface RecipeService {
 
     @GET("recipes/{recipe_id}/details")
-    suspend fun getRecipeDetails(
+    suspend fun getDetails(
         @Path("recipe_id") recipeId: Long,
         @Query("userId") userId: Long,
         @Header("Authorization") token: String
     ): Response<RecipeFullDTO>
 
     @POST("recipes/{recipe_id}/rating")
-    suspend fun rateRecipe(
+    suspend fun rate(
         @Path("recipe_id") recipeId: Long,
         @Body rateRecipeRequestDTO: RateRecipeRequestDTO,
         @Header("Authorization") token: String

@@ -16,7 +16,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ProductRepository
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.loadImage
 import com.ottistech.indespensa.ui.helpers.validMaxLength
 import com.ottistech.indespensa.ui.helpers.validMinValue
 import com.ottistech.indespensa.ui.helpers.validNotNull

@@ -19,7 +19,7 @@ import com.ottistech.indespensa.databinding.FragmentRecipeFormBinding
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.UiMode
 import com.ottistech.indespensa.ui.dialog.IngredientDialogCreator
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.recyclerview.adapter.IngredientAdapter

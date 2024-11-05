@@ -14,10 +14,10 @@ import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentProductDetailsBinding
 import com.ottistech.indespensa.shared.ProductItemType
 import com.ottistech.indespensa.ui.dialog.DatePickerCreator
-import com.ottistech.indespensa.ui.helpers.loadImage
-import com.ottistech.indespensa.ui.helpers.renderAmount
-import com.ottistech.indespensa.ui.helpers.renderValidityDate
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.loadImage
+import com.ottistech.indespensa.shared.renderAmount
+import com.ottistech.indespensa.shared.renderValidityDate
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId

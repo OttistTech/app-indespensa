@@ -42,7 +42,7 @@ class UserRemoteDataSource {
     ) : ResultWrapper<UserCredentialsDTO> {
         return try {
             Log.d(TAG, "[login] Trying to log user in with: $userInfo")
-            val response = service.getUser(userInfo)
+            val response = service.login(userInfo)
             if (response.isSuccessful) {
                 Log.d(TAG, "[login] Logged in successfully")
                 ResultWrapper.Success(
@@ -65,7 +65,7 @@ class UserRemoteDataSource {
     ) : ResultWrapper<UserFullDTO> {
         try {
             Log.d(TAG, "[getData] Fetching user info")
-            val response = service.getUserFullInfo(userId, fullInfo, token)
+            val response = service.getUserData(userId, fullInfo, token)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[getData] Found successfully")
                 ResultWrapper.Success(
@@ -88,7 +88,7 @@ class UserRemoteDataSource {
     ): ResultWrapper<UserCredentialsDTO> {
         return try {
             Log.d(TAG, "[update] Trying to update user with: $user")
-            val response = service.updateUser(userId, user, token)
+            val response = service.update(userId, user, token)
             if (response.isSuccessful) {
                 Log.d(TAG, "[update] Updated successfully")
                 ResultWrapper.Success(
@@ -110,7 +110,7 @@ class UserRemoteDataSource {
     ) : ResultWrapper<Boolean> {
         return try {
             Log.d(TAG, "[deactivate] Deactivating user")
-            val response = service.deactivateUser(userId, token)
+            val response = service.deactivate(userId, token)
             return if (response.isSuccessful) {
                 Log.d(TAG, "[deactivate] Deactivated successfully")
                 ResultWrapper.Success(true)

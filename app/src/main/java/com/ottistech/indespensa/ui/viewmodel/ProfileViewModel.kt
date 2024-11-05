@@ -51,9 +51,6 @@ class ProfileViewModel(
     private var page = 0
     private var isLastPageLoaded = false
 
-    private val _isPremium = MutableLiveData<Boolean>()
-    val isPremium: LiveData<Boolean> = _isPremium
-
     init {
         _carouselItems.value = AppConstants.PREMIUM_CAROUSEL_MESSAGES
 
@@ -80,11 +77,11 @@ class ProfileViewModel(
                 val result = dashboardRepository.getProfileData()
                 _profileData.value = result
             } catch (e: ResourceNotFoundException) {
-                _feedback.value = Feedback(
-                    feedbackId = FeedbackId.GET_PROFILE_DATA,
-                    code = FeedbackCode.NOT_FOUND,
-                    message = "Não foi possível encontrar suas informações"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.GET_PROFILE_DATA, FeedbackCode.NOT_FOUND, "Não foi possível encontrar suas informações")
+            } catch(e: Exception) {
+                _feedback.value =
+                    Feedback(FeedbackId.GET_PROFILE_DATA, FeedbackCode.UNHANDLED, "Não foi possível carregar o perfil")
             }
             _isContentLoading.value = false
         }
@@ -106,20 +103,14 @@ class ProfileViewModel(
             } catch (e: ResourceNotFoundException) {
                 if (page == 0) {
                     _recipes.value = null
-                    _feedback.value = Feedback(
-                        feedbackId = FeedbackId.RECIPES_LIST,
-                        code = FeedbackCode.NOT_FOUND,
-                        message = "Parece que você não criou nenhuma receita"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.NOT_FOUND, "Parece que você não criou nenhuma receita")
                 }
                 isLastPageLoaded = true
             } catch (e: Exception) {
                 _recipes.value = null
-                _feedback.value = Feedback(
-                    feedbackId = FeedbackId.RECIPES_LIST,
-                    code = FeedbackCode.UNHANDLED,
-                    message = "Não foi possível buscar as receitas criadas por você!"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.RECIPES_LIST, FeedbackCode.UNHANDLED, "Não foi possível buscar as receitas criadas por você!")
             }
             _isRecipesLoading.value = false
         }
@@ -129,19 +120,12 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 if (userRepository.switchPremium()) {
-                    _isPremium.value = true
-                    _feedback.value = Feedback(
-                        feedbackId = FeedbackId.SWITCH_PREMIUM,
-                        code = FeedbackCode.SUCCESS,
-                        message = "Você cancelou seu plano Premium"
-                    )
+                    _feedback.value =
+                        Feedback(FeedbackId.SWITCH_PREMIUM, FeedbackCode.SUCCESS, "Você cancelou seu plano Premium")
                 }
             } catch (e: Exception) {
-                _feedback.value = Feedback(
-                    feedbackId = FeedbackId.SWITCH_PREMIUM,
-                    code = FeedbackCode.UNHANDLED,
-                    message = "Não foi possível cancelar o plano"
-                )
+                _feedback.value =
+                    Feedback(FeedbackId.SWITCH_PREMIUM, FeedbackCode.UNHANDLED, "Não foi possível cancelar o plano")
             }
             _isRecipesLoading.value = false
         }

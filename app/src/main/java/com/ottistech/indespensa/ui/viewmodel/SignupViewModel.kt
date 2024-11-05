@@ -193,8 +193,10 @@ class SignupViewModel (
         if(signupType == AppAccountType.BUSINESS) {
             validEnterpriseType()
         }
+        if(signupType == AppAccountType.PERSONAL) {
+            validBirthdate()
+        }
         validEmail()
-        validBirthdate()
         validPassword()
         validPasswordConfirmation()
         validCep()

@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.databinding.CardCloseValidityBinding
-import com.ottistech.indespensa.ui.helpers.formatAsString
-import com.ottistech.indespensa.ui.helpers.renderAmount
+import com.ottistech.indespensa.shared.formatAsString
+import com.ottistech.indespensa.shared.renderAmount
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 
 class CloseValidityAdapter(

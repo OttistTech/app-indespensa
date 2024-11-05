@@ -40,9 +40,7 @@ class UpdateProfileViewModel(
             isLoading.value = true
             try {
                 val userInfo = repository.getData(true)
-                userInfo?.let {
-                    setStateWithUser(it)
-                }
+                setStateWithUser(userInfo)
             } catch (e: Exception) {
                 _feedback.value =
                     Feedback(FeedbackId.GET_PROFILE_DATA, FeedbackCode.UNHANDLED, "Não foi possível carregar suas informações!")
@@ -112,14 +110,14 @@ class UpdateProfileViewModel(
         val errorState = formErrorState.value
         isFormValid.value = errorState?.let {
             it.name == null &&
-                    it.enterpriseType == null &&
-                    it.email == null &&
-                    it.password == null &&
-                    it.cep == null &&
-                    it.addressNumber == null &&
-                    it.street == null &&
-                    it.city == null &&
-                    it.state == null
+            it.enterpriseType == null &&
+            it.email == null &&
+            it.password == null &&
+            it.cep == null &&
+            it.addressNumber == null &&
+            it.street == null &&
+            it.city == null &&
+            it.state == null
         } ?: true
     }
 
