@@ -83,7 +83,9 @@ class RecipeAdapter(
             val colorGreen = context.getColor(R.color.green)
             val defaultColor = context.getColor(R.color.gray)
 
-            val percentageInPantry = (recipe.amountInPantry * 100) / recipe.amountIngredients
+            val percentageInPantry = if(recipe.amountIngredients != 0) {
+                (recipe.amountInPantry * 100) / recipe.amountIngredients
+            } else 0
             val ingredientsColor = when (percentageInPantry) {
                 in 0..80 -> colorRed
                 in 81..99 -> colorOrange
