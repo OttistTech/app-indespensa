@@ -1,16 +1,18 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentShopHistoryBinding
-import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.shared.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.recyclerview.adapter.PurchaseHistoryAdapter
 import com.ottistech.indespensa.ui.viewmodel.ShopHistoryViewModel
 import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseDTO
@@ -25,11 +27,13 @@ class ShopHistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentShopHistoryBinding.inflate(inflater, container, false)
         adapter = setupAdapter()
+        binding = FragmentShopHistoryBinding.inflate(inflater, container, false)
         viewModel = ShopHistoryViewModel(
             ShopRepository(requireContext())
         )
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -38,12 +42,11 @@ class ShopHistoryFragment : Fragment() {
 
         setupRecyclerView()
         setupObservers()
+        setupBackButton()
     }
 
     override fun onResume() {
         super.onResume()
-        binding.shopHistoryContent.visibility = View.GONE
-        binding.shopHistoryProgressbar.visibility = View.VISIBLE
         viewModel.fetchHistory()
     }
 
@@ -51,6 +54,16 @@ class ShopHistoryFragment : Fragment() {
         return PurchaseHistoryAdapter(
             context = requireContext()
         )
+    }
+
+    private fun setupBackButton() {
+        binding.shopHistoryBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.shop_history_dest, true)
     }
 
     private fun setupRecyclerView() {
@@ -61,36 +74,35 @@ class ShopHistoryFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.history.observe(viewLifecycleOwner) { history ->
-            binding.shopHistoryProgressbar.visibility = View.GONE
             if(history != null) {
                 binding.shopHistoryPurchases.text = getString(R.string.purchases_number, history.size)
                 binding.shopHistoryIngredients.text = getString(R.string.ingredients_number, history.sumOf { it.dailyAmount })
                 adapter.updateState(
                     prepareDataForAdapter(history)
                 )
-                binding.shopHistoryContent.visibility = View.VISIBLE
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
-            binding.shopHistoryProgressbar.visibility = View.GONE
-            when(error) {
-                UiConstants.ERROR_NOT_FOUND -> {
-                    binding.shopHistoryList.visibility = View.GONE
-                    binding.shopHistoryMessage.text = getString(R.string.shop_history_message_empty)
-                    binding.shopHistoryMessage.visibility = View.VISIBLE
-                }
-                null -> {
-                    binding.shopHistoryMessage.visibility = View.GONE
-                }
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        if(feedback.code == FeedbackCode.NOT_FOUND) {
+            binding.shopHistoryList.visibility = View.GONE
+            binding.shopHistoryMessage.text = feedback.message
+            binding.shopHistoryMessage.visibility = View.VISIBLE
+        } else {
+            showToast(feedback.message)
         }
     }
 
     private fun prepareDataForAdapter(data: List<PurchaseDTO>): List<Any> {
         val items = mutableListOf<Any>()
         for (purchase in data) {
-            Log.d("TAG", purchase.toString())
             items.add(PurchaseHistoryAdapter.PurchaseHeader(
                 purchase.purchaseDate,
                 purchase.dailyAmount

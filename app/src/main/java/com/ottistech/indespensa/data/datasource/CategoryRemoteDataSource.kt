@@ -3,44 +3,33 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.CategoryService
-import org.json.JSONObject
-import java.net.HttpURLConnection
+import com.ottistech.indespensa.webclient.service.core.CategoryService
 
 class CategoryRemoteDataSource {
 
     private val TAG = "CATEGORY REMOTE DATASOURCE"
     private val service : CategoryService =
-        RetrofitInitializer().getService(CategoryService::class.java)
+        RetrofitInitializer().getCoreService(CategoryService::class.java)
 
-    suspend fun listCategories(
-        pattern: String
+    suspend fun list(
+        pattern: String,
+        token: String
     ) : ResultWrapper<List<String>> {
-        try {
-            Log.d(TAG, "[listCategories] Trying to fetch categories")
-            val response = service.listCategories(pattern)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[listCategories] Found categories successfully")
+        return try {
+            Log.d(TAG, "[list] Fetching categories")
+            val response = service.list(pattern, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[list] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<String>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[listCategories] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[listCategories] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[list] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listCategories] Failed while fetching categories", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[list] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 }

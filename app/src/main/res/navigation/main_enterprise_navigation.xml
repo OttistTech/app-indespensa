@@ -11,11 +11,9 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/nav_recipe_list"
-        android:name="com.ottistech.indespensa.ui.fragment.RecipeListFragment"
-        android:label="fragment_recipe_list"
-        tools:layout="@layout/fragment_recipe_list" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_recipe_list"-->
+<!--        android:label="fragment_recipe_list" />-->
 
     <fragment
         android:id="@+id/nav_shoplist"

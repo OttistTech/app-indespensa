@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.ottistech.indespensa.ui.viewmodel.RecipeFormViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+            <ImageButton
+                android:id="@+id/recipe_form_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow"
+                android:elevation="2dp"
+                android:outlineProvider="none"
+                android:backgroundTint="@color/transparent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_2"
+                android:layout_marginStart="@dimen/margin_2"/>
+            <ImageView
+                android:id="@+id/recipe_form_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_size_big"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_placeholder"
+                app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:id="@+id/recipe_form_general_information"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_form_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="@dimen/margin_6"
+                android:layout_marginTop="@dimen/margin_4">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recipe_general_information"
+                    style="@style/IndespensaSectionTitle" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/recipe_form_name_layout"
+                    android:layout_width="match_parent"
+                    android:error="@{model.formErrorState.name}"
+                    android:layout_height="@dimen/field_height"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:errorTextColor="@color/pastelOrange"
+                    app:errorIconDrawable="@null">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/recipe_form_name_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="@={model.formState.name}"
+                        android:paddingBottom="@dimen/padding_3"
+                        android:hint="@string/form_hint_name"
+                        android:textSize="@dimen/text_regular"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.name}"
+                    android:visibility="@{model.formErrorState.name != null ? View.VISIBLE : View.GONE}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/recipe_form_description_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="104dp"
+                    android:error="@{model.formErrorState.description}"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeWidth="@dimen/border_bold"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:errorTextColor="@color/pastelOrange"
+                    app:errorIconDrawable="@null">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/recipe_form_description_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="96dp"
+                        android:text="@={model.formState.description}"
+                        android:gravity="top|start"
+                        android:scrollbars="vertical"
+                        android:maxLines="5"
+                        android:inputType="textMultiLine"
+                        android:background="@null"
+                        android:padding="@dimen/padding_4"
+                        android:hint="@string/form_hint_description"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.description}"
+                    android:visibility="@{model.formErrorState.description != null ? View.VISIBLE : View.GONE}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:baselineAligned="false">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:orientation="vertical"
+                        android:baselineAligned="false">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/recipe_form_time_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.time}"
+                            android:theme="@style/IndespensaTextInputLayout"
+                            app:boxStrokeWidth="2dp"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:errorTextColor="@color/pastelOrange"
+                            app:errorIconDrawable="@null">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/recipe_form_time_field"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.time}"
+                                android:layout_gravity="bottom"
+                                android:paddingBottom="@dimen/padding_3"
+                                android:hint="@string/form_hint_time"
+                                android:textSize="@dimen/text_regular"
+                                android:inputType="numberDecimal"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.time}"
+                            android:visibility="@{model.formErrorState.time != null ? View.VISIBLE : View.GONE}"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:baselineAligned="false"
+                        android:layout_marginStart="@dimen/margin_2">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/recipe_form_select_level_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/field_height"
+                            android:error="@{model.formErrorState.level}"
+                            android:hint="@string/form_hint_level"
+                            android:theme="@style/IndespensaTextInputLayoutDropdown"
+                            app:boxStrokeWidth="2dp"
+                            app:boxStrokeErrorColor="@color/red"
+                            app:errorTextColor="@color/pastelOrange"
+                            app:errorIconDrawable="@null">
+                            <AutoCompleteTextView
+                                android:id="@+id/recipe_form_select_level"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={model.formState.level}"
+                                android:layout_gravity="bottom"
+                                android:dropDownAnchor="@id/recipe_form_select_level"
+                                android:dropDownHeight="148dp"
+                                android:fontFamily="@font/montserrat_medium"
+                                android:inputType="none"
+                                android:paddingBottom="@dimen/padding_3"
+                                tools:ignore="LabelFor" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            style="@style/IndespensaFormErrorMessage"
+                            android:text="@{model.formErrorState.level}"
+                    android:visibility="@{model.formErrorState.level != null ? View.VISIBLE : View.GONE}"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/recipe_form_ingredients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_form_general_information"
+                app:layout_constraintStart_toStartOf="@+id/recipe_form_general_information"
+                app:layout_constraintEnd_toEndOf="@+id/recipe_form_general_information"
+                android:layout_marginTop="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recipe_ingredients"
+                    style="@style/IndespensaSectionTitle" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recipe_form_ingredients_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    tools:listitem="@layout/card_ingredient"
+                    tools:itemCount="4"/>
+                <Button
+                    android:id="@+id/recipe_form_add_ingredient_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_terciary_background"
+                    android:backgroundTint="@color/transparent"
+                    android:enabled="true"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/add_ingredient"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:textAlignment="center"
+                    android:text="@{model.formErrorState.ingredients}"
+                    android:visibility="@{model.formErrorState.ingredients != null ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/recipe_form_preparation_method"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_form_ingredients"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="@dimen/margin_6"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/recipe_preparation_method"
+                    style="@style/IndespensaSectionTitle" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/recipe_form_preparation_method_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:error="@{model.formErrorState.preparationMethod}"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:theme="@style/IndespensaTextInputLayout"
+                    app:boxStrokeWidth="2dp"
+                    app:boxStrokeErrorColor="@color/red"
+                    app:errorTextColor="@color/pastelOrange"
+                    app:errorIconDrawable="@null">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/recipe_form_preparation_method_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="152dp"
+                        android:text="@={model.formState.preparationMethod}"
+                        android:gravity="top|start"
+                        android:scrollbars="vertical"
+                        android:maxLines="5"
+                        android:inputType="textMultiLine"
+                        android:background="@null"
+                        android:padding="@dimen/padding_4"
+                        android:hint="@string/form_hint_preparation_method"
+                        android:textSize="@dimen/text_regular" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaFormErrorMessage"
+                    android:text="@{model.formErrorState.preparationMethod}"
+                    android:visibility="@{model.formErrorState.preparationMethod != null ? View.VISIBLE : View.GONE}"/>
+            </LinearLayout>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/IndespensaButton.primary"
+                android:onClick="@{() -> model.submit()}"
+                android:enabled="@{model.isFormValid &amp;&amp; !model.isLoading}"
+                android:text="@string/cta_save"
+                android:layout_marginVertical="@dimen/margin_2"
+                app:layout_constraintEnd_toEndOf="@id/recipe_form_preparation_method"
+                app:layout_constraintStart_toStartOf="@id/recipe_form_preparation_method"
+                app:layout_constraintTop_toBottomOf="@id/recipe_form_preparation_method"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

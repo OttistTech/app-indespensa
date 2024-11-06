@@ -1,5 +1,6 @@
 package com.ottistech.indespensa.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,7 +27,7 @@ import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.databinding.FragmentScannerBinding
 import com.ottistech.indespensa.ui.helpers.PermissionManager
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.UiConstants
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
 import kotlinx.coroutines.launch
@@ -35,14 +36,17 @@ import java.util.concurrent.Executor
 class ScannerFragment : Fragment() {
 
     private val TAG = "SCANNER FRAGMENT"
-    private lateinit var binding : FragmentScannerBinding
-    private lateinit var barcodeScanner : BarcodeScanner
+    private lateinit var binding: FragmentScannerBinding
+    private lateinit var barcodeScanner: BarcodeScanner
     private lateinit var permissionManager: PermissionManager
-    private val permissions = arrayOf(
-        android.Manifest.permission.CAMERA
-    )
-    private var barcodeFound : String? = null
-    private val repository = ProductRepository()
+    private lateinit var repository: ProductRepository
+    private val permissions = arrayOf(android.Manifest.permission.CAMERA)
+    private var barcodeFound: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        repository = ProductRepository(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -1,122 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    tools:context=".ui.fragment.ShopFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    TODO: Implement search bar -->
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.ottistech.indespensa.ui.viewmodel.ShopViewModel" />
+    </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/shoplist_blur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blur"
+            android:elevation="1dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/shoplist_searchbar"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:theme="@style/IndespensaTextInputLayout"
+            app:boxStrokeWidth="@dimen/border_bold"
+            app:boxStrokeErrorColor="@color/red"
+            app:errorTextColor="@color/pastelOrange"
+            app:errorIconDrawable="@null"
+            app:endIconMode="custom"
+            app:boxBackgroundColor="@color/white"
+            android:elevation="2dp"
+            app:endIconDrawable="@drawable/ic_search"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginHorizontal="@dimen/margin_4"
+            app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/shoplist_searchbar_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="@string/search_product_shoplist"
+                android:textColorHint="@color/gray"
+                android:layout_gravity="bottom"
+                android:textSize="@dimen/text_regular"
+                android:paddingBottom="@dimen/padding_3" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shoplist_search_result_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="192dp"
+            android:elevation="2dp"
+            android:visibility="gone"
+            tools:listitem="@layout/card_product_search"
+            tools:itemCount="5"
+            app:layout_constraintStart_toStartOf="@id/shoplist_searchbar"
+            app:layout_constraintEnd_toEndOf="@id/shoplist_searchbar"
+            app:layout_constraintTop_toBottomOf="@id/shoplist_searchbar"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ExtraText">
-
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_2"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="@id/shoplist_searchbar"
+            app:layout_constraintStart_toStartOf="@id/shoplist_searchbar"
+            app:layout_constraintTop_toBottomOf="@id/shoplist_searchbar"
+            app:layout_constraintBottom_toBottomOf="parent">
             <TextView
-                android:id="@+id/shoplist_quantity_ingredients"
+                android:id="@+id/shoplist_ingredients_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
+                style="@style/IndespensaHeading4"
+                android:visibility="@{model.isLoading ? View.GONE : View.VISIBLE}"
                 tools:text="11 ingredientes na sua lista de compras" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/shoplist_add_all_to_pantry_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/button_primary_background"
-            android:enabled="true"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/shoplist_add_all_to_pantry"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/shop_purchase_history_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/button_secondary_background"
-            android:enabled="true"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/shoplist_purchase_history"
-            android:textAllCaps="true"
-            android:textColor="@color/primary"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/shop_recyclerview"
+            <Button
+                android:id="@+id/shoplist_add_all_to_pantry_button"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/card_shop_item"
-                android:layout_marginTop="10dp"/>
-
-            <ProgressBar
-                android:id="@+id/shop_progressbar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:indeterminateBehavior="repeat"
-                android:indeterminateTint="@color/secondary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shop_recyclerview" />
-
-            <TextView
-                android:id="@+id/shop_message"
-                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                style="@style/IndespensaButton.primary"
+                android:text="@string/shoplist_add_all_to_pantry" />
+            <Button
+                android:id="@+id/shop_purchase_history_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/IndespensaButton.secondary"
+                android:text="@string/shoplist_purchase_history" />
+            <TextView
+                android:id="@+id/shoplist_recommendations_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/IndespensaText"
                 android:visibility="gone"
-                tools:text="Text Message"
-                android:theme="@style/IndespensaHeading2"
-                android:textColor="@color/gray"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shop_recyclerview" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginVertical="@dimen/margin_4"
+                android:text="@string/shoplist_recommendations"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/shoplist_product_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{model.isLoading ? View.GONE : View.VISIBLE}"
+                    android:layout_marginTop="@dimen/margin_2"
+                    tools:listitem="@layout/card_shop_item" />
+                <ProgressBar
+                    android:id="@+id/shoplist_progressbar"
+                    android:layout_width="@dimen/progressbar_large"
+                    android:layout_height="@dimen/progressbar_large"
+                    android:theme="@style/IndespensaProgressbar"
+                    android:visibility="@{model.isLoading ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/shoplist_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="Text Message"
+                    android:theme="@style/IndespensaHeading2"
+                    android:textColor="@color/gray"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

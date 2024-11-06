@@ -1,95 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pantry_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@drawable/ic_add"
-        app:shapeAppearanceOverlay="@style/IndespensaRoundedFab"
-        app:backgroundTint="@color/secondary"
-        app:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp" />
-
-    <ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <ImageButton
+            android:id="@+id/pantry_back"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="600dp"
-            android:layout_marginHorizontal="16dp">
-
-            <ImageView
-                android:id="@+id/pantry_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/logo_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="32dp" />
-
-            <TextView
-                android:id="@+id/pantry_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pantry_logo"
-                android:layout_marginTop="24dp"
-                android:layout_marginHorizontal="16dp"
-                tools:text="Olá, nome, esse é o estado atual da sua despensa"
-                android:theme="@style/IndespensaHeading3"
-                android:textAlignment="center" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/pantry_items_list"
+            android:src="@drawable/ic_arrow"
+            android:elevation="1dp"
+            android:outlineProvider="none"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginStart="@dimen/margin_2"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pantry_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_add"
+            app:shapeAppearanceOverlay="@style/IndespensaRoundedFab"
+            app:backgroundTint="@color/secondary"
+            app:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_5" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/pantry_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"
-                tools:listitem="@layout/card_pantry_item" />
-
-            <ProgressBar
-                android:id="@+id/pantry_progressbar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:indeterminateBehavior="repeat"
-                android:indeterminateTint="@color/secondary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pantry_text"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/pantry_message"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:text="Text Message"
-                android:theme="@style/IndespensaHeading2"
-                android:textColor="@color/gray"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pantry_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginHorizontal="16dp"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginHorizontal="@dimen/margin_4">
+                <ImageView
+                    android:id="@+id/pantry_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/margin_8" />
+                <TextView
+                    android:id="@+id/pantry_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pantry_logo"
+                    android:layout_marginTop="@dimen/margin_6"
+                    android:layout_marginHorizontal="@dimen/margin_4"
+                    style="@style/IndespensaHeading3"
+                    android:textAlignment="center"
+                    tools:text="Olá, nome, esse é o estado atual da sua despensa" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pantry_items_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/pantry_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/margin_6"
+                    tools:listitem="@layout/card_pantry_item" />
+                <ProgressBar
+                    android:id="@+id/pantry_progressbar"
+                    android:layout_width="@dimen/progressbar_large"
+                    android:layout_height="@dimen/progressbar_large"
+                    android:indeterminateBehavior="repeat"
+                    android:indeterminateTint="@color/secondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pantry_text"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/pantry_message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="Text Message"
+                    android:theme="@style/IndespensaHeading2"
+                    android:textColor="@color/gray"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pantry_text"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginHorizontal="@dimen/margin_4"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

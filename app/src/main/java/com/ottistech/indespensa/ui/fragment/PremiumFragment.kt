@@ -12,6 +12,7 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentPremiumBinding
 import com.ottistech.indespensa.ui.dialog.PaymentDialogCreator
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.recyclerview.adapter.TextCarouselAdapter
 import com.ottistech.indespensa.ui.viewmodel.PremiumViewModel
 
@@ -35,6 +36,36 @@ class PremiumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBackButton()
+        setupObservers()
+        setupOldPriceStyle()
+        setupPremiumButton()
+    }
+
+    private fun setupPremiumButton() {
+        val paymentDialogCreator = PaymentDialogCreator(requireContext())
+        binding.premiumGoToPaymentButton.setOnClickListener {
+            paymentDialogCreator.showPaymentDialog("R$${viewModel.currentPrice.value}") {
+                viewModel.handlePaymentClick(
+                    onSuccess = {
+                        showToast("Agora você é premium")
+                        navigateToHome()
+                    },
+                    onError = { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        navigateToHome()
+                    }
+                )
+            }
+        }
+    }
+
+    private fun setupOldPriceStyle() {
+        binding.premiumPriceOld.paintFlags =
+            binding.premiumPriceOld.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    }
+
+    private fun setupObservers() {
         viewModel.carouselItems.observe(viewLifecycleOwner) { carouselItems ->
             val carouselAdapter = TextCarouselAdapter(carouselItems)
             binding.premiumViewPager.adapter = carouselAdapter
@@ -46,27 +77,19 @@ class PremiumFragment : Fragment() {
         }
 
         viewModel.currentPrice.observe(viewLifecycleOwner) { currentPrice ->
-            binding.premiumPriceCurrent.text = getString(R.string.premium_price_current, currentPrice)
+            binding.premiumPriceCurrent.text =
+                getString(R.string.premium_price_current, currentPrice)
         }
+    }
 
-        binding.premiumPriceOld.paintFlags = binding.premiumPriceOld.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-
-        val paymentDialogCreator = PaymentDialogCreator(requireContext())
-        binding.premiumGoToPaymentButton.setOnClickListener {
-            paymentDialogCreator.showPaymentDialog("R$${viewModel.currentPrice.value}") {
-                viewModel.handlePaymentClick(
-                    onSuccess = {
-                        Toast.makeText(requireContext(), "Agora você é um Premium", Toast.LENGTH_SHORT).show()
-                        navigateToHome()
-                    },
-                    onError = { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                        navigateToHome()
-                    }
-                )
-            }
+    private fun setupBackButton() {
+        binding.premiumBack.setOnClickListener {
+            popBackStack()
         }
+    }
 
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.premium_dest, true)
     }
 
     override fun onDestroyView() {

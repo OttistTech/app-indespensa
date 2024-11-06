@@ -11,12 +11,16 @@ class UserLocalDataSource(
     context: Context
 ) {
 
-    private val TAG = "USER LOCAL DATASOURCE"
-    private val USER_PREFERENCES_FILE : String = "user-preferences"
-    private val USER_PREFERENCES_KEY : String = "user-data"
+    companion object {
+        private const val TAG = "USER LOCAL DATASOURCE"
+        private const val USER_PREFERENCES_FILE : String = "user-preferences"
+        private const val USER_PREFERENCES_KEY : String = "user-data"
+    }
+
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
+
     private val sharedPreferences = EncryptedSharedPreferences.create(
         context,
         USER_PREFERENCES_FILE,
@@ -25,26 +29,34 @@ class UserLocalDataSource(
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    fun saveUser(user: UserCredentialsDTO) {
-        Log.d(TAG, "[saveUser] Saving user credentials locally $user")
+    fun save(user: UserCredentialsDTO) {
+        Log.d(TAG, "[saveUser] Saving user credentials and token: $user")
+        val currentUser = get()
+        if (currentUser?.token != null) {
+            user.token = currentUser.token
+        }
+
         val gson = Gson()
         val userJson = gson.toJson(user)
-        sharedPreferences.edit().putString(USER_PREFERENCES_KEY, userJson).apply()
+
+        sharedPreferences.edit()
+            .putString(USER_PREFERENCES_KEY, userJson)
+            .apply()
     }
 
-    fun getUser(): UserCredentialsDTO? {
+    fun get(): UserCredentialsDTO? {
         val userJson = sharedPreferences.getString(USER_PREFERENCES_KEY, null)
         return if (userJson != null) {
             val user = Gson().fromJson(userJson, UserCredentialsDTO::class.java)
-            Log.d(TAG, "[getUser] Reading user credentials locally $user")
+            Log.d(TAG, "[getUser] Reading user credentials: $user")
             user
         } else {
             null
         }
     }
 
-    fun removeUser() {
-        Log.d(TAG, "[removeUser] Removing user credentials from local data source")
+    fun clear() {
+        Log.d(TAG, "[removeUser] Removing user credentials")
         sharedPreferences.edit().remove(USER_PREFERENCES_KEY).apply()
     }
 }

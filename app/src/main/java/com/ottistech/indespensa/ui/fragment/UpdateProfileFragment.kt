@@ -2,6 +2,7 @@ package com.ottistech.indespensa.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,18 +16,16 @@ import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.activity.AuthActivity
 import com.ottistech.indespensa.ui.dialog.ConfirmationDialogCreator
-import com.ottistech.indespensa.ui.helpers.FieldValidations
 import com.ottistech.indespensa.ui.helpers.FieldVisibilitySwitcher
-import com.ottistech.indespensa.ui.helpers.showToast
-import com.ottistech.indespensa.ui.model.FieldError
+import com.ottistech.indespensa.shared.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.viewmodel.UpdateProfileViewModel
-import com.ottistech.indespensa.webclient.dto.user.UserFullIDTO
-import com.ottistech.indespensa.webclient.dto.user.UserUpdateDTO
 
 class UpdateProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentUpdateProfileBinding
-    private lateinit var validator : FieldValidations
     private lateinit var visibilitySwitcher : FieldVisibilitySwitcher
     private lateinit var dialogCreator : ConfirmationDialogCreator
     private lateinit var viewModel: UpdateProfileViewModel
@@ -35,123 +34,151 @@ class UpdateProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUpdateProfileBinding.inflate(inflater, container, false)
-        validator = FieldValidations(requireContext())
         visibilitySwitcher = FieldVisibilitySwitcher(requireContext())
         dialogCreator = ConfirmationDialogCreator(requireContext())
+        binding = FragmentUpdateProfileBinding.inflate(inflater, container, false)
         viewModel = UpdateProfileViewModel(
             UserRepository(requireContext())
         )
+        binding.model = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupForAccountType(viewModel.userType)
+        setupValidationListeners()
+        setupDeactivateButton()
+        setupAppTermsButton()
+        setupStatesSelect()
+        setupLogoutButton()
         setupObservers()
-        viewModel.fetchUserInfo()
-
-        if(viewModel.getUserType() != AppAccountType.BUSINESS) {
-            binding.updateProfileFormInputEnterpriseTypeContainer.visibility = View.GONE
-        }
+        setupBackButton()
 
         var passwordVisibility = false
-        binding.updateProfileFormInputPasswordContainer.setEndIconOnClickListener {
+        binding.updateProfilePasswordLayout.setEndIconOnClickListener {
             passwordVisibility = visibilitySwitcher.switch(passwordVisibility,
-                binding.updateProfileFormInputPassword, binding.updateProfileFormInputPasswordContainer)
+                binding.updateProfilePasswordField, binding.updateProfilePasswordLayout)
         }
+    }
 
-        val brazilStatesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.BRAZIL_STATES)
-        binding.updateProfileFormInputStateSelect.setAdapter(brazilStatesAdapter)
-
-        binding.updateProfileFormAppTermsLink.setOnClickListener {
-            navigateToTermsAndConditions()
+    private fun setupBackButton() {
+        binding.updateProfileBack.setOnClickListener {
+            popBackStack()
         }
+    }
 
-        binding.updateProfileFormButtonSave.setOnClickListener {
-            if(validForm()) {
-                val user = generateUpdatedUser()
-                viewModel.updateUser(user)
-            }
-        }
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.update_profile_dest, true)
+    }
 
-        binding.updateProfileFormAppTermsLink.setOnClickListener {
-            navigateToTermsAndConditions()
-        }
-
-        binding.updateProfileFormButtonLogout.setOnClickListener {
-            dialogCreator.showDialog(
-                getString(R.string.update_profile_logout_confirmation_message),
-                getString(R.string.cta_exit)
-            ) {
-                viewModel.logoutUser()
-                navigateToAuth()
-            }
-        }
-
+    private fun setupDeactivateButton() {
         binding.updateProfileFormButtonRemoveAccount.setOnClickListener {
+            Log.d("DEBUG", "PASSOU AQUI 2")
             dialogCreator.showDialog(
-                getString(R.string.update_profile_deactivate_confirmation_message),
-                getString(R.string.cta_remove),
+                title = getString(R.string.update_profile_deactivate_confirmation_message),
+                actionText = getString(R.string.cta_remove),
             ) {
-                viewModel.deactivateUser()
+                viewModel.deactivate()
                 navigateToAuth()
             }
         }
+    }
+
+    private fun setupLogoutButton() {
+        binding.updateProfileButtonLogout.setOnClickListener {
+            Log.d("DEBUG", "PASSOU AQUI")
+            dialogCreator.showDialog(
+                title = getString(R.string.update_profile_logout_confirmation_message),
+                actionText = getString(R.string.cta_exit)
+            ) {
+                viewModel.logout()
+                navigateToAuth()
+            }
+        }
+    }
+
+    private fun setupStatesSelect() {
+        val brazilStatesAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            AppConstants.BRAZIL_STATES
+        )
+        binding.updateProfileStateSelectField.setAdapter(brazilStatesAdapter)
+    }
+
+    private fun setupForAccountType(type: AppAccountType) {
+        if (type != AppAccountType.BUSINESS) {
+            binding.updateProfileEnterpriseTypeLayout.visibility = View.GONE
+        }
+    }
+
+    private fun setupAppTermsButton() {
+        binding.updateProfileFormAppTermsLink.setOnClickListener {
+            navigateToTermsAndConditions()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchUserInfo()
     }
 
     private fun setupObservers() {
-        viewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
-            userInfo?.let { fillForm(it) }
-        }
-        viewModel.updateResult.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                showToast("Atualizado com sucesso!")
-            }
-        }
-        viewModel.userMessage.observe(viewLifecycleOwner) { message ->
-            message?.let { showToast(it) }
-        }
-        viewModel.fieldError.observe(viewLifecycleOwner) { error ->
-            error?.let { showFieldError(error) }
-        }
-    }
-
-    private fun showFieldError(error: FieldError) {
-        when(error.fieldName) {
-            "email" -> {
-                validator.setFieldError(
-                    binding.updateProfileFormInputEmailContainer, binding.updateProfileFormInputEmailError,
-                    getString(R.string.form_error_conflict, "E-mail")
-                )
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
         }
     }
 
-    private fun generateUpdatedUser(): UserUpdateDTO {
-        return UserUpdateDTO(
-            name = binding.updateProfileFormInputName.text.toString(),
-            enterpriseType = binding.updateProfileFormInputEnterpriseType.text.toString(),
-            email = binding.updateProfileFormInputEmail.text.toString(),
-            password = binding.updateProfileFormInputPassword.text.toString(),
-            cep = binding.updateProfileFormInputCep.text.toString(),
-            addressNumber = binding.updateProfileFormInputAddressNumber.text.toString().toInt(),
-            street = binding.updateProfileFormInputStreet.text.toString(),
-            city = binding.updateProfileFormInputCity.text.toString(),
-            state = binding.updateProfileFormInputStateSelect.text.toString(),
-        )
+    private fun handleFeedback(feedback: Feedback) {
+        when(feedback.feedbackId) {
+            FeedbackId.DEACTIVATE_PROFILE -> {
+                showToast(feedback.message)
+            }
+            FeedbackId.UPDATE_PROFILE -> {
+                showToast(feedback.message)
+            }
+            FeedbackId.GET_PROFILE_DATA -> {
+                if(feedback.code != FeedbackCode.SUCCESS) {
+                    showToast(feedback.message)
+                    findNavController().popBackStack(R.id.nav_profile, false)
+                }
+            }
+        }
     }
 
-    private fun fillForm(userInfo: UserFullIDTO) {
-        binding.updateProfileFormInputName.setText(userInfo.name)
-        binding.updateProfileFormInputEnterpriseType.setText(userInfo.enterpriseType)
-        binding.updateProfileFormInputEmail.setText(userInfo.email)
-        binding.updateProfileFormInputPassword.setText(userInfo.password)
-        binding.updateProfileFormInputCep.setText(userInfo.cep)
-        binding.updateProfileFormInputAddressNumber.setText(userInfo.addressNumber.toString())
-        binding.updateProfileFormInputStreet.setText(userInfo.street)
-        binding.updateProfileFormInputCity.setText(userInfo.city)
-        binding.updateProfileFormInputStateSelect.setText(userInfo.state, false)
+    private fun setupValidationListeners() {
+        binding.updateProfileNameField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validName() }
+        }
+        binding.updateProfileEnterpriseTypeLayout.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validEnterpriseType() }
+        }
+        binding.updateProfileEmailField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validEmail() }
+        }
+        binding.updateProfilePasswordLayout.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validPassword() }
+        }
+        binding.updateProfileCepField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validCep() }
+        }
+        binding.updateProfileAddressNumberField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validAddressNumber() }
+        }
+        binding.updateProfileStreetField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validStreet() }
+        }
+        binding.updateProfileCityField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validCity() }
+        }
+        binding.updateProfileStateSelectField.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validState() }
+        }
     }
 
     private fun navigateToTermsAndConditions() {
@@ -165,26 +192,5 @@ class UpdateProfileFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         currentActivity.startActivity(intent)
         currentActivity.finish()
-    }
-
-    private fun validForm() : Boolean {
-        val isNameValid = validator.validMinLength(binding.updateProfileFormInputName, binding.updateProfileFormInputNameContainer, binding.updateProfileFormInputNameError, 4) &&
-                validator.validMaxLength(binding.updateProfileFormInputName, binding.updateProfileFormInputNameContainer, binding.updateProfileFormInputNameError, 40)
-        val isEnterpriseTypeValid = if(viewModel.getUserType() == AppAccountType.BUSINESS) {
-            validator.validNotNull(binding.updateProfileFormInputEnterpriseType, binding.updateProfileFormInputEnterpriseTypeContainer, binding.updateProfileFormInputEnterpriseTypeError)
-        } else {
-            true
-        }
-        val isEmailValid = validator.validIsEmail(binding.updateProfileFormInputEmail, binding.updateProfileFormInputEmailContainer, binding.updateProfileFormInputEmailError)
-        val isPasswordValid = validator.validPassword(binding.updateProfileFormInputPassword, binding.updateProfileFormInputPasswordContainer, binding.updateProfileFormInputPasswordError)
-        val isCepValid = validator.validCep(binding.updateProfileFormInputCep, binding.updateProfileFormInputCepContainer, binding.updateProfileFormInputCepError)
-        val isAddressNumberValid = validator.validMaxLength(binding.updateProfileFormInputAddressNumber, binding.updateProfileFormInputAddressNumberContainer, binding.updateProfileFormInputAddressNumberError, 4) &&
-                validator.validNotNull(binding.updateProfileFormInputAddressNumber, binding.updateProfileFormInputAddressNumberContainer, binding.updateProfileFormInputAddressNumberError)
-        val isStreetValid = validator.validNotNull(binding.updateProfileFormInputStreet, binding.updateProfileFormInputStreetContainer, binding.updateProfileFormInputStreetError)
-        val isCityValid = validator.validNotNull(binding.updateProfileFormInputCity, binding.updateProfileFormInputCityContainer, binding.updateProfileFormInputCityError)
-        val isStateValid = validator.validNotNull(binding.updateProfileFormInputStateSelect, binding.updateProfileFormInputStateSelectContainer, binding.updateProfileFormInputStateSelectError)
-        return isNameValid && isEnterpriseTypeValid && isEmailValid &&
-                isPasswordValid && isCepValid && isAddressNumberValid &&
-                isCityValid && isStreetValid && isStateValid
     }
 }

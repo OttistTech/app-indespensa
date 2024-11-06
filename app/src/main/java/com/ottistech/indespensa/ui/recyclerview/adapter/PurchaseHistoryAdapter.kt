@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.CardPurchaseItemBinding
 import com.ottistech.indespensa.databinding.HeaderPurchaseBinding
-import com.ottistech.indespensa.ui.helpers.formatAsString
-import com.ottistech.indespensa.ui.helpers.loadImage
+import com.ottistech.indespensa.shared.formatAsString
+import com.ottistech.indespensa.shared.loadImage
 import com.ottistech.indespensa.webclient.dto.shoplist.PurchaseItemDTO
 import java.util.Date
 

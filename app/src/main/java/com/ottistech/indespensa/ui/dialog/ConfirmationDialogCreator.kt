@@ -3,23 +3,38 @@ package com.ottistech.indespensa.ui.dialog
 import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.databinding.DialogConfirmationBinding
+import com.ottistech.indespensa.shared.loadImage
 
 class ConfirmationDialogCreator(
     private val context: Context
 ) {
 
     fun showDialog(
-        message: String,
-        actionText: String,
+        title: String? = null,
+        description: CharSequence? = null,
+        imageUrl: String? = null,
+        actionText: String? = null,
         onConfirm: () -> Unit
     ) {
         val binding = DialogConfirmationBinding.inflate(LayoutInflater.from(context))
-        binding.dialogConfirmationMessage.text = message
-        binding.dialogConfirmationConfirm.text = actionText
+        title?.let {
+            binding.dialogConfirmationTitle.visibility = View.VISIBLE
+            binding.dialogConfirmationTitle.text = it
+        }
+        description?.let {
+            binding.dialogConfirmationDescription.visibility = View.VISIBLE
+            binding.dialogConfirmationDescription.text = it
+        }
+        imageUrl?.let {
+            binding.dialogConfirmationImage.visibility = View.VISIBLE
+            binding.dialogConfirmationImage.loadImage(it)
+        }
+        binding.dialogConfirmationConfirm.text = actionText ?: context.getString(R.string.cta_confirm)
 
-        val dialog = AlertDialog.Builder(context, R.style.IndespensaConfirmationDialog)
+        val dialog = AlertDialog.Builder(context, R.style.IndespensaDialog)
             .setView(binding.root)
             .create()
 

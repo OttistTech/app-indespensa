@@ -1,0 +1,27 @@
+package com.ottistech.indespensa.ui.model.feedback
+
+object FeedbackId {
+    const val RECOMMENDATIONS = "RECOMMENDATIONS"
+    const val SHOP_HISTORY = "SHOP HISTORY"
+    const val RECIPE_SEARCH = "RECIPE SEARCH"
+    const val GET_RECIPE_DETAILS = "RECIPE DETAILS"
+    const val PANTRY_LIST = "PANTRY LIST"
+    const val ADD_TO_PANTRY = "ADD TO PANTRY"
+    const val GET_ITEM_DETAILS = "GET ITEM DETAILS"
+    const val CREATE_RECIPE = "CREATE RECIPE"
+    const val DEACTIVATE_PROFILE = "DEACTIVATE PROFILE"
+    const val UPDATE_PROFILE = "UPDATE PROFILE"
+    const val GET_PROFILE_DATA = "GET PROFILE DATA"
+    const val SIGNUP = "SIGNUP"
+    const val LOGIN = "LOGIN"
+    const val ADD_ALL_TO_PANTRY = "ADD ALL TO PANTRY"
+    const val ADD_TO_SHOPLIST = "ADD TO SHOPLIST"
+    const val CLOSE_VALIDITY_ITEMS = "CLOSE VALIDITY ITEMS"
+    const val CREATE_PANTRY_ITEM = "CREATE PANTRY ITEM"
+    const val PERSONAL_DASHBOARD = "PERSONAL DASHBOARD"
+    const val PRODUCT_DETAILS = "PRODUCT DETAILS"
+    const val PRODUCT_SEARCH = "PRODUCT SEARCH"
+    const val RECIPES_LIST = "RECIPES LIST"
+    const val SHOPLIST = "SHOPLIST"
+    const val SWITCH_PREMIUM = "SWITCH PREMIUM"
+}

@@ -1,93 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:fillViewport="true"
-    app:cardCornerRadius="16dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FBFBFB">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/payment_title"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/premium_normal_text"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat"
-            android:textAlignment="center"
-            android:textColor="#8B8A8A"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:text="Realize o pagamento de apenas R$19,99 para ser premium" />
-
-        <ImageView
-            android:id="@+id/payment_qrcode"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_normal_text"
-            app:srcCompat="@drawable/qrcode" />
-
-        <Button
-            android:id="@+id/payment_confirm_copy_pix"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/button_primary_background"
-            android:enabled="true"
-            android:fontFamily="@font/montserrat"
-            android:text="@string/payment_confirm_payment_copy_pix"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/payment_qrcode" />
-
-        <Button
-            android:id="@+id/payment_confirm_payment_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/button_terciary_background"
-            android:backgroundTint="@color/transparent"
-            android:enabled="true"
-            android:fontFamily="@font/montserrat"
-            android:text="@string/payment_confirm_payment"
-            android:textAllCaps="true"
-            android:textColor="@color/primary"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/payment_confirm_copy_pix" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:cardCornerRadius="16dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/IndespensaHeading2"
+                android:layout_marginTop="@dimen/margin_6"
+                android:text="@string/payment_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/premium_normal_text"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:theme="@style/IndespensaText"
+                android:layout_marginTop="@dimen/margin_4"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:text="Realize o pagamento de apenas R$19,99 para ser premium" />
+            <ImageView
+                android:id="@+id/payment_qrcode"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="@dimen/margin_4"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/premium_normal_text"
+                app:srcCompat="@drawable/qrcode" />
+            <Button
+                android:id="@+id/payment_confirm_copy_pix"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_4"
+                android:layout_marginTop="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/margin_4"
+                android:background="@drawable/button_primary_background"
+                android:enabled="true"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/payment_confirm_payment_copy_pix"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payment_qrcode" />
+            <Button
+                android:id="@+id/payment_confirm_payment_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_2"
+                android:layout_marginTop="@dimen/margin_4"
+                android:layout_marginEnd="@dimen/margin_2"
+                android:layout_marginBottom="@dimen/margin_6"
+                android:background="@drawable/button_terciary_background"
+                android:backgroundTint="@color/transparent"
+                android:enabled="true"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/payment_confirm_payment"
+                android:textAllCaps="true"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payment_confirm_copy_pix" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

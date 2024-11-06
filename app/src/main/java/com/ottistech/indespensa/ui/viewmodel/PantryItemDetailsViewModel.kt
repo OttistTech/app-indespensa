@@ -1,6 +1,5 @@
 package com.ottistech.indespensa.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
-import com.ottistech.indespensa.ui.UiConstants
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import kotlinx.coroutines.launch
@@ -18,41 +19,42 @@ class PantryItemDetailsViewModel(
     private val shopRepository: ShopRepository,
 ) : ViewModel(), ProductItemDetailsViewModel {
 
-    private val TAG = "PANTRY ITEM DETAILS VIEWMODEL"
-
     private val _itemDetails = MutableLiveData<PantryItemDetailsDTO?>()
     override val itemDetails: MutableLiveData<PantryItemDetailsDTO?> = _itemDetails
 
-    private val _message = MutableLiveData<Int?>()
-    override val message: LiveData<Int?> = _message
+    private val _feedback = MutableLiveData<Feedback?>()
+    override val feedback: LiveData<Feedback?> = _feedback
 
     private val _itemAmount = MutableLiveData<Int>()
     override val itemAmount: LiveData<Int> = _itemAmount
 
     override fun getItemDetails(itemId: Long) {
-        Log.d(TAG, "[getItemDetails] Requesting item $itemId details")
         viewModelScope.launch {
             try {
-                val itemDetails = pantryRepository.getItemDetails(itemId)
+                val itemDetails = pantryRepository.getDetails(itemId)
                 if(itemDetails != null) {
                     _itemDetails.value = itemDetails
                     _itemAmount.value = itemDetails.amount
                 } else {
-                    _message.value = UiConstants.ERROR_NOT_FOUND
+                    _feedback.value =
+                        Feedback(FeedbackId.GET_ITEM_DETAILS, FeedbackCode.UNHANDLED, "Não foi possível carregar as informações")
                 }
             } catch(e: ResourceNotFoundException) {
-                _message.value = UiConstants.ERROR_NOT_FOUND
+                _feedback.value =
+                    Feedback(FeedbackId.GET_ITEM_DETAILS, FeedbackCode.NOT_FOUND, "Informações não encontradas")
+            } catch(e: Exception) {
+                _feedback.value =
+                    Feedback(FeedbackId.GET_ITEM_DETAILS, FeedbackCode.UNHANDLED, "Não foi possível carregar!")
             }
         }
     }
 
     override fun syncChanges() {
-        Log.d(TAG, "[syncChanges] Requesting for changed item synchronization")
         val pantryItemId: Long? = _itemDetails.value?.itemId
         val newAmount: Int? = _itemAmount.value
         if(pantryItemId != null && newAmount != null) {
             viewModelScope.launch {
-                pantryRepository.updateItemsAmount(
+                pantryRepository.updateAmount(
                     ProductItemUpdateAmountDTO(
                         pantryItemId,
                         newAmount
@@ -63,7 +65,6 @@ class PantryItemDetailsViewModel(
     }
 
     override fun registerAmountChange(amountChange: Int) {
-        Log.d(TAG, "[registerItemChange] Pantry item amount was changed in $amountChange")
         _itemAmount.value?.plus(amountChange)?.let { newAmount ->
             if(newAmount >= 0) {
                 _itemAmount.value = newAmount
@@ -72,15 +73,17 @@ class PantryItemDetailsViewModel(
     }
 
     fun addToShopList() {
-        Log.d(TAG, "[addToShopList] Requesting for adding item to shop list")
         val productId: Long? = _itemDetails.value?.productId
         if(productId != null) {
             viewModelScope.launch {
-                val result = shopRepository.addItem(productId)
-                if(result) {
-                    _message.value = UiConstants.OK
-                } else {
-                    _message.value = UiConstants.FAIL
+                syncChanges()
+                try {
+                    shopRepository.add(productId)
+                    _feedback.value =
+                        Feedback(FeedbackId.ADD_TO_SHOPLIST, FeedbackCode.SUCCESS, "Adicionado à lista de compras!")
+                } catch (e: Exception) {
+                    _feedback.value =
+                        Feedback(FeedbackId.ADD_TO_SHOPLIST, FeedbackCode.UNHANDLED, "Não foi possível adicionar!")
                 }
             }
         }

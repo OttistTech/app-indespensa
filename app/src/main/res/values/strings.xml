@@ -1,7 +1,7 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--  App  -->
     <string name="app_name">InDespensa</string>
-    <string name="app_name_uppercase">InDESPENSA</string>
+    <string name="app_name_uppercase">InDespensa</string>
     <string name="app_slogan">O indispensável na sua cozinha</string>
 
     <!--  Landing  -->
@@ -29,6 +29,9 @@
     <string name="form_hint_amount">Peso / Volume</string>
     <string name="form_hint_unit">Un.</string>
     <string name="form_hint_validity_date">Data de validade</string>
+    <string name="form_hint_time">Tempo (min.)</string>
+    <string name="form_hint_level">Nível</string>
+    <string name="form_hint_preparation_method">Modo de preparo</string>
     <string name="form_app_terms_start_text">Concordo com os</string>
     <string name="form_app_terms_link">Termos de uso</string>
     <string name="form_error_not_null">%1$s é obrigatório</string>
@@ -37,15 +40,20 @@
     <string name="form_error_repeat_password">A senha deve ser a mesma</string>
     <string name="form_error_min_length">%1$s deve ter no mínimo %2$d caracteres</string>
     <string name="form_error_max_length">%1$s deve ter no máximo %2$d caracteres</string>
+    <string name="form_error_min_value">%1$s deve ser no mínimo %2$d</string>
+    <string name="form_error_max_value">%1$s deve ser no máximo %2$d</string>
     <string name="form_error_password">A senha deve %1$s</string>
-    <string name="form_error_checkbox">CheckBox Obrigatório</string>
+    <string name="form_error_checkbox">Check Obrigatório</string>
     <string name="form_error_conflict">%1$s já está em uso</string>
+    <string name="form_error_no_ingredients">Selecione pelo menos um ingrediente</string>
     <string name="form_hint_birthdate">Data de nascimento</string>
     <string name="form_login_no_account">Não tem uma conta?</string>
     <string name="form_login_signup_link">Cadastre-se</string>
     <string name="form_login_unauthorizated_error">Senha incorreta!</string>
     <string name="form_login_notfound_error">Usuário não existe!</string>
     <string name="form_login_already_deactivated_error">Usuário desativado!</string>
+    <string name="form_hint_avalilability">Disponibilidade</string>
+    <string name="form_hint_preparation_time">Tempo de preparo</string>
 
     <!--  Main - Pages  -->
     <string name="page_home_title">Home</string>
@@ -67,8 +75,14 @@
     <string name="label_product_amount">Peso / Volume:</string>
     <string name="label_validity_date">Validade:</string>
     <string name="ingredient_amount">%1$d x</string>
-    <string name="ingredient_product_amount">%.2f</string>
+    <string name="ingredient_product_amount">%.1f</string>
     <string name="ingredients_number">%1$d ingredientes</string>
+    <string name="search_product">Buscar produtos</string>
+    <string name="cta_conclude">Concluir</string>
+    <string name="search_all_filters">ver todos os filtros</string>
+    <string name="search_clear_filters">limpar filtros</string>
+    <string name="time_minutes">%1$dmin</string>
+    <string name="cta_apply">Aplicar</string>
 
     <!--  Scanner  -->
     <string name="scanner_tooltip">Aponte a câmera para o código de barras</string>
@@ -98,6 +112,9 @@
     <string name="label_amount_pantry">Quantidade na despensa:</string>
     <string name="add_to_pantry">+ despensa</string>
     <string name="premium_slogan">Filtros de receita personalizados</string>
+    <string name="close_validity">Próximos da validade</string>
+    <string name="pantry">Sua despensa</string>
+    <string name="card_pantry_item_unit_opened">Un. aberta</string>
 
     <!--  Premium  -->
     <string name="payment_title">Estamos quase lá…</string>
@@ -109,4 +126,51 @@
     <string name="premium_logo_indepensa_premium">Logo InDepensa Premium</string>
     <string name="premium_label_only">Por apenas</string>
     <string name="premium_price_current">R$%.2f</string>
+
+    <!--  Recipe  -->
+    <string name="recipe_details_item_amount">%1$.1f%2$s</string>
+    <string name="ingredients_count">Ingredientes (%1$d/%2$d)</string>
+    <string name="ingredients_count_short">(%1$d/%2$d) ingr.</string>
+    <string name="preparation_mode">Modo de Preparo - %1$s</string>
+    <string name="recipe_details_prepare_recipe">Preparar receita</string>
+    <string name="dialog_rating_title">Avaliação</string>
+    <string name="dialog_rating_feedback">O que você achou dessa receita?</string>
+    <string name="dialog_rating_send">Enviar</string>
+    <string name="recipe_general_information">Informações gerais</string>
+    <string name="recipe_ingredients">Ingredientes</string>
+    <string name="add_ingredient">+ Ingrediente</string>
+    <string name="recipe_preparation_method">Passo a passo</string>
+    <string name="recipe_add_ingredient">Adicionar Ingrediente</string>
+    <string name="recipe_required_ingredient">Ingrediente obrigatório</string>
+    <string name="recipe">Receita</string>
+    <string name="profile_items_in_pantry">Itens na despensa</string>
+    <string name="profile_purchases_made">Compras realizadas</string>
+    <string name="profile_products_already_expired">Produtos já vencidos</string>
+    <string name="profile_recipes_made">Receitas preparadas</string>
+    <string name="search_recipe">Buscar receita</string>
+    <string name="recommended_recipes">Receitas para você</string>
+    <string name="recommended_recipes_description">Encontre aqui a melhor receita para o seu dia. Nós te ajudamos com isso!</string>
+    <string name="recipe_filters">Filtros de receita</string>
+
+    <!--  DashBoard  -->
+    <string name="dashboard_personal_big_number_label_1">Itens na despensa</string>
+    <string name="dashboard_personal_big_number_label_2">Última compra</string>
+    <string name="dashboard_personal_big_number_label_3">Próximos do vencimento</string>
+    <string name="dashboard_personal_big_number_label_4">Receitas possíveis</string>
+    <string name="profile">Seu perfil</string>
+    <string name="your_stats">Você no InDespensa</string>
+    <string name="recipes_created_by_you">Receitas criadas por você</string>
+    <string name="premium_cta">Quero ser premium</string>
+    <string name="premium_title_cta">Assine o InDespensa Premium</string>
+    <string name="cta_leave_premium">Deixar premium</string>
+    <string name="page_dashboard_title">DashBoard</string>
+    <string name="indespensa_admin_title">Administrador Indespensa</string>
+    <string name="search_product_shoplist">Produtos para adicionar</string>
+    <string name="cta_confirm">Confirmar</string>
+    <string name="premium_last_price">R$39,99</string>
+    <string name="cta_pay">Ir para pagamento</string>
+    <string name="app_terms_title">Leia com atenção</string>
+    <string name="shoplist_recommendations">Separamos alguns produtos que você pode gostar para começar uma lista de compras:</string>
+
+
 </resources>

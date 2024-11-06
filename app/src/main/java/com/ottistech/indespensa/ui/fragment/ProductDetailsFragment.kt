@@ -13,12 +13,14 @@ import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.data.repository.ShopRepository
 import com.ottistech.indespensa.databinding.FragmentProductDetailsBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.helpers.DatePickerCreator
-import com.ottistech.indespensa.ui.helpers.loadImage
-import com.ottistech.indespensa.ui.helpers.renderAmount
-import com.ottistech.indespensa.ui.helpers.renderValidityDate
-import com.ottistech.indespensa.ui.helpers.showToast
+import com.ottistech.indespensa.ui.dialog.DatePickerCreator
+import com.ottistech.indespensa.shared.loadImage
+import com.ottistech.indespensa.shared.renderAmount
+import com.ottistech.indespensa.shared.renderValidityDate
+import com.ottistech.indespensa.shared.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.viewmodel.PantryItemDetailsViewModel
 import com.ottistech.indespensa.ui.viewmodel.ProductItemDetailsViewModel
 import com.ottistech.indespensa.ui.viewmodel.ShopItemDetailsViewModel
@@ -47,6 +49,7 @@ class ProductDetailsFragment : Fragment() {
 
         setupObservers()
         setupUiInteractions()
+        setupBackButton()
     }
 
     override fun onResume() {
@@ -115,6 +118,8 @@ class ProductDetailsFragment : Fragment() {
                 } else {
                     productDetailsValidityDateContainer.visibility = View.GONE
                 }
+
+                if (itemDetails.wasOpened) productDetailsWasOpenedContainer.visibility = View.VISIBLE
             }
         }
         showContent()
@@ -128,9 +133,9 @@ class ProductDetailsFragment : Fragment() {
                 renderProductItem(itemDetails)
             }
         }
-        viewModel.message.observe(viewLifecycleOwner) { messageCode ->
-            messageCode?.let {
-                handleViewModelMessage(messageCode)
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
             }
         }
         viewModel.itemAmount.observe(viewLifecycleOwner) { amount ->
@@ -144,20 +149,27 @@ class ProductDetailsFragment : Fragment() {
         showLoad()
     }
 
-    private fun handleViewModelMessage(messageCode: Int) {
-        when(messageCode) {
-            UiConstants.ERROR_NOT_FOUND -> showToast("Não foi possível carregar o produto").also { popBackStack() }
-            UiConstants.FAIL -> showToast("Não foi possível concluir a ação")
-            UiConstants.OK -> showToast("Adicionado com sucesso").also { popBackStack() }
+    private fun handleFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+        when(feedback.feedbackId) {
+            FeedbackId.ADD_TO_SHOPLIST -> {
+                if(feedback.code == FeedbackCode.SUCCESS) { popBackStack() }
+            }
+            FeedbackId.ADD_TO_PANTRY -> {
+                if(feedback.code == FeedbackCode.SUCCESS) { popBackStack() }
+            }
+            FeedbackId.GET_ITEM_DETAILS -> popBackStack()
+        }
+    }
+
+    private fun setupBackButton() {
+        binding.productDetailsBack.setOnClickListener {
+            popBackStack()
         }
     }
 
     private fun popBackStack() {
-        if(args.itemType == ProductItemType.PANTRY_ITEM) {
-            findNavController().popBackStack(R.id.pantry_dest, false)
-        } else {
-            findNavController().popBackStack(R.id.nav_shoplist, false)
-        }
+        findNavController().popBackStack(R.id.product_details_dest, true)
     }
 
     private fun setupForProductType() {

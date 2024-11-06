@@ -1,33 +1,38 @@
 package com.ottistech.indespensa.data.repository
 
-import android.util.Log
+import android.content.Context
 import com.ottistech.indespensa.data.datasource.CategoryRemoteDataSource
 import com.ottistech.indespensa.data.exception.ResourceNotFoundException
+import com.ottistech.indespensa.data.exception.ResourceUnauthorizedException
+import com.ottistech.indespensa.shared.getCurrentUser
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
 import java.net.HttpURLConnection
 
-class CategoryRepository {
+class CategoryRepository (
+    private val context: Context
+) {
 
-    private val TAG = "CATEGORY REPOSITORY"
     private val remoteDataSource = CategoryRemoteDataSource()
 
-    suspend fun listCategories(pattern: String = "") : List<String> {
-        Log.d(TAG, "[listCategories] Trying to fetch product categories")
-        val result : ResultWrapper<List<String>> = remoteDataSource.listCategories(pattern)
+    suspend fun list(pattern: String = "") : List<String> {
+        val token = context.getCurrentUser().token
+        val result =
+            remoteDataSource.list(pattern, token)
         when(result) {
             is ResultWrapper.Success -> {
-                Log.d(TAG, "[listCategories] Found categories successfully")
                 return result.value
             }
             is ResultWrapper.Error -> {
                 when(result.code) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
+                    HttpURLConnection.HTTP_NOT_FOUND ->
                         throw ResourceNotFoundException(result.error)
-                    }
-                    else -> throw Exception(result.error)
+                    HttpURLConnection.HTTP_UNAUTHORIZED ->
+                        throw ResourceUnauthorizedException(result.error)
+                    else ->
+                        throw Exception(result.error)
                 }
             }
-            else -> throw Exception()
+            else -> throw Exception("Error while listing categories")
         }
     }
 }

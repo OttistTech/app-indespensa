@@ -8,151 +8,118 @@ import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemDetailsDTO
 import com.ottistech.indespensa.webclient.dto.shoplist.ShopItemPartialDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.ShopService
-import org.json.JSONObject
-import java.net.HttpURLConnection
+import com.ottistech.indespensa.webclient.service.core.ShopService
 
 class ShopRemoteDatasource {
 
     private val TAG = "SHOP REMOTE DATASOURCE"
     private val service : ShopService =
-        RetrofitInitializer().getService(ShopService::class.java)
+        RetrofitInitializer().getCoreService(ShopService::class.java)
 
-    suspend fun addItem(
+    suspend fun add(
         userId: Long,
-        shopItem: ShopItemCreateDTO
-    ) : ResultWrapper<ShopItemPartialDTO> {
-        try {
-            Log.d(TAG, "[addItem] Trying to add shop item with $shopItem")
-            val response = service.addItem(userId, shopItem)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[addItem] Shop item added successfully")
-                ResultWrapper.Success(
-                    response.body() as ShopItemPartialDTO
-                )
+        shopItem: ShopItemCreateDTO,
+        token: String
+    ) : ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[add] Adding shop item with: $shopItem")
+            val response = service.add(userId, shopItem, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[add] Added successfully")
+                ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[addItem] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[add] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[addItem] Failed while adding shop item", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[add] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun listItems(userId: Long) : ResultWrapper<List<ShopItemPartialDTO>> {
-        try {
-            Log.d(TAG, "[listItems] Trying to fetch shop items for user $userId")
-            val response = service.listItems(userId)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[listItems] Found shop items for user $userId")
+    suspend fun list(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<List<ShopItemPartialDTO>> {
+        return try {
+            Log.d(TAG, "[list] Fetching shop items")
+            val response = service.list(userId, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[list] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<ShopItemPartialDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[listItems] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                    Log.e(TAG, "[listItems] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
-                }
+                Log.e(TAG, "[list] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listItems] Failed while listing shop items", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[list] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<List<ProductItemUpdateAmountDTO>> {
-        try {
-            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
-            val response = service.updateItemsAmount(pantryItems)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[updateItemsAmount] Updated amount successfully for ${response.body()?.size}/${pantryItems.size} items")
-                ResultWrapper.Success(
-                    response.body() as List<ProductItemUpdateAmountDTO>
-                )
+    suspend fun updateAmount(
+        pantryItems : List<ProductItemUpdateAmountDTO>,
+        token: String
+    ) : ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[updateAmount] Trying to update amount of ${pantryItems.size} items")
+            val response = service.updateAmount(pantryItems, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[updateAmount] Updated successfully")
+                ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                Log.e(TAG, "[updateItemsAmount] A not mapped error occurred")
-                ResultWrapper.Error(response.code(), error.get("detail").toString())
+                Log.e(TAG, "[updateAmount] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[updateItemsAmount] Failed while updating items amount", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[updateAmount] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getItemDetails(itemId: Long): ResultWrapper<ShopItemDetailsDTO> {
-        try {
-            Log.d(TAG, "[getItemDetails] Trying to get pantry item details for $itemId")
-            val response = service.getItemDetails(itemId)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getItemDetails] Found pantry item details successfully $itemId")
+    suspend fun getDetails(
+        itemId: Long,
+        token: String
+    ): ResultWrapper<ShopItemDetailsDTO> {
+        return try {
+            Log.d(TAG, "[getDetails] Fetching item details by id $itemId")
+            val response = service.getDetails(itemId, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getDetails] Found successfully")
                 ResultWrapper.Success(
                     response.body() as ShopItemDetailsDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getItemDetails] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                    Log.e(TAG, "[getItemDetails] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
-                }
+                Log.e(TAG, "[getDetails] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getDetails] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getHistory(userId: Long): ResultWrapper<List<PurchaseDTO>> {
+    suspend fun getHistory(
+        userId: Long,
+        token: String
+    ): ResultWrapper<List<PurchaseDTO>> {
         try {
-            Log.d(TAG, "[getHistory] Trying to get history for $userId")
-            val response = service.getHistory(userId)
+            Log.d(TAG, "[getHistory] Fetching history")
+            val response = service.getHistory(userId, token)
             return if(response.isSuccessful) {
-                Log.d(TAG, "[getHistory] Found history successfully")
+                Log.d(TAG, "[getHistory] Found successfully")
                 ResultWrapper.Success(
                     response.body() as List<PurchaseDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getHistory] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                    Log.e(TAG, "[getHistory] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
-                }
+                Log.e(TAG, "[getHistory] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getHistory] Failed while getting history", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getHistory] Failed", e)
+            return ResultWrapper.ConnectionError
         }
     }
-
-
 }

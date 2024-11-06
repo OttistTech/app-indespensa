@@ -13,9 +13,12 @@ import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.PantryRepository
 import com.ottistech.indespensa.databinding.FragmentPantryBinding
 import com.ottistech.indespensa.shared.ProductItemType
-import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
+import com.ottistech.indespensa.shared.getCurrentUser
+import com.ottistech.indespensa.shared.showToast
 import com.ottistech.indespensa.ui.helpers.makeSpanText
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
 import com.ottistech.indespensa.ui.recyclerview.adapter.PantryAdapter
 import com.ottistech.indespensa.ui.viewmodel.PantryViewModel
 
@@ -41,18 +44,10 @@ class PantryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        setupBackButton()
         setupObservers()
-
-        val currentUserName = requireContext().getCurrentUser().name
-        binding.pantryText.text = makeSpanText(
-            getString(R.string.pantry_text, currentUserName),
-            currentUserName,
-            ContextCompat.getColor(requireContext(), R.color.secondary)
-        )
-
-        binding.pantryFab.setOnClickListener {
-            navigateToPantryForm()
-        }
+        showUserMessage()
+        setupFab()
     }
 
     override fun onResume() {
@@ -66,6 +61,31 @@ class PantryFragment : Fragment() {
         viewModel.syncChanges()
     }
 
+    private fun setupFab() {
+        binding.pantryFab.setOnClickListener {
+            navigateToPantryForm()
+        }
+    }
+
+    private fun showUserMessage() {
+        val currentUserName = requireContext().getCurrentUser().name
+        binding.pantryText.text = makeSpanText(
+            getString(R.string.pantry_text, currentUserName),
+            currentUserName,
+            ContextCompat.getColor(requireContext(), R.color.secondary)
+        )
+    }
+
+    private fun setupBackButton() {
+        binding.pantryBack.setOnClickListener {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.pantry_dest, true)
+    }
+
     private fun setupObservers() {
         viewModel.pantryState.observe(viewLifecycleOwner) { pantryItems ->
             binding.pantryProgressbar.visibility = View.GONE
@@ -75,18 +95,24 @@ class PantryFragment : Fragment() {
             }
         }
 
-        viewModel.error.observe(viewLifecycleOwner) { error ->
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
             binding.pantryProgressbar.visibility = View.GONE
-            when(error) {
-                UiConstants.ERROR_NOT_FOUND -> {
-                    binding.pantryItemsList.visibility = View.GONE
-                    binding.pantryMessage.text = getString(R.string.pantry_message_empty)
-                    binding.pantryMessage.visibility = View.VISIBLE
-                }
-                null -> {
-                    binding.pantryMessage.visibility = View.GONE
-                }
+            feedback?.let {
+                handleFeedback(it)
             }
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        if (
+            feedback.feedbackId == FeedbackId.PANTRY_LIST &&
+            feedback.code == FeedbackCode.NOT_FOUND
+        ) {
+            binding.pantryItemsList.visibility = View.GONE
+            binding.pantryMessage.text = feedback.message
+            binding.pantryMessage.visibility = View.VISIBLE
+        } else {
+            showToast(feedback.message)
         }
     }
 

@@ -1,148 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ui.fragment.PremiumFragment">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/premium_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/logo_small_premium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/premium_logo_indepensa_premium" />
-
-        <TextView
-            android:id="@+id/premium_main_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/premium_title"
-            android:textColor="@color/secondary"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_logo" />
-
-        <TextView
-            android:id="@+id/premium_main_text"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="@string/premium_text"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_main_title" />
-
-        <TextView
-            android:id="@+id/premium_label_only"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/montserrat_medium"
-            android:text="@string/premium_label_only"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_main_text" />
-
-        <TextView
-            android:id="@+id/premium_price_current"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_bold"
-            tools:text="R$19,99"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_label_only" />
-
-        <TextView
-            android:id="@+id/premium_price_old"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="R$39,99"
-            android:textColor="@color/red"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.13"
-            app:layout_constraintStart_toEndOf="@+id/premium_price_current"
-            app:layout_constraintTop_toBottomOf="@+id/premium_label_only" />
-
-        <ImageView
-            android:id="@+id/premium_image_carousel"
-            android:layout_width="wrap_content"
-            android:layout_height="250dp"
-            android:layout_marginTop="6dp"
-            android:src="@drawable/premium_cellphone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_price_current" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        android:layout_height="match_parent">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="80dp"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/premium_image_carousel">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/premium_view_pager"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            tools:context=".ui.fragment.PremiumFragment"
+            android:fillViewport="true">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:id="@+id/premium_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow"
+                    android:backgroundTint="@color/transparent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:layout_marginStart="@dimen/margin_2"/>
+                <ImageView
+                    android:id="@+id/premium_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:src="@drawable/logo_premium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@string/premium_logo_indepensa_premium" />
+                <TextView
+                    android:id="@+id/premium_main_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaHeading3"
+                    android:textColor="@color/secondary"
+                    android:text="@string/premium_title"
+                    android:layout_marginTop="@dimen/margin_4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_logo" />
+                <TextView
+                    android:id="@+id/premium_main_text"
+                    android:layout_width="296dp"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaText"
+                    android:textAlignment="center"
+                    android:textColor="@color/gray"
+                    android:text="@string/premium_text"
+                    android:layout_marginTop="@dimen/margin_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_main_title" />
+                <TextView
+                    android:id="@+id/premium_label_only"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaHeading3"
+                    android:text="@string/premium_label_only"
+                    android:layout_marginTop="@dimen/margin_4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_main_text" />
 
-            <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-                android:id="@+id/premium_dots_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:dotsSize="8dp"
-                app:dotsStrokeColor="@color/gray" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/premium_go_to_payment_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/button_primary_background"
-            android:fontFamily="@font/montserrat"
-            android:text="Ir para pagamento"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            app:backgroundTint="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
+                <TextView
+                    android:id="@+id/premium_price_current"
+                    style="@style/IndespensaHeading2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_label_only"
+                    tools:text="R$19,99" />
+                <TextView
+                    android:id="@+id/premium_price_old"
+                    style="@style/IndespensaHeading5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/premium_last_price"
+                    android:textColor="@color/red"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintBottom_toBottomOf="@+id/premium_price_current"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/premium_price_current" />
+                <ImageView
+                    android:id="@+id/premium_image_carousel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:src="@drawable/premium_cellphone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_price_current" />
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="80dp"
+                    android:layout_marginTop="@dimen/margin_1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/premium_image_carousel">
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/premium_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+                        android:id="@+id/premium_dots_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_2"
+                        app:dotsSize="@dimen/dots_size"
+                        app:dotsStrokeColor="@color/gray" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/premium_go_to_payment_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/IndespensaButton.primary"
+                    android:layout_margin="@dimen/margin_6"
+                    android:text="@string/cta_pay"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</layout>

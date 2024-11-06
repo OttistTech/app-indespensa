@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.InDespensa" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
@@ -9,13 +10,13 @@
 
     <!--  Splash Screen Theme Configurations  -->
     <style name="IndespensaSplashScreen" parent="Theme.SplashScreen.IconBackground">
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_white_with_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/logo_white</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/secondary</item>
         <item name="windowSplashScreenAnimationDuration">2000</item>
         <item name="postSplashScreenTheme">@style/Theme.InDespensa</item>
     </style>
 
-    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="IndespensaTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/gray</item>
         <item name="hintTextColor">@color/gray</item>
         <item name="android:textColorHint">@color/gray</item>
@@ -23,20 +24,27 @@
         <item name="android:fontFamily">@font/montserrat_medium</item>
     </style>
 
-    <style name="CustomTextInputLayoutDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+    <style name="IndespensaTextInputLayoutDropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="boxStrokeColor">@color/gray</item>
         <item name="hintTextColor">@color/gray</item>
         <item name="android:textColorHint">@color/gray</item>
         <item name="android:fontFamily">@font/montserrat_medium</item>
     </style>
 
-    <style name="IndespensaText">
-        <item name="android:fontFamily">@font/montserrat</item>
-    </style>
-
     <style name="IndespensaFormErrorMessage" parent="IndespensaText">
         <item name="android:textColor">@color/red</item>
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="IndespensaSectionTitle">
+        <item name="android:fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textColor">@color/secondary</item>
+        <item name="android:textSize">@dimen/text_regular</item>
+    </style>
+
+    <style name="IndespensaText">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="IndespensaHeading1" parent="IndespensaText">
@@ -70,12 +78,12 @@
     </style>
 
     <style name="IndespensaHeading6" parent="IndespensaText">
-        <item name="android:textSize">28sp</item>
+        <item name="android:textSize">8sp</item>
         <item name="android:textColor">@color/gray</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="IndespensaConfirmationDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="IndespensaDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
@@ -84,5 +92,70 @@
     <style name="IndespensaRoundedFab">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar" >
+        <item name="android:progressDrawable">@drawable/rating_bar</item>
+        <item name="android:minHeight">15dip</item>
+        <item name="android:maxHeight">47dip</item>
+    </style>
+
+    <style name="IndespensaTag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/margin_2</item>
+        <item name="background">@null</item>
+        <item name="android:background">@drawable/tag_filter_default</item>
+        <item name="android:textColor">@color/pastelOrange</item>
+        <item name="android:textSize">@dimen/text_regular</item>
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+    </style>
+
+    <style name="IndespensaTag.Selected">
+        <item name="android:background">@drawable/tag_filter_selected</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="IndespensaButton" parent="Widget.MaterialComponents.Button">
+        <item name="textAllCaps">true</item>
+        <item name="android:layout_marginTop">@dimen/margin_2</item>
+        <item name="fontFamily">@font/montserrat_semibold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">@dimen/letter_spacing_all_caps</item>
+        <item name="android:enabled">true</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
+    <style name="IndespensaButton.primary" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_primary_background</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="IndespensaButton.secondary" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_secondary_background</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="IndespensaButton.green" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_border_green_background</item>
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <style name="IndespensaButton.red" parent="IndespensaButton">
+        <item name="android:background">@drawable/button_border_red_background</item>
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="IndespensaProgressbar" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateTint">@color/secondary</item>
+    </style>
+
+    <style name="IndespensaBlur">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:background">@color/blur</item>
     </style>
 </resources>

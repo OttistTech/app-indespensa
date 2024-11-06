@@ -1,75 +1,87 @@
 package com.ottistech.indespensa.ui.fragment
 
 import android.content.Intent
-import android.content.res.Resources.NotFoundException
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.widget.addTextChangedListener
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
 import com.ottistech.indespensa.data.repository.CategoryRepository
 import com.ottistech.indespensa.data.repository.PantryRepository
+import com.ottistech.indespensa.data.repository.ProductRepository
 import com.ottistech.indespensa.databinding.FragmentPantryFormBinding
 import com.ottistech.indespensa.shared.AppConstants
 import com.ottistech.indespensa.ui.UiConstants
-import com.ottistech.indespensa.ui.helpers.DatePickerCreator
-import com.ottistech.indespensa.ui.helpers.FieldValidations
-import com.ottistech.indespensa.ui.helpers.getCurrentUser
-import com.ottistech.indespensa.ui.helpers.loadImage
-import com.ottistech.indespensa.ui.helpers.showToast
-import com.ottistech.indespensa.ui.helpers.toDate
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
+import com.ottistech.indespensa.ui.dialog.DatePickerCreator
+import com.ottistech.indespensa.shared.showToast
+import com.ottistech.indespensa.ui.model.feedback.Feedback
+import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
+import com.ottistech.indespensa.ui.model.feedback.FeedbackId
+import com.ottistech.indespensa.ui.recyclerview.adapter.ProductSearchAdapter
+import com.ottistech.indespensa.ui.viewmodel.PantryFormViewModel
 import com.ottistech.indespensa.webclient.dto.product.ProductDTO
-import kotlinx.coroutines.launch
 
 class PantryFormFragment : Fragment() {
 
-    private val TAG = "PANTRY FORM FRAGMENT"
     private lateinit var binding : FragmentPantryFormBinding
-    private lateinit var validator : FieldValidations
+    private lateinit var viewModel : PantryFormViewModel
+    private lateinit var searchAdapter: ProductSearchAdapter
+
     private lateinit var datePicker : MaterialDatePicker<Long>
-    private lateinit var pantryRepository : PantryRepository
-    private lateinit var categoryRepository : CategoryRepository
 
-
-    private var productEanCode : String? = null
-    private var productImageUrl : String? = null
+    private val resultLauncherGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val imageUri = result.data?.data
+        if(imageUri != null) {
+            binding.pantryFormImage.setImageURI(imageUri)
+            viewModel.setNewProductImageBitmap(binding.pantryFormImage.drawable.toBitmap())
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        validator = FieldValidations(requireContext())
-        binding = FragmentPantryFormBinding.inflate(inflater, container, false)
-        pantryRepository = PantryRepository(requireContext())
-        categoryRepository = CategoryRepository()
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_pantry_form, container, false)
+        viewModel = PantryFormViewModel(
+            PantryRepository(requireContext()),
+            ProductRepository(requireContext()),
+            CategoryRepository(requireContext())
+        )
+        binding.model = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        parentFragmentManager.setFragmentResultListener(
-            UiConstants.SCANNER_REQUEST_CODE, this
-        ) { _, bundle ->
-            val result : ProductDTO? =
-                bundle.getSerializable(UiConstants.SCANNER_RESULT_KEY) as ProductDTO?
-
-            result?.let {
-                fillForm(it)
-                productEanCode = it.eanCode
-                productImageUrl = it.imageUrl
-            }
+        binding.pantryFormButtonSubmit.setOnClickListener {
+            viewModel.submit()
         }
+
+        setupUnitiesSelect(AppConstants.AMOUNT_UNITIES)
+        setupDatePicker()
+        setupSearchBar()
+        setupBackButton()
+
+        setupAdapter()
+        setupRecyclerView()
+
+        setupObservers()
+        setupValidationListeners()
 
         binding.pantryFormImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -81,124 +93,142 @@ class PantryFormFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        lifecycleScope.launch {
-            val categories = categoryRepository.listCategories()
-            val categoriesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, categories)
-            binding.pantryFormInputCategorySelect.setAdapter(categoriesAdapter)
-        }
-
-        val unitiesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, AppConstants.AMOUNT_UNITIES)
-        binding.pantryFormInputUnitSelect.setAdapter(unitiesAdapter)
-
-        val datePickerCreator = DatePickerCreator()
-        datePicker = datePickerCreator.createDatePicker(binding.pantryFormInputValidityDate, getString(
-            com.ottistech.indespensa.R.string.form_hint_validity_date), false)
-        binding.pantryFormInputValidityDate.setOnClickListener {
-            datePicker.show(parentFragmentManager, "DATE PICKER")
-        }
-
-        binding.pantryFormButtonSubmit.setOnClickListener {
-            if(validForm()) {
-                val newPantryItem = generatePantryItem()
-                Log.d(TAG, "Pantry item generated by form: $newPantryItem")
-                lifecycleScope.launch {
-                    try {
-                        Log.d(TAG, "Trying to create pantry item")
-                        val result = pantryRepository.createItem(newPantryItem, binding.pantryFormImage.drawable.toBitmap())
-                        if(result) {
-                            showToast(requireContext().getString(R.string.created_successfully, "Item"))
-                            findNavController().popBackStack(R.id.pantry_form_dest, true)
-                        } else {
-                            Log.e(TAG, "Failed creating pantry item")
-                        }
-                    } catch (e: NotFoundException) {
-                        Log.e(TAG, "Failed creating pantry item", e)
-                    }
-                }
+        parentFragmentManager.setFragmentResultListener(
+            UiConstants.SCANNER_REQUEST_CODE, this
+        ) { _, bundle ->
+            val result : ProductDTO? =
+                bundle.getSerializable(UiConstants.SCANNER_RESULT_KEY) as ProductDTO?
+            result?.let {
+                viewModel.updateStateWithProduct(it)
             }
         }
     }
 
-    private val resultLauncherGallery = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        val imageUri = result.data?.data
-        if(imageUri != null) {
-            binding.pantryFormImage.setImageURI(imageUri)
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchCategories()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.clearCallbacks()
+    }
+
+    private fun setupBackButton() {
+        binding.pantryFormBack.setOnClickListener {
+            popBackStack()
         }
     }
 
-    private fun generatePantryItem(): PantryItemCreateDTO {
-        return PantryItemCreateDTO(
-            productEanCode= productEanCode.toString(),
-            productName= binding.pantryFormInputName.text.toString(),
-            productDescription= binding.pantryFormInputDescription.text.toString(),
-            productImageUrl= productImageUrl,
-            productAmount= binding.pantryFormInputAmount.text.toString().toDouble(),
-            productUnit= binding.pantryFormInputUnitSelect.text.toString(),
-            foodName= binding.pantryFormInputFood.text.toString(),
-            categoryName= binding.pantryFormInputCategorySelect.text.toString(),
-            brandName= binding.pantryFormInputBrand.text.toString(),
-            validityDate= binding.pantryFormInputValidityDate.text.toString().toDate()!!
-        )
-    }
-
-    private fun fillForm(product: ProductDTO) {
-        product.imageUrl?.let {
-            binding.pantryFormImage.loadImage(it)
-            binding.pantryFormImage.tag = it
-            binding.pantryFormImage.isEnabled = false
-        }
-        product.name?.let {
-            binding.pantryFormInputName.setText(it)
-            binding.pantryFormInputName.isEnabled = false
-        }
-        product.foodName?.let {
-            binding.pantryFormInputFood.setText(it)
-            binding.pantryFormInputFood.isEnabled = false
-        }
-        product.description?.let {
-            binding.pantryFormInputDescription.setText(it)
-            binding.pantryFormInputDescription.isEnabled = false
-        }
-        product.categoryName?.let {
-            binding.pantryFormInputCategorySelect.setText(it)
-            binding.pantryFormInputCategorySelect.isEnabled = false
-        }
-        product.brandName?.let {
-            binding.pantryFormInputBrand.setText(it)
-            binding.pantryFormInputBrand.isEnabled = false
-        }
-        product.amount?.let {
-            binding.pantryFormInputAmount.setText(it.toString())
-            binding.pantryFormInputAmount.isEnabled = false
-        }
-        product.unit?.let {
-            binding.pantryFormInputUnitSelect.setText(it)
-            binding.pantryFormInputUnitSelect.isEnabled = false
+    private fun setupAdapter() {
+        searchAdapter = ProductSearchAdapter(
+            requireContext()
+        ) { product ->
+            viewModel.fetchProductAndUpdateState(product.productId)
+            viewModel.clearCallbacks()
         }
     }
 
-    private fun validForm() : Boolean {
-        // name
-        val isNameValid = validator.validNotNull(binding.pantryFormInputName, binding.pantryFormInputNameContainer, binding.pantryFormInputNameError)
-        // food
-        val isFoodValid = validator.validNotNull(binding.pantryFormInputFood, binding.pantryFormInputFoodContainer, binding.pantryFormInputFoodError)
-        // category
-        val isCategoryValid = validator.validNotNull(binding.pantryFormInputCategorySelect, binding.pantryFormInputCategorySelectContainer, binding.pantryFormInputCategorySelectError)
-        // description
-        val isDescriptionValid = validator.validMinLength(binding.pantryFormInputDescription, binding.pantryFormInputDescriptionContainer, binding.pantryFormInputDescriptionError, 12)
-                && validator.validMaxLength(binding.pantryFormInputDescription, binding.pantryFormInputDescriptionContainer, binding.pantryFormInputDescriptionError, 120)
-        // brand
-        val isBrandValid = validator.validNotNull(binding.pantryFormInputBrand, binding.pantryFormInputBrandContainer, binding.pantryFormInputBrandError)
-        // amount
-        val isAmountValid = validator.validNotNull(binding.pantryFormInputAmount, binding.pantryFormInputAmountContainer, binding.pantryFormInputAmountError)
-        // unit
-        val isUnityValid = validator.validNotNull(binding.pantryFormInputUnitSelect, binding.pantryFormInputUnitSelectContainer, binding.pantryFormInputUnitSelectError)
-        // validity date
-        val isValidityDateValid = validator.validNotNull(binding.pantryFormInputValidityDate, binding.pantryFormInputValidityDateContainer, binding.pantryFormInputValidityDateError)
+    private fun setupRecyclerView() {
+        with(binding.pantryFormProductResultList) {
+            adapter = searchAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
 
-        return isNameValid && isFoodValid && isCategoryValid && isDescriptionValid &&
-                isBrandValid && isAmountValid && isUnityValid && isValidityDateValid
+    private fun setupDatePicker() {
+        val datePickerCreator = DatePickerCreator()
+        datePicker = datePickerCreator.createDatePicker(binding.pantryFormInputValidityDate, getString(R.string.form_hint_validity_date), false)
+        binding.pantryFormInputValidityDate.setOnClickListener {
+            datePicker.show(parentFragmentManager, "DATE PICKER")
+        }
+    }
+
+    private fun setupUnitiesSelect(data: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, data)
+        binding.pantryFormInputUnitSelect.setAdapter(adapter)
+    }
+
+    private fun setupCategoriesSelect(data: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, data)
+        binding.pantryFormInputCategorySelect.setAdapter(adapter)
+    }
+
+    private fun setupObservers() {
+        viewModel.categories.observe(viewLifecycleOwner) { categories ->
+            categories?.let {
+                setupCategoriesSelect(it)
+            }
+        }
+
+        viewModel.searchProductResult.observe(viewLifecycleOwner) { result ->
+            result?.let {
+                binding.pantryFormProductResultList.visibility = View.VISIBLE
+                searchAdapter.updateState(it)
+            }
+        }
+
+        viewModel.feedback.observe(viewLifecycleOwner) { feedback ->
+            feedback?.let {
+                handleFeedback(it)
+            }
+        }
+    }
+
+    private fun handleFeedback(feedback: Feedback) {
+        showToast(feedback.message)
+        if(
+            feedback.feedbackId == FeedbackId.CREATE_PANTRY_ITEM &&
+            feedback.code == FeedbackCode.SUCCESS
+        ) {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack(R.id.pantry_form_dest, true)
+    }
+
+    private fun setupSearchBar() {
+        binding.pantryFormSearchbarInput.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.pantryFormProductResultList.visibility = View.GONE
+                    binding.pantryFormBlur.visibility = View.GONE
+                    binding.pantryFormSearchbarInput.text = null
+                    searchAdapter.clear()
+                }, 50)
+            } else {
+                binding.pantryFormProductResultList.visibility = View.VISIBLE
+                binding.pantryFormBlur.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setupValidationListeners() {
+        binding.pantryFormInputName.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validProductName() }
+        }
+        binding.pantryFormInputFood.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validFoodName() }
+        }
+        binding.pantryFormInputCategorySelect.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validCategory() }
+        }
+        binding.pantryFormInputDescription.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validDescription() }
+        }
+        binding.pantryFormInputBrand.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validBrandName() }
+        }
+        binding.pantryFormInputAmount.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validAmount() }
+        }
+        binding.pantryFormInputUnitSelect.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { viewModel.validUnit() }
+        }
+        binding.pantryFormInputValidityDate.addTextChangedListener {
+            viewModel.validValidityDate()
+        }
     }
 }

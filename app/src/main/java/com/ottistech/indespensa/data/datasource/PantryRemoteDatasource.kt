@@ -3,210 +3,168 @@ package com.ottistech.indespensa.data.datasource
 import android.util.Log
 import com.ottistech.indespensa.webclient.RetrofitInitializer
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemAddDTO
+import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCloseValidityDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemCreateDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemDetailsDTO
-import com.ottistech.indespensa.webclient.dto.pantry.PantryItemFullDTO
 import com.ottistech.indespensa.webclient.dto.pantry.PantryItemPartialDTO
 import com.ottistech.indespensa.webclient.dto.product.ProductItemUpdateAmountDTO
 import com.ottistech.indespensa.webclient.helpers.ResultWrapper
-import com.ottistech.indespensa.webclient.service.PantryService
-import org.json.JSONObject
-import java.net.HttpURLConnection
+import com.ottistech.indespensa.webclient.service.core.PantryService
 import java.util.Date
 
 class PantryRemoteDatasource {
 
     private val TAG = "PANTRY REMOTE DATASOURCE"
     private val service : PantryService =
-        RetrofitInitializer().getService(PantryService::class.java)
+        RetrofitInitializer().getCoreService(PantryService::class.java)
 
-    suspend fun createItem(
+    suspend fun create(
         userId: Long,
-        pantryItem: PantryItemCreateDTO
-    ) : ResultWrapper<PantryItemFullDTO> {
-        try {
-            Log.d(TAG, "[createItem] Trying to create pantry item with $pantryItem")
-            val response = service.createItem(userId, pantryItem)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[createItem] Pantry item created successfully")
-                ResultWrapper.Success(
-                    response.body() as PantryItemFullDTO
-                )
+        pantryItem: PantryItemCreateDTO,
+        token: String
+    ) : ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[create] Trying to create with: $pantryItem")
+            val response = service.create(userId, pantryItem, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[create] Created successfully")
+                ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_CONFLICT -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[createItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[createItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[createItem] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[create] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[createItem] Failed while creating pantry item", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[create] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun listItems(userId: Long) : ResultWrapper<List<PantryItemPartialDTO>> {
-        try {
-            Log.d(TAG, "[listItems] Trying to fetch pantry items for user $userId")
-            val response = service.listItems(userId)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[listItems] Found pantry items for user $userId")
+    suspend fun list(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<List<PantryItemPartialDTO>> {
+        return try {
+            Log.d(TAG, "[list] Fetching pantry items")
+            val response = service.list(userId, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[list] Found pantry items successfully")
                 ResultWrapper.Success(
                     response.body() as List<PantryItemPartialDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[listItems] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                        Log.e(TAG, "[listItems] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[list] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[listItems] Failed while listing pantry items", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[list] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun updateItemsAmount(pantryItems : List<ProductItemUpdateAmountDTO>) : ResultWrapper<List<ProductItemUpdateAmountDTO>> {
-        try {
-            Log.d(TAG, "[updateItemsAmount] Trying to update amount of ${pantryItems.size} items")
-            val response = service.updateItemsAmount(pantryItems)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[updateItemsAmount] Updated amount successfully for ${response.body()?.size}/${pantryItems.size} items")
-                ResultWrapper.Success(
-                    response.body() as List<ProductItemUpdateAmountDTO>
-                )
+    suspend fun updateAmount(
+        pantryItems : List<ProductItemUpdateAmountDTO>,
+        token: String
+    ) : ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[updateAmount] Trying to update amount of ${pantryItems.size} items")
+            val response = service.updateAmount(pantryItems, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[updateAmount] Updated successfully")
+                ResultWrapper.Success(true)
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                Log.e(TAG, "[updateItemsAmount] A not mapped error occurred")
-                ResultWrapper.Error(response.code(), error.get("detail").toString())
+                Log.e(TAG, "[updateAmount] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[updateItemsAmount] Failed while updating items amount", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[updateAmount] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun getItemDetails(pantryItemId: Long) : ResultWrapper<PantryItemDetailsDTO> {
-        try {
-            Log.d(TAG, "[getItemDetails] Trying to get pantry item details for $pantryItemId")
-            val response = service.getItemDetails(pantryItemId)
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[getItemDetails] Found pantry item details successfully $pantryItemId")
+    suspend fun getDetails(
+        pantryItemId: Long,
+        token: String
+    ) : ResultWrapper<PantryItemDetailsDTO> {
+        return try {
+            Log.d(TAG, "[getDetails] Fetching pantry item details for $pantryItemId")
+            val response = service.getDetails(pantryItemId, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[getDetails] Found successfully")
                 ResultWrapper.Success(
                     response.body() as PantryItemDetailsDTO
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[getItemDetails] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    } else -> {
-                    Log.e(TAG, "[getItemDetails] A not mapped error occurred")
-                    ResultWrapper.Error(null, "Unexpected Error")
-                }
-                }
+                Log.e(TAG, "[getDetails] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[getItemDetails] Failed while getting pantry item by id", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[getDetails] Failed", e)
+            ResultWrapper.ConnectionError
         }
     }
 
-    suspend fun addItem(userId: Long, shopItemId: Long, validityDate: Date) : ResultWrapper<PantryItemFullDTO> {
-        try {
-            val pantryItemAdd = PantryItemAddDTO(
-                shopItemId,
-                validityDate
-            )
+    suspend fun addShopItem(
+        userId: Long,
+        shopItemId: Long,
+        validityDate: Date,
+        token: String
+    ) : ResultWrapper<Boolean> {
+        return try {
+            val pantryItemAdd = PantryItemAddDTO(shopItemId, validityDate)
+            Log.d(TAG, "[addShopItem] Trying to add item with: $pantryItemAdd")
+            val response = service.add(userId, pantryItemAdd, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[addShopItem] Added successfully")
+                ResultWrapper.Success(true)
+            } else {
+                Log.e(TAG, "[addShopItem] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[addShopItem] Failed", e)
+            return ResultWrapper.ConnectionError
+        }
+    }
 
-            Log.d(TAG, "[addItem] Trying to add item to pantry")
-            val response = service.addPantryItem(userId, pantryItemAdd)
+    suspend fun addAllShopItems(
+        userId: Long,
+        token: String
+    ): ResultWrapper<Boolean> {
+        return try {
+            Log.d(TAG, "[addAllShopItems] Trying to add all shop items")
+            val response = service.addAllShopItems(userId, token)
+            if (response.isSuccessful) {
+                Log.d(TAG, "[addAllShopItems] Added all successfully")
+                ResultWrapper.Success(true)
+            } else {
+                Log.e(TAG, "[addAllShopItems] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "[addAllShopItems] Failed", e)
+            ResultWrapper.ConnectionError
+        }
+    }
 
-            return if(response.isSuccessful) {
-                Log.d(TAG, "[addItem] Added items to pantry successfully")
+    suspend fun listCloseValidityItems(
+        userId: Long,
+        token: String
+    ) : ResultWrapper<List<PantryItemCloseValidityDTO>> {
+        return try {
+            Log.d(TAG, "[listCloseValidityItems] Fetching close validity items")
+            val response = service.listCloseValidityItems(userId, token)
+            if(response.isSuccessful) {
+                Log.d(TAG, "[listCloseValidityItems] Found successfully")
                 ResultWrapper.Success(
-                    response.body() as PantryItemFullDTO
+                    response.body() as List<PantryItemCloseValidityDTO>
                 )
             } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                when(response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addItem] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[addItem] A not mapped error occurred")
-                        ResultWrapper.Error(null, "Unexpected Error")
-                    }
-                }
+                Log.e(TAG, "[listCloseValidityItems] Error ${response.code()} occurred: ${response.message()}")
+                ResultWrapper.Error(response.code(), response.message())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[addAllShopItemsToPantry] Failed while adding shop item to pantry", e)
-            return ResultWrapper.NetworkError
+            Log.e(TAG, "[listCloseValidityItems] Failed", e)
+            return ResultWrapper.ConnectionError
         }
     }
-
-    suspend fun addAllShopItemsToPantry(userId: Long): ResultWrapper<Any> {
-        return try {
-            Log.d(TAG, "[addAllShopItemsToPantry] Trying to add all shop items to pantry")
-            val response = service.addAllShopItemsToPantry(userId)
-            if (response.isSuccessful) {
-                Log.d(TAG, "[addAllShopItemsToPantry] Added all shop items to pantry successfully")
-                ResultWrapper.Success("Added all shop items to pantry successfully")
-            } else {
-                val error = JSONObject(response.errorBody()!!.string())
-                Log.d(TAG, response.code().toString())
-
-                when (response.code()) {
-                    HttpURLConnection.HTTP_NOT_FOUND -> {
-                        val detail = error.get("detail").toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {
-                        val detail = error.get(error.keys().next()).toString()
-                        Log.e(TAG, "[addAllShopItemsToPantry] $detail")
-                        ResultWrapper.Error(response.code(), detail)
-                    }
-                    else -> {
-                        Log.e(TAG, "[addAllShopItemsToPantry] A not mapped error occurred")
-                        ResultWrapper.Error(response.code(), "Unexpected Error")
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed while adding shop all items to pantry", e)
-            ResultWrapper.NetworkError
-        }
-
-    }
-
-
 }
