@@ -83,6 +83,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        recipeAdapter.clearItems()
         viewModel.fetchDashboardData()
         viewModel.fetchCloseValidityItems()
         viewModel.fetchRecommendedRecipes()

@@ -88,8 +88,6 @@ dependencies {
     implementation("androidx.camera:camera-extensions:1.2.2")
     // ENCRYPTED PREFERENCES
     implementation("androidx.security:security-crypto:1.1.0-alpha03")
-    // GIFS AND ANIMATIONS
-    implementation("com.airbnb.android:lottie:6.3.0")
     // WORKER
     implementation("androidx.work:work-runtime-ktx:$work_version")
 
