@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="model"
+            type="com.ottistech.indespensa.ui.viewmodel.RecipeListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/white">
+        <TextView
+            android:id="@+id/recipe_list_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/IndespensaHeading2"
+            android:text="@string/recipe_list_title"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginStart="@dimen/margin_4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_list_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_4"
+            android:layout_marginHorizontal="@dimen/margin_4"
+            app:layout_constraintTop_toBottomOf="@id/recipe_list_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/card_recipe_item"/>
+        <ProgressBar
+            android:layout_width="@dimen/progressbar_small"
+            android:layout_height="@dimen/progressbar_small"
+            android:theme="@style/IndespensaProgressbar"
+            android:layout_marginTop="@dimen/margin_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_list_list"
+            android:visibility="@{model.isLoading == true ? View.VISIBLE : View.GONE}" />
+        <TextView
+            android:id="@+id/recipe_list_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            style="@style/IndespensaHeading2"
+            android:textColor="@color/gray"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="@id/recipe_list_list"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginHorizontal="@dimen/margin_4"/>
+        <ProgressBar
+            android:layout_width="@dimen/progressbar_large"
+            android:layout_height="@dimen/progressbar_large"
+            android:theme="@style/IndespensaProgressbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipe_list_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="@{model.isLoading == true ? View.VISIBLE : View.GONE}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
