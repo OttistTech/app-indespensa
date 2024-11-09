@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.repository.AddressRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentSignupBinding
 import com.ottistech.indespensa.shared.AppAccountType
@@ -49,7 +50,8 @@ class SignupFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_signup, container, false)
         viewModel = SignupViewModel(
             args.signupType,
-            UserRepository(requireContext())
+            UserRepository(requireContext()),
+            AddressRepository()
         )
         binding.model = viewModel
         binding.lifecycleOwner = this
