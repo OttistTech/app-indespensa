@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ottistech.indespensa.R
+import com.ottistech.indespensa.data.repository.AddressRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.databinding.FragmentUpdateProfileBinding
 import com.ottistech.indespensa.shared.AppAccountType
@@ -38,7 +39,8 @@ class UpdateProfileFragment : Fragment() {
         dialogCreator = ConfirmationDialogCreator(requireContext())
         binding = FragmentUpdateProfileBinding.inflate(inflater, container, false)
         viewModel = UpdateProfileViewModel(
-            UserRepository(requireContext())
+            UserRepository(requireContext()),
+            AddressRepository()
         )
         binding.model = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

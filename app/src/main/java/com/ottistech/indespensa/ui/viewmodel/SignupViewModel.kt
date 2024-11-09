@@ -1,11 +1,13 @@
 package com.ottistech.indespensa.ui.viewmodel
 
+import android.content.res.Resources.NotFoundException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.FieldConflictException
+import com.ottistech.indespensa.data.repository.AddressRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.helpers.validConfirmation
@@ -16,17 +18,21 @@ import com.ottistech.indespensa.ui.helpers.validNotNull
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
+import com.ottistech.indespensa.ui.viewmodel.state.SignupFormActiveState
 import com.ottistech.indespensa.ui.viewmodel.state.SignupFormErrorState
 import com.ottistech.indespensa.ui.viewmodel.state.SignupFormFieldsState
+import com.ottistech.indespensa.webclient.dto.address.Address
 import kotlinx.coroutines.launch
 
 class SignupViewModel (
     private val signupType: AppAccountType,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val addressRepository: AddressRepository
 ) : ViewModel() {
 
     val formState = MutableLiveData(SignupFormFieldsState(signupType))
     val formErrorState = MutableLiveData(SignupFormErrorState())
+    val formActiveState = MutableLiveData(SignupFormActiveState())
 
     val isFormValid = MutableLiveData(true)
     val isLoading = MutableLiveData(false)
@@ -145,6 +151,66 @@ class SignupViewModel (
             else if( !validMinLength(value, 8) ) { "Digite um CEP válido!" }
             else { null }
         formErrorState.value = formErrorState.value!!.copy(cep=error)
+        if(value?.length == 8) {
+            getCepAddress(value)
+        } else if(
+            !formActiveState.value!!.city || !formActiveState.value!!.state || !formActiveState.value!!.street
+        ) {
+            clearAddressFields()
+        }
+    }
+
+    private fun getCepAddress(value: String) {
+        viewModelScope.launch {
+            try {
+                val address = addressRepository.get(value)
+                fillAddressFields(address)
+            } catch (e: NotFoundException) {
+                formErrorState.value = formErrorState.value!!.copy(cep="Digite um CEP válido")
+                clearAddressFields()
+            } catch (e: BadRequestException) {
+                formErrorState.value = formErrorState.value!!.copy(cep="Digite um CEP válido")
+                clearAddressFields()
+            } catch (e: Exception) {
+                clearAddressFields()
+            }
+        }
+    }
+
+    private fun clearAddressFields() {
+        formState.value = formState.value!!.copy(
+            city=null,
+            state=null,
+            street=null
+        )
+        formErrorState.value = formErrorState.value!!.copy(
+            city=null,
+            state=null,
+            street=null
+        )
+        formActiveState.value = formActiveState.value!!.copy(
+            city=true,
+            state=true,
+            street=true
+        )
+    }
+
+    private fun fillAddressFields(address: Address) {
+        address.city.let {
+            formState.value = formState.value!!.copy(city=it)
+            formErrorState.value = formErrorState.value!!.copy(city=null)
+            formActiveState.value = formActiveState.value!!.copy(city=false)
+        }
+        address.state.let {
+            formState.value = formState.value!!.copy(state=it)
+            formErrorState.value = formErrorState.value!!.copy(state=null)
+            formActiveState.value = formActiveState.value!!.copy(state=false)
+        }
+        address.street.let {
+            formState.value = formState.value!!.copy(street=it)
+            formErrorState.value = formErrorState.value!!.copy(street=null)
+            formActiveState.value = formActiveState.value!!.copy(street=false)
+        }
     }
 
     fun validAddressNumber() {

@@ -1,11 +1,13 @@
 package com.ottistech.indespensa.ui.viewmodel
 
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ottistech.indespensa.data.exception.BadRequestException
 import com.ottistech.indespensa.data.exception.FieldConflictException
+import com.ottistech.indespensa.data.repository.AddressRepository
 import com.ottistech.indespensa.data.repository.UserRepository
 import com.ottistech.indespensa.shared.AppAccountType
 import com.ottistech.indespensa.ui.helpers.validIsEmail
@@ -15,19 +17,23 @@ import com.ottistech.indespensa.ui.helpers.validNotNull
 import com.ottistech.indespensa.ui.model.feedback.Feedback
 import com.ottistech.indespensa.ui.model.feedback.FeedbackCode
 import com.ottistech.indespensa.ui.model.feedback.FeedbackId
+import com.ottistech.indespensa.ui.viewmodel.state.UpdateProfileFormActiveState
 import com.ottistech.indespensa.ui.viewmodel.state.UpdateProfileFormErrorState
 import com.ottistech.indespensa.ui.viewmodel.state.UpdateProfileFormFieldsState
+import com.ottistech.indespensa.webclient.dto.address.Address
 import com.ottistech.indespensa.webclient.dto.user.UserFullDTO
 import kotlinx.coroutines.launch
 
 class UpdateProfileViewModel(
-    private val repository: UserRepository
+    private val userRepository: UserRepository,
+    private val addressRepository: AddressRepository
 ) : ViewModel() {
 
-    val userType = repository.getUserCredentials().type
+    val userType = userRepository.getUserCredentials().type
 
     val formState = MutableLiveData(UpdateProfileFormFieldsState())
     val formErrorState = MutableLiveData(UpdateProfileFormErrorState())
+    val formActiveState = MutableLiveData(UpdateProfileFormActiveState())
 
     val isFormValid = MutableLiveData(true)
     val isLoading = MutableLiveData(false)
@@ -39,7 +45,7 @@ class UpdateProfileViewModel(
         viewModelScope.launch {
             isLoading.value = true
             try {
-                val userInfo = repository.getData(true)
+                val userInfo = userRepository.getData(true)
                 setStateWithUser(userInfo)
             } catch (e: Exception) {
                 _feedback.value =
@@ -69,7 +75,7 @@ class UpdateProfileViewModel(
                 viewModelScope.launch {
                     isLoading.value = true
                     try {
-                        repository.updateUser(formState.value!!.toUserUpdateDTO())
+                        userRepository.updateUser(formState.value!!.toUserUpdateDTO())
                         _feedback.value =
                             Feedback(FeedbackId.UPDATE_PROFILE, FeedbackCode.SUCCESS, "Usuário atualizado")
                         fetchUserInfo()
@@ -92,7 +98,7 @@ class UpdateProfileViewModel(
     fun deactivate() {
         viewModelScope.launch {
             try {
-                repository.deactivateUser()
+                userRepository.deactivateUser()
                 _feedback.value =
                     Feedback(FeedbackId.DEACTIVATE_PROFILE, FeedbackCode.SUCCESS, "Sua conta foi desativada!")
             } catch (e: Exception) {
@@ -103,7 +109,7 @@ class UpdateProfileViewModel(
     }
 
     fun logout() {
-        repository.logoutUser()
+        userRepository.logoutUser()
     }
 
     private fun validForm() {
@@ -168,6 +174,66 @@ class UpdateProfileViewModel(
             else if( !validMinLength(value, 8) ) { "Digite um CEP válido!" }
             else { null }
         formErrorState.value = formErrorState.value!!.copy(cep=error)
+        if(value?.length == 8) {
+            getCepAddress(value)
+        } else if(
+            !formActiveState.value!!.city || !formActiveState.value!!.state || !formActiveState.value!!.street
+        ) {
+            clearAddressFields()
+        }
+    }
+
+    private fun getCepAddress(value: String) {
+        viewModelScope.launch {
+            try {
+                val address = addressRepository.get(value)
+                fillAddressFields(address)
+            } catch (e: Resources.NotFoundException) {
+                formErrorState.value = formErrorState.value!!.copy(cep="Digite um CEP válido")
+                clearAddressFields()
+            } catch (e: BadRequestException) {
+                formErrorState.value = formErrorState.value!!.copy(cep="Digite um CEP válido")
+                clearAddressFields()
+            } catch (e: Exception) {
+                clearAddressFields()
+            }
+        }
+    }
+
+    private fun clearAddressFields() {
+        formState.value = formState.value!!.copy(
+            city=null,
+            state=null,
+            street=null
+        )
+        formErrorState.value = formErrorState.value!!.copy(
+            city=null,
+            state=null,
+            street=null
+        )
+        formActiveState.value = formActiveState.value!!.copy(
+            city=true,
+            state=true,
+            street=true
+        )
+    }
+
+    private fun fillAddressFields(address: Address) {
+        address.city.let {
+            formState.value = formState.value!!.copy(city=it)
+            formErrorState.value = formErrorState.value!!.copy(city=null)
+            formActiveState.value = formActiveState.value!!.copy(city=false)
+        }
+        address.state.let {
+            formState.value = formState.value!!.copy(state=it)
+            formErrorState.value = formErrorState.value!!.copy(state=null)
+            formActiveState.value = formActiveState.value!!.copy(state=false)
+        }
+        address.street.let {
+            formState.value = formState.value!!.copy(street=it)
+            formErrorState.value = formErrorState.value!!.copy(street=null)
+            formActiveState.value = formActiveState.value!!.copy(street=false)
+        }
     }
 
     fun validAddressNumber() {
